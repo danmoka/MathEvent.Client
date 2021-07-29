@@ -32,7 +32,7 @@ const CreateEventModal = () => {
   const [organization, setOrganization] = useState(
     preparedOrganizations[0].value
   );
-  const [hierarchy, setHierarchy] = useState(false);
+  const [hierarchy, setHierarchy] = useState(null);
 
   useEffect(() => {
     dispatch(fetchOrganizations());
@@ -59,7 +59,7 @@ const CreateEventModal = () => {
   }, []);
 
   const handleHierarchyValueChange = useCallback((newValue) => {
-    setHierarchy(newValue);
+    setHierarchy(newValue || null);
   }, []);
 
   const handleCreate = useCallback(() => {
@@ -70,7 +70,7 @@ const CreateEventModal = () => {
       Description: description,
       OrganizationId: organization,
       ParentId: parent ? parent.id : null,
-      Hierarchy: hierarchy,
+      Hierarchy: hierarchy || null,
     };
 
     dispatch(createEvent({ event }));

@@ -43,7 +43,7 @@ const EventEditInfo = () => {
   const [organization, setOrganization] = useState(
     preparedOrganizations[0].value
   );
-  const [hierarchy, setHierarchy] = useState(false);
+  const [hierarchy, setHierarchy] = useState(null);
 
   useEffect(() => {
     dispatch(fetchOrganizations());
@@ -56,7 +56,7 @@ const EventEditInfo = () => {
       setStartDate(event.startDate);
       setLocation(event.location);
       setDesctiption(event.description);
-      setHierarchy(!!event.hierarchy);
+      setHierarchy(event.hierarchy || null);
 
       if (event.organization) {
         setOrganization(event.organization.id);
