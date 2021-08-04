@@ -13,9 +13,12 @@ const images = {
     pattern: "/public/svg/pattern.svg",
     pdf: "/public/svg/pdf.svg",
     png: "/public/svg/png.svg",
+    ppt: "/public/svg/ppt.svg",
     pptx: "/public/svg/pptx.svg",
     svg: "/public/svg/svg.svg",
+    xls: "/public/svg/xls.svg",
     xlsx: "/public/svg/xlsx.svg",
+    zip: "/public/svg/zip.svg"
 };
 
 export default images;
