@@ -17,7 +17,8 @@
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
-    "use-debounce": "^6.0.1"
+    "use-debounce": "^6.0.1",
+    "connected-react-router": "6.9.1"
   },
   "scripts": {
     "build": "webpack --mode production",
@@ -59,7 +60,6 @@
     "babel-polyfill": "6.26.0",
     "body-parser": "1.19.0",
     "bootstrap": "4.5.2",
-    "connected-react-router": "6.9.1",
     "copy-webpack-plugin": "6.3.2",
     "css-loader": "4.3.0",
     "d3-scale-chromatic": "^2.0.0",
