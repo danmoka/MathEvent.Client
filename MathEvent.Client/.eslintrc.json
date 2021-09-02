@@ -1,19 +1,60 @@
 {
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true
+    },
+    "parser": "babel-eslint",
     "extends": [
+        "eslint:recommended",
         "airbnb",
-        "prettier",
-        "plugin:react/recommended"
+        "airbnb/hooks",
+        "plugin:react/recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:jsx-a11y/recommended"
     ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
     "plugins": [
-        "prettier",
-        "react"
+        "react",
+        "react-hooks"
     ],
     "rules": {
-        "prettier/prettier": "error",
-        "import/no-cycle": "off",
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-        "no-nested-ternary": "off",
-        "react/jsx-props-no-spreading": [1, { "custom": "ignore" }],
-        "no-param-reassign": "off"
+        "max-len": [
+            "warn",
+            {
+                "code": 80
+            }
+        ],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/react-in-jsx-scope": "off",
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx"
+                ]
+            }
+        ],
+        "react/display-name": 1,
+        "import/prefer-default-export": "off",
+        "linebreak-style": ["error", "windows"]
     }
 }
