@@ -1,0 +1,37 @@
+.app-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__toolbar {
+        display: flex;
+        justify-content: space-between;
+        width: 700px;
+    }
+}
+
+.app-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__body {
+        padding-left: 24px;
+        padding-right: 24px;
+        width: 700px;
+    }
+}
+
+@media (max-width: 801px) {
+    .app-header {
+        &__toolbar {
+            width: 100%;
+        }
+    }
+
+    .app-content {
+        &__body {
+            width: 100%;
+        }
+    }
+}
