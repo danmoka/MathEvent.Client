@@ -14,6 +14,7 @@ import { fetchEvents } from '../../store/actions/event';
 import { palette, paletteDark } from '../../styles/palette';
 import colors from '../../constants/colors';
 import AppContent from './AppContent';
+import AppMenu from './AppMenu';
 import './App.scss';
 
 const useInterval = (callback, delay) => {
@@ -71,7 +72,7 @@ const App = () => {
       <AppBar
         className="app-header"
         position="fixed"
-        color={colors.info}
+        color={colors.inherit}
         elevation={1}
       >
         <Toolbar className="app-header__toolbar">
@@ -84,6 +85,7 @@ const App = () => {
       <Toolbar id="back-to-top-anchor" />
       <div className="app-content">
         <div className="app-content__body">
+          <AppMenu />
           <AppContent />
         </div>
       </div>
