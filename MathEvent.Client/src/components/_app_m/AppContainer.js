@@ -1,7 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import { store, history } from '../../store';
+import store from '../../store';
+import history from '../../utils/history';
 import App from './App';
 
 const AppContainer = () => (
@@ -12,5 +13,4 @@ const AppContainer = () => (
   </Provider>
 );
 
-export { history };
 export default AppContainer;

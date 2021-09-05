@@ -1,5 +1,5 @@
 import routes from './routes';
-import { history } from '../components/_app/AppContainer';
+import history from './history';
 
 export const navigateToHome = () => history.push(routes.home);
 

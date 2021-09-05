@@ -1,16 +1,16 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { createBrowserHistory } from "history";
-import { routerMiddleware } from "connected-react-router";
-import createRootReducer from "./reducers"
+import { configureStore } from '@reduxjs/toolkit';
+import { routerMiddleware } from 'connected-react-router';
+import createRootReducer from './reducers';
+import history from '../utils/history';
 
-const history = createBrowserHistory();
 const rootReducer = createRootReducer(history);
 
 const store = configureStore({
-    reducer: rootReducer,
-    middleware: getDefaultMiddleware =>
-        getDefaultMiddleware({ serializableCheck: false })
-            .concat(routerMiddleware(history))
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false,
+  })
+    .concat(routerMiddleware(history)),
 });
 
-export { store, history };
+export default store;

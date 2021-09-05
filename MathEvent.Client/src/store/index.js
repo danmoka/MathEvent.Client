@@ -1,3 +1,3 @@
-import { store, history } from "./store";
+import store from './store';
 
-export { store, history };
+export default store;
