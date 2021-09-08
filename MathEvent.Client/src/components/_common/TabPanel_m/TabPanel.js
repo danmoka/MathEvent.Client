@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { arrayOf, string } from 'prop-types';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -13,6 +13,10 @@ const useStyles = makeStyles({
   iconLabel: {
     minHeight: 48,
     height: 48,
+  },
+  icon: {
+    marginRight: 5,
+    marginTop: 6,
   },
 });
 
@@ -50,7 +54,11 @@ const TabPanel = ({ tabs, value }) => {
             wrapped
             icon={
             tab.iconType
-              ? <Icon type={tab.iconType} />
+              ? (
+                <div className={classes.icon}>
+                  <Icon type={tab.iconType} />
+                </div>
+              )
               : null
         }
             onClick={tab.onClick}
@@ -62,29 +70,17 @@ const TabPanel = ({ tabs, value }) => {
 };
 
 TabPanel.propTypes = {
-  tabs: arrayOf({
-    label: string,
-    onClick: () => {},
-    iconType: string,
-  }),
-  value: {
-    label: string,
-    onClick: () => {},
-    iconType: string,
-  },
+  tabs: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    iconType: PropTypes.string,
+    onClick: PropTypes.func,
+  })),
+  value: PropTypes.number,
 };
 
 TabPanel.defaultProps = {
-  tabs: [{
-    label: '',
-    onClick: () => {},
-    iconType: null,
-  }],
-  value: {
-    label: '',
-    onClick: () => {},
-    iconType: null,
-  },
+  tabs: [],
+  value: -1,
 };
 
 export default TabPanel;

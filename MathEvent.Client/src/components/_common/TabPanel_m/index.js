@@ -1,3 +1,3 @@
-import TabPanel from './TabPanel_m';
+import TabPanel from './TabPanel';
 
 export default TabPanel;

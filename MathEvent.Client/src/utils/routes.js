@@ -6,6 +6,7 @@ const routes = {
   },
   events: {
     main: '/events',
+    event: (eventId) => `/events/${eventId}`,
     edit: (eventId) => `/events/${eventId}/edit`,
   },
   organizations: {
