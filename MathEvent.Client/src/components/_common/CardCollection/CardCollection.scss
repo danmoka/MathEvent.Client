@@ -1,0 +1,14 @@
+.card-collection {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card {
+    margin-bottom: 24px;
+
+    &__media {
+        height: 0;
+        padding-top: 56.25%;
+    }
+}

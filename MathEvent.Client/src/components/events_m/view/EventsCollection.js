@@ -2,80 +2,79 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import 'moment/locale/ru';
-import { iconTypes } from '../../_common/Icon';
 import Loader from '../../_common/Loader';
+import CardCollection from '../../_common/CardCollection';
 import EventsBreadcrumbs from './EventsBreadcrumbs';
+import { getImageSrc } from '../../../utils/get-image-src';
+import { iconTypes } from '../../_common/Icon';
+import images from '../../../constants/images';
 import './EventsView.scss';
+
+const prepareDateTime = (dateTime) => {
+  moment.locale('ru');
+  const preparedDateTime = moment(dateTime).format('LL');
+
+  return preparedDateTime;
+};
+
+const prepareImage = (path, isDarkTheme) => {
+  if (path) {
+    return getImageSrc(path);
+  }
+  if (isDarkTheme) {
+    return images.eventDefaultDark;
+  }
+
+  return images.eventDefault;
+};
 
 const prepareEvents = (
   events,
   selectedEvent,
-  onEventEdit,
-  onEventDelete,
   onClick,
+  isDarkTheme,
 ) => events.map((event, index) => ({
   id: event.id,
   primaryText: event.name,
-  secondaryText: moment(event.startDate).format('LL'),
+  secondaryText: prepareDateTime(event.startDate),
+  additionalInfo: event.description,
+  image: prepareImage(event.avatarPath, isDarkTheme),
   isSelected: selectedEvent && event.id === selectedEvent.id,
   index: index + 1,
   onClick: () => onClick(event),
-  actions: [
-    {
-      id: 'edit',
-      label: 'Редактировать',
-      icon: iconTypes.edit,
-      onClick: () => onEventEdit(event),
-    },
-    {
-      id: 'delete',
-      label: 'Удалить',
-      icon: iconTypes.delete,
-      onClick: () => onEventDelete(event),
-    },
-  ],
 }));
 
-const EventsList = () => {
+const EventsCollection = () => {
   const dispatch = useDispatch();
   const { events, selectedEvent, isFetchingEvents } = useSelector(
     (state) => state.event,
   );
+  const { isDarkTheme } = useSelector((state) => state.app);
 
   const handleEventClick = useCallback(() => {
     console.log('clicked...');
   }, []);
 
-  const handleEventEdit = useCallback(() => {
-    console.log('edit...');
-  }, []);
-
-  const handleEventDelete = useCallback(() => {
-    console.log('delete...');
-  }, []);
-
   const preparedEvents = prepareEvents(
     events,
     selectedEvent,
-    handleEventEdit,
-    handleEventDelete,
     handleEventClick,
+    isDarkTheme,
   );
 
   return (
-    <div>
+    <div className="events-collection">
       <EventsBreadcrumbs />
       {isFetchingEvents ? (
-        <div className="events-list__loader-section">
+        <div className="events-collection__loader-section">
           <Loader />
         </div>
+
       ) : (
-        <div className="event-list">
-          {/* <List className="event-list__ul" items={preparedEvents} /> */}
-        </div>
+        <CardCollection items={preparedEvents} />
       )}
     </div>
   );
 };
 
-export default EventsList;
+export default EventsCollection;

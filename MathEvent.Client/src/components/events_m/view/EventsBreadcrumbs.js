@@ -20,7 +20,7 @@ const EventsBreadcrumbs = () => {
   const dispatch = useDispatch();
   let { crumbs } = useSelector((state) => state.event);
   const { isFetchingEventBreadcrumbs } = useSelector((state) => state.event);
-  crumbs = [{ id: null, name: '' }, ...crumbs];
+  crumbs = crumbs.length > 0 ? [{ id: null, name: '' }, ...crumbs] : [];
 
   const handleCrumbClick = useCallback((crumb) => {
     dispatch(fetchEvents(crumb.id));
@@ -46,10 +46,18 @@ const EventsBreadcrumbs = () => {
         </div>
       )
       : (
-        <CommonBreadcrumbs
-          items={preparedCrumbs}
-          backButtonOnClick={handleBackButtonClick}
-        />
+        <>
+          {crumbs.length > 0
+            ? (
+              <CommonBreadcrumbs
+                items={preparedCrumbs}
+                backButtonOnClick={handleBackButtonClick}
+              />
+            )
+            : (
+              <></>
+            )}
+        </>
       )
   );
 };

@@ -1,8 +1,4 @@
 .events-breadcrumbs {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
     &__loader-section {
         display: flex;
         justify-content: center;
@@ -10,11 +6,9 @@
     }
 }
 
-.events-list {
+.events-collection {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 
     &__loader-section {
         display: flex;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTitle } from '../../../hooks';
 import EventsFilter from './EventsFilter';
-import EventsList from './EventsList';
+import EventsCollection from './EventsCollection';
 
 const EventView = () => {
   useTitle('События');
@@ -9,7 +9,7 @@ const EventView = () => {
   return (
     <div>
       <EventsFilter />
-      <EventsList />
+      <EventsCollection />
     </div>
   );
 };
