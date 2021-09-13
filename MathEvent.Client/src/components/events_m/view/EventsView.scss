@@ -1,3 +1,28 @@
+.events-view {
+    &__search-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 24px;
+
+        &__buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    &__filters-section {
+        margin-top: 24px;
+    }
+
+    &__collection-section {
+        margin-top: 24px;
+    }
+
+    &__calendar-section {
+        margin-top: 24px;
+    }
+}
+
 .events-breadcrumbs {
     &__loader-section {
         display: flex;
@@ -14,5 +39,105 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+}
+
+.events-search {
+    padding: 3px 4px;
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    height: 48px;
+    width: 45%;
+
+    &__input {
+        flex: 1;
+        margin-left: 15px;
+    }
+}
+
+.events-filters {
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+        display: flex;
+        align-items: center;
+    
+        &__name {
+            padding-right: 10px;
+        }
+    
+        &__divider {
+            flex: 1;
+        }
+    }
+
+    &__main {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+        margin-bottom: 4px;
+    }
+
+    &__dropdown {
+        min-width: 120px;
+        width: 120px;
+    }
+}
+
+.events-sort {
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+        display: flex;
+        align-items: center;
+    
+        &__name {
+            padding-right: 10px;
+        }
+    
+        &__divider {
+            flex: 1;
+        }
+    }
+
+    &__main {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+        margin-bottom: 4px;
+    }
+
+    &__dropdown {
+        min-width: 120px;
+        width: 120px;
+    }
+}
+
+.events-calendar {
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+        display: flex;
+        align-items: center;
+    
+        &__name {
+            padding-right: 10px;
+        }
+    
+        &__divider {
+            flex: 1;
+        }
+    }
+}
+
+@media (max-width: 801px) {
+    .events-search {
+        width: 70%;
     }
 }

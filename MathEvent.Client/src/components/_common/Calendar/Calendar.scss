@@ -1,0 +1,55 @@
+.react-calendar-heatmap text {
+    font-size: 10px;
+    fill: #aaa;
+}
+
+.react-calendar-heatmap .react-calendar-heatmap-small-text {
+    font-size: 5px;
+}
+
+.react-calendar-heatmap rect:hover {
+    stroke: #555;
+    stroke-width: 1px;
+}
+
+.react-calendar-heatmap .color-dark-empty {
+    fill: #3f3f3f;
+}
+
+.react-calendar-heatmap .color-dark-filled {
+    fill: #ce93d8;
+}
+
+.react-calendar-heatmap .color-dark-0 {
+    fill: #3f3f3f;
+}
+.react-calendar-heatmap .color-dark-1 {
+    fill: #f3e5f5;
+}
+.react-calendar-heatmap .color-dark-2 {
+    fill: #e1bee7;
+}
+.react-calendar-heatmap .color-dark-3 {
+    fill: #ce93d8;
+}
+
+.react-calendar-heatmap .color-default-empty {
+    fill: #E0E0E0;
+}
+
+.react-calendar-heatmap .color-default-filled {
+    fill: #4b45b2;
+}
+
+.react-calendar-heatmap .color-default-0 {
+    fill: #E0E0E0;
+}
+.react-calendar-heatmap .color-default-1 {
+    fill: #9891ff;
+}
+.react-calendar-heatmap .color-default-2 {
+    fill: #6C63FF;
+}
+.react-calendar-heatmap .color-default-3 {
+    fill: #4b45b2;
+}
