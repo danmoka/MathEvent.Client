@@ -4,7 +4,14 @@ const eventRoutes = {
   fetchEvents: (
     parentId,
     organizationId,
-  ) => getRoute(`events/?parent=${parentId}&organization=${organizationId}`),
+    startDateFrom,
+    startDateTo,
+  ) => getRoute(
+    `events/?parent=${parentId}`
+    + `&organization=${organizationId}`
+    + `&startDateFrom=${startDateFrom}`
+    + `&startDateTo=${startDateTo}`,
+  ),
   fetchEvent: (eventId) => getRoute(`events/${eventId}`),
   createEvent: () => getRoute('events/'),
   updateEvent: (eventId) => getRoute(`events/${eventId}/`),

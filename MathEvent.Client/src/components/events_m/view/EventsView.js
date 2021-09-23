@@ -24,14 +24,22 @@ const EventView = () => {
     isSortOpened,
     isCalendarOpened,
     organizationId,
+    startDateFrom,
+    startDateTo,
   } = useSelector((state) => state.filters);
 
   useEffect(() => {
     dispatch(fetchEvents({
       parentId: null,
       organizationId,
+      startDateFrom: startDateFrom
+        ? new Date(startDateFrom).toISOString()
+        : null,
+      startDateTo: startDateTo
+        ? new Date(startDateTo).toISOString()
+        : null,
     }));
-  }, [dispatch, organizationId]);
+  }, [dispatch, organizationId, startDateFrom, startDateTo]);
 
   const handleFiltersButtonClick = useCallback(() => {
     dispatch(setIsFilterOpened(!isFilterOpened));

@@ -8,9 +8,16 @@ export const fetchEvents = createAsyncThunk('fetchEvents', async (
   {
     parentId,
     organizationId,
+    startDateFrom,
+    startDateTo,
   },
 ) => {
-  const response = await eventService.fetchEvents(parentId, organizationId);
+  const response = await eventService.fetchEvents(
+    parentId,
+    organizationId,
+    startDateFrom,
+    startDateTo,
+  );
 
   if (statusCode(response).ok) {
     const events = await response.json();

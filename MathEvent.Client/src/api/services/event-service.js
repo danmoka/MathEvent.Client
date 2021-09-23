@@ -3,8 +3,18 @@ import { baseService } from './base-service';
 import { getAccessToken } from '../../utils/local-storage-manager';
 
 const eventService = {
-  fetchEvents: async (parentId, organizationId) => {
-    const url = api.events.fetchEvents(parentId, organizationId);
+  fetchEvents: async (
+    parentId,
+    organizationId,
+    startDateFrom,
+    startDateTo,
+  ) => {
+    const url = api.events.fetchEvents(
+      parentId,
+      organizationId,
+      startDateFrom,
+      startDateTo,
+    );
     const response = await baseService.get(url);
 
     return response;

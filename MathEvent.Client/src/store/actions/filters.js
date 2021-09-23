@@ -19,3 +19,13 @@ export const setOrganizationFilter = createAction(
   'setOrganizationFilter',
   (organizationId) => ({ payload: { organizationId } }),
 );
+
+export const setStartDateFromFilter = createAction(
+  'setStartDateFromFilter',
+  (startDateFrom) => ({ payload: { startDateFrom } }),
+);
+
+export const setStartDateToFilter = createAction(
+  'setStartDateToFilter',
+  (startDateTo) => ({ payload: { startDateTo } }),
+);

@@ -3,8 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Dropdown from '../../_common/Dropdown';
+import { DateField } from '../../_common/Date';
 import { fetchOrganizations } from '../../../store/actions/organization';
-import { setOrganizationFilter } from '../../../store/actions/filters';
+import {
+  setOrganizationFilter,
+  setStartDateFromFilter,
+  setStartDateToFilter,
+} from '../../../store/actions/filters';
 import './EventsView.scss';
 
 const prepareOrganizations = (organizations) => [
@@ -15,19 +20,11 @@ const prepareOrganizations = (organizations) => [
   })),
 ];
 
-const prepareDateTimeRange = () => [
-  { value: 'any', name: 'Любой' },
-  { value: 'day', name: 'Сегодня' },
-  { value: 'week', name: 'На этой неделе' },
-  { value: 'month', name: 'В этом месяце' },
-  { value: 'year', name: 'В этом году' },
-];
-
 const EventsFilters = () => {
   const dispatch = useDispatch();
   const { organizations } = useSelector((state) => state.organization);
+  const { startDateFrom, startDateTo } = useSelector((state) => state.filters);
   const preparedOrganizations = prepareOrganizations(organizations);
-  const preparedDateTimeRange = prepareDateTimeRange();
 
   useEffect(() => {
     dispatch(fetchOrganizations());
@@ -35,6 +32,18 @@ const EventsFilters = () => {
 
   const handleOrganizationFilterChange = useCallback((organizationId) => {
     dispatch(setOrganizationFilter(organizationId));
+  }, [dispatch]);
+
+  const handleStartDateFromFilterChange = useCallback((newStartDateFrom) => {
+    if (newStartDateFrom > startDateTo) {
+      dispatch(setStartDateToFilter(null));
+    }
+
+    dispatch(setStartDateFromFilter(newStartDateFrom));
+  }, [dispatch, startDateTo]);
+
+  const handleStartDateToFilterChange = useCallback((newStartDateTo) => {
+    dispatch(setStartDateToFilter(newStartDateTo));
   }, [dispatch]);
 
   return (
@@ -57,12 +66,21 @@ const EventsFilters = () => {
           items={preparedOrganizations}
           onChange={handleOrganizationFilterChange}
         />
-        <Dropdown
-          className="events-filters__dropdown"
-          label="Период"
-          value={preparedDateTimeRange[0].value}
-          items={preparedDateTimeRange}
-          onChange={() => {}}
+        <DateField
+          className="events-filters__datefield"
+          variant="dialog"
+          value={startDateFrom}
+          minDate={new Date(2015, 10)}
+          onChange={handleStartDateFromFilterChange}
+          label="Начало ОТ"
+        />
+        <DateField
+          className="events-filters__datefield"
+          variant="dialog"
+          value={startDateTo}
+          minDate={startDateFrom || new Date(2015, 10)}
+          onChange={handleStartDateToFilterChange}
+          label="Начало ДО"
         />
       </div>
     </div>
