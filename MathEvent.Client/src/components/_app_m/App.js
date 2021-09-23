@@ -10,7 +10,6 @@ import {
   ThemeProvider,
 } from '@material-ui/core/styles';
 import { fetchTokens, fetchUserInfo } from '../../store/actions/account';
-import { fetchEvents } from '../../store/actions/event';
 import { palette, paletteDark } from '../../styles/palette';
 import colors from '../../constants/colors';
 import AppContent from './AppContent';
@@ -61,10 +60,6 @@ const App = () => {
   useInterval(() => {
     dispatch(fetchTokens({ userName: null, password: null }));
   }, tokenInterval);
-
-  useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch]);
 
   return (
     <ThemeProvider theme={theme}>

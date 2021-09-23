@@ -14,3 +14,8 @@ export const setIsCalendarOpened = createAction(
   'setIsCalendarOpened',
   (isCalendarOpened) => ({ payload: { isCalendarOpened } }),
 );
+
+export const setOrganizationFilter = createAction(
+  'setOrganizationFilter',
+  (organizationId) => ({ payload: { organizationId } }),
+);

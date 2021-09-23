@@ -1,71 +1,83 @@
-import api from "../api";
-import { baseService } from "./base-service";
-import { getAccessToken } from "../../utils/local-storage-manager";
+import api from '../api';
+import { baseService } from './base-service';
+import { getAccessToken } from '../../utils/local-storage-manager';
 
 const eventService = {
-    fetchEvents: async (eventId) => {
-        const url = api.events.fetchEvents(eventId);
+  fetchEvents: async (parentId, organizationId) => {
+    const url = api.events.fetchEvents(parentId, organizationId);
+    const response = await baseService.get(url);
 
-        return await baseService.get(url);
-    },
-    fetchEvent: async (eventId) => {
-        const url = api.events.fetchEvent(eventId);
+    return response;
+  },
+  fetchEvent: async (eventId) => {
+    const url = api.events.fetchEvent(eventId);
+    const response = await baseService.get(url);
 
-        return await baseService.get(url);
-    },
-    fetchEventBreadcrumbs: async (eventId) => {
-        const url = api.events.fetchEventBreadcrumbs(eventId);
+    return response;
+  },
+  fetchEventBreadcrumbs: async (eventId) => {
+    const url = api.events.fetchEventBreadcrumbs(eventId);
+    const response = await baseService.get(url);
 
-        return await baseService.get(url);
-    },
-    fetchStatistics: async (eventSubsStatisticsTop) => {
-        const url = api.events.fetchStatistics(eventSubsStatisticsTop);
+    return response;
+  },
+  fetchStatistics: async (eventSubsStatisticsTop) => {
+    const url = api.events.fetchStatistics(eventSubsStatisticsTop);
+    const response = await baseService.get(url);
 
-        return await baseService.get(url);
-    },
-    fetchEventStatistics: async (eventId) => {
-        const url = api.events.fetchEventStatistics(eventId);
+    return response;
+  },
+  fetchEventStatistics: async (eventId) => {
+    const url = api.events.fetchEventStatistics(eventId);
+    const response = await baseService.get(url);
 
-        return await baseService.get(url);
-    },
-    createEvent: async (createdEvent) => {
-        const url = api.events.createEvent();
+    return response;
+  },
+  createEvent: async (createdEvent) => {
+    const url = api.events.createEvent();
+    const response = await baseService.post(url, createdEvent);
 
-        return await baseService.post(url, createdEvent);
-    },
-    updateEvent: async (eventId, updatedEvent) => {
-        const url = api.events.updateEvent(eventId);
+    return response;
+  },
+  updateEvent: async (eventId, updatedEvent) => {
+    const url = api.events.updateEvent(eventId);
+    const response = await baseService.put(url, updatedEvent);
 
-        return await baseService.put(url, updatedEvent);
-    },
-    patchEvent: async (eventId, data) => {
-        const url = api.events.patchEvent(eventId);
+    return response;
+  },
+  patchEvent: async (eventId, data) => {
+    const url = api.events.patchEvent(eventId);
+    const response = await baseService.patch(url, data);
 
-        return await baseService.patch(url, data);
-    },
-    deleteEvent: async (eventId) => {
-        const url = api.events.deleteEvent(eventId);
+    return response;
+  },
+  deleteEvent: async (eventId) => {
+    const url = api.events.deleteEvent(eventId);
+    const response = await baseService.delete(url);
 
-        return await baseService.delete(url);
-    },
-    uploadAvatar: async (eventId, file) => {
-        const url = api.events.uploadAvatar(eventId);
+    return response;
+  },
+  uploadAvatar: async (eventId, file) => {
+    const url = api.events.uploadAvatar(eventId);
 
-        try {
-            const formData = new FormData();
-            formData.append('file', file, file.name);
+    try {
+      const formData = new FormData();
+      formData.append('file', file, file.name);
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
+      });
 
-            return await fetch(url, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    Authorization: `Bearer ${getAccessToken()}`,
-                },
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    },
+      return response;
+    } catch (e) {
+      console.log(e);
+
+      return undefined;
+    }
+  },
 };
 
 export default eventService;

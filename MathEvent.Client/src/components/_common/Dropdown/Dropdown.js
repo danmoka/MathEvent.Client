@@ -23,12 +23,18 @@ const Dropdown = ({
 
   return (
     <FormControl className={className} variant={variant}>
-      <InputLabel>{label}</InputLabel>
+      <InputLabel
+        shrink
+        id="placeholder-label-label"
+      >
+        {label}
+      </InputLabel>
       <Select
-        label={label}
+        labelId="placeholder-label-label"
+        id="placeholder-label"
         value={dropdownValue}
         variant={variant}
-        size="small"
+        displayEmpty
         onChange={handleChange}
       >
         {items.map((item) => (

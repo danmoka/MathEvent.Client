@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IconButton, iconTypes } from '../../_common/Icon';
 import EventsSearch from './EventsSearch';
@@ -13,6 +13,7 @@ import {
   setIsSortOpened,
   setIsCalendarOpened,
 } from '../../../store/actions/filters';
+import { fetchEvents } from '../../../store/actions/event';
 
 const EventView = () => {
   useTitle('События');
@@ -22,7 +23,15 @@ const EventView = () => {
     isFilterOpened,
     isSortOpened,
     isCalendarOpened,
+    organizationId,
   } = useSelector((state) => state.filters);
+
+  useEffect(() => {
+    dispatch(fetchEvents({
+      parentId: null,
+      organizationId,
+    }));
+  }, [dispatch, organizationId]);
 
   const handleFiltersButtonClick = useCallback(() => {
     dispatch(setIsFilterOpened(!isFilterOpened));

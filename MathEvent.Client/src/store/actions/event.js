@@ -4,8 +4,13 @@ import eventService from '../../api/services/event-service';
 import statusCode from '../../utils/status-code-reader';
 import modalTypes from '../../constants/modal-types';
 
-export const fetchEvents = createAsyncThunk('fetchEvents', async (eventId) => {
-  const response = await eventService.fetchEvents(eventId);
+export const fetchEvents = createAsyncThunk('fetchEvents', async (
+  {
+    parentId,
+    organizationId,
+  },
+) => {
+  const response = await eventService.fetchEvents(parentId, organizationId);
 
   if (statusCode(response).ok) {
     const events = await response.json();
@@ -44,7 +49,7 @@ export const fetchEventBreadcrumbs = createAsyncThunk(
     }
 
     return { crumbs: [] };
-  }
+  },
 );
 
 export const fetchStatistics = createAsyncThunk(
@@ -59,7 +64,7 @@ export const fetchStatistics = createAsyncThunk(
     }
 
     return { statistics: [] };
-  }
+  },
 );
 
 export const fetchEventStatistics = createAsyncThunk(
@@ -74,7 +79,7 @@ export const fetchEventStatistics = createAsyncThunk(
     }
 
     return { statistics: [] };
-  }
+  },
 );
 
 export const createEvent = createAsyncThunk(
@@ -91,7 +96,7 @@ export const createEvent = createAsyncThunk(
     }
 
     return { hasError: true };
-  }
+  },
 );
 
 export const updateEvent = createAsyncThunk(
@@ -107,7 +112,7 @@ export const updateEvent = createAsyncThunk(
     }
 
     return { hasError: true };
-  }
+  },
 );
 
 export const patchEvent = createAsyncThunk(
@@ -123,7 +128,7 @@ export const patchEvent = createAsyncThunk(
     }
 
     return { hasError: true };
-  }
+  },
 );
 
 export const deleteEvent = createAsyncThunk(
@@ -137,7 +142,7 @@ export const deleteEvent = createAsyncThunk(
     }
 
     return { hasError: true };
-  }
+  },
 );
 
 export const uploadEventAvatar = createAsyncThunk(
@@ -154,7 +159,7 @@ export const uploadEventAvatar = createAsyncThunk(
     }
 
     return { hasError: true };
-  }
+  },
 );
 
 export const selectEvent = createAction('selectEvent', (event) => ({
@@ -168,19 +173,19 @@ export const showCreateEventModal = createAsyncThunk(
   'showCreateEventModal',
   async (params, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.createEvent));
-  }
+  },
 );
 export const showDeleteEventModal = createAsyncThunk(
   'showDeleteEventModal',
   async ({ event }, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.deleteEvent, { event }));
-  }
+  },
 );
 export const showUploadEventAvatarModal = createAsyncThunk(
   'showUploadEventAvatarModal',
   async ({ eventId }, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.uploadEventAvatar, { eventId }));
-  }
+  },
 );
 export const showEditManagersEventModal = createAsyncThunk(
   'showEditManagersEventModal',
@@ -189,19 +194,19 @@ export const showEditManagersEventModal = createAsyncThunk(
       showModal(modalTypes.editManagersEventModal, {
         event,
         preparedNewManagers,
-      })
+      }),
     );
-  }
+  },
 );
 export const showEventLocation = createAsyncThunk(
   'showEventLocation',
   async ({ position }, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.eventLocation, { position }));
-  }
+  },
 );
 export const showEventStatistics = createAsyncThunk(
   'showEventStatistics',
   async ({ event }, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.eventStatistics, { event }));
-  }
+  },
 );

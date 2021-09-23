@@ -3,12 +3,14 @@ import {
   setIsCalendarOpened,
   setIsFilterOpened,
   setIsSortOpened,
+  setOrganizationFilter,
 } from '../actions/filters';
 
 const initialState = {
   isFilterOpened: false,
   isSortOpened: false,
   isCalendarOpened: false,
+  organizationId: '',
 };
 
 const filtersSlice = createSlice({
@@ -26,6 +28,10 @@ const filtersSlice = createSlice({
     [setIsCalendarOpened]: (state, { payload: { isCalendarOpened } }) => {
       const st = state;
       st.isCalendarOpened = isCalendarOpened;
+    },
+    [setOrganizationFilter]: (state, { payload: { organizationId } }) => {
+      const st = state;
+      st.organizationId = organizationId;
     },
   },
 });
