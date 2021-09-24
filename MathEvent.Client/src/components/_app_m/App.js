@@ -9,6 +9,7 @@ import {
   createMuiTheme,
   ThemeProvider,
 } from '@material-ui/core/styles';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { fetchTokens, fetchUserInfo } from '../../store/actions/account';
 import { palette, paletteDark } from '../../styles/palette';
 import colors from '../../constants/colors';
@@ -78,12 +79,14 @@ const App = () => {
         </Toolbar>
       </AppBar>
       <Toolbar id="back-to-top-anchor" />
-      <div className="app-content">
-        <div className="app-content__body">
-          <AppMenu />
-          <AppContent />
+      <Scrollbars>
+        <div className="app-content">
+          <div className="app-content__body">
+            <AppMenu />
+            <AppContent />
+          </div>
         </div>
-      </div>
+      </Scrollbars>
     </ThemeProvider>
   );
 };

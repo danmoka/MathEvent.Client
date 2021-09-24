@@ -139,6 +139,12 @@
             flex: 1;
         }
     }
+
+    &__loader-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 @media (max-width: 801px) {

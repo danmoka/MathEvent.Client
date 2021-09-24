@@ -28,6 +28,28 @@ export const fetchEvents = createAsyncThunk('fetchEvents', async (
   return { events: [] };
 });
 
+export const fetchEventsCountByDate = createAsyncThunk(
+  'fetchEventsByDate', async (
+    {
+      startDateFrom,
+      startDateTo,
+    },
+  ) => {
+    const response = await eventService.fetchEventsCountByDate(
+      startDateFrom,
+      startDateTo,
+    );
+
+    if (statusCode(response).ok) {
+      const eventsCountByDate = await response.json();
+
+      return { eventsCountByDate };
+    }
+
+    return { eventsCountByDate: {} };
+  },
+);
+
 export const fetchEvent = createAsyncThunk('fetchEvent', async (eventId) => {
   const response = await eventService.fetchEvent(eventId);
 

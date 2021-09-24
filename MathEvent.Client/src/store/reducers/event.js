@@ -15,6 +15,9 @@ import {
   onPendingEventStatistics,
   onFulfilledEventStatistics,
   onRejectedEventStatistics,
+  onPendingEventsCountByDate,
+  onFulfilledEventsCountByDate,
+  onRejectedEventsCountByDate,
 } from './defaults';
 import {
   fetchEvents,
@@ -29,6 +32,7 @@ import {
   patchEvent,
   deleteEvent,
   uploadEventAvatar,
+  fetchEventsCountByDate,
 } from '../actions/event';
 
 const initialState = {
@@ -38,11 +42,13 @@ const initialState = {
   crumbs: [],
   eventStatistics: [],
   statistics: [],
+  eventsCountByDate: {},
   isGridView: true,
   isFetchingEvents: false,
   isFetchingEvent: false,
   isFetchingEventBreadcrumbs: false,
   isFetchingEventsStatistics: false,
+  isFetchingEventsCountByDate: false,
   hasError: false,
 };
 
@@ -54,31 +60,56 @@ const eventSlice = createSlice({
       onPendingEvents(state);
     },
     [fetchEvents.fulfilled]: (state, { payload: { events, hasError } }) => {
-      onFulfilledEvents(state, hasError);
+      const st = state;
+      onFulfilledEvents(st, hasError);
 
       if (!hasError) {
-        state.events = events;
+        st.events = events;
       }
     },
     [fetchEvents.rejected]: (state) => {
-      onRejectedEvents(state);
-      state.events = [];
-      state.selectedEvent = null;
+      const st = state;
+      onRejectedEvents(st);
+      st.events = [];
+      st.selectedEvent = null;
+    },
+
+    [fetchEventsCountByDate.pending]: (state) => {
+      onPendingEventsCountByDate(state);
+    },
+    [fetchEventsCountByDate.fulfilled]: (state, {
+      payload: {
+        eventsCountByDate, hasError,
+      },
+    }) => {
+      const st = state;
+      onFulfilledEventsCountByDate(st, hasError);
+
+      if (!hasError) {
+        st.eventsCountByDate = eventsCountByDate;
+      }
+    },
+    [fetchEventsCountByDate.rejected]: (state) => {
+      const st = state;
+      onRejectedEventsCountByDate(st);
+      st.eventsCountByDate = {};
     },
 
     [fetchEvent.pending]: (state) => {
       onPendingEvent(state);
     },
     [fetchEvent.fulfilled]: (state, { payload: { event, hasError } }) => {
-      onFulfilledEvent(state, hasError);
+      const st = state;
+      onFulfilledEvent(st, hasError);
 
       if (!hasError) {
-        state.eventInfo = event;
+        st.eventInfo = event;
       }
     },
     [fetchEvent.rejected]: (state) => {
-      onRejectedEvent(state);
-      state.eventInfo = null;
+      const st = state;
+      onRejectedEvent(st);
+      st.eventInfo = null;
     },
     [createEvent.pending]: (state) => {
       onPendingEvents(state);
@@ -91,10 +122,12 @@ const eventSlice = createSlice({
     },
 
     [selectEvent]: (state, { payload: { event } }) => {
-      state.selectedEvent = event;
+      const st = state;
+      st.selectedEvent = event;
     },
     [setGridView]: (state, { payload: { isGridView } }) => {
-      state.isGridView = isGridView;
+      const st = state;
+      st.isGridView = isGridView;
     },
 
     [fetchEventBreadcrumbs.pending]: (state) => {
@@ -102,14 +135,16 @@ const eventSlice = createSlice({
     },
     [fetchEventBreadcrumbs.fulfilled]: (
       state,
-      { payload: { crumbs, hasError } }
+      { payload: { crumbs, hasError } },
     ) => {
-      onFulfilledEventBreadcrumbs(state, hasError);
-      state.crumbs = crumbs;
+      const st = state;
+      onFulfilledEventBreadcrumbs(st, hasError);
+      st.crumbs = crumbs;
     },
     [fetchEventBreadcrumbs.rejected]: (state) => {
-      onRejectedEventBreadcrumbs(state);
-      state.crumbs = [];
+      const st = state;
+      onRejectedEventBreadcrumbs(st);
+      st.crumbs = [];
     },
 
     [fetchStatistics.pending]: (state) => {
@@ -117,17 +152,19 @@ const eventSlice = createSlice({
     },
     [fetchStatistics.fulfilled]: (
       state,
-      { payload: { statistics, hasError } }
+      { payload: { statistics, hasError } },
     ) => {
-      onFulfilledEventsStatistics(state, hasError);
+      const st = state;
+      onFulfilledEventsStatistics(st, hasError);
 
       if (!hasError) {
-        state.statistics = statistics;
+        st.statistics = statistics;
       }
     },
     [fetchStatistics.rejected]: (state) => {
-      onRejectedEventsStatistics(state);
-      state.statistics = [];
+      const st = state;
+      onRejectedEventsStatistics(st);
+      st.statistics = [];
     },
 
     [fetchEventStatistics.pending]: (state) => {
@@ -135,17 +172,19 @@ const eventSlice = createSlice({
     },
     [fetchEventStatistics.fulfilled]: (
       state,
-      { payload: { statistics, hasError } }
+      { payload: { statistics, hasError } },
     ) => {
-      onFulfilledEventStatistics(state, hasError);
+      const st = state;
+      onFulfilledEventStatistics(st, hasError);
 
       if (!hasError) {
-        state.eventStatistics = statistics;
+        st.eventStatistics = statistics;
       }
     },
     [fetchEventStatistics.rejected]: (state) => {
-      onRejectedEventStatistics(state);
-      state.eventStatistics = [];
+      const st = state;
+      onRejectedEventStatistics(st);
+      st.eventStatistics = [];
     },
 
     [updateEvent.pending]: (state) => {
@@ -153,34 +192,19 @@ const eventSlice = createSlice({
     },
     [updateEvent.fulfilled]: (
       state,
-      { payload: { updatedEvent, hasError } }
+      { payload: { updatedEvent, hasError } },
     ) => {
-      onFulfilledEvent(state, hasError);
+      const st = state;
+      onFulfilledEvent(st, hasError);
 
       if (!hasError) {
-        state.eventInfo = updatedEvent;
-        // state.events = state.events.map((event) => {
-        //   if (event.id === updatedEvent.id) {
-        //     return {
-        //       ...updatedEvent,
-        //       id: updatedEvent.id,
-        //       avatarPath: updatedEvent.avatarPath,
-        //       name: updatedEvent.name,
-        //       startDate: updatedEvent.startDate,
-        //       location: updatedEvent.location,
-        //       description: updatedEvent.description,
-        //       hierarchy: updatedEvent.hierarchy,
-        //       parentId: updatedEvent.parentId,
-        //     };
-        //   }
-
-        //   return event;
-        // });
+        st.eventInfo = updatedEvent;
       }
     },
     [updateEvent.rejected]: (state) => {
-      onRejectedEvent(state);
-      state.eventInfo = null;
+      const st = state;
+      onRejectedEvent(st);
+      st.eventInfo = null;
     },
 
     [patchEvent.pending]: (state) => {
@@ -188,32 +212,41 @@ const eventSlice = createSlice({
     },
     [patchEvent.fulfilled]: (
       state,
-      { payload: { updatedEvent, hasError } }
+      { payload: { updatedEvent, hasError } },
     ) => {
-      onFulfilledEvent(state, hasError);
+      const st = state;
+      onFulfilledEvent(st, hasError);
 
       if (!hasError) {
-        state.eventInfo = updatedEvent;
+        st.eventInfo = updatedEvent;
       }
     },
     [patchEvent.rejected]: (state) => {
-      onRejectedEvent(state);
-      state.eventInfo = null;
+      const st = state;
+      onRejectedEvent(st);
+      st.eventInfo = null;
     },
 
     [deleteEvent.pending]: (state) => {
       onPendingEvent(state);
     },
     [deleteEvent.fulfilled]: (state, { payload: { eventId, hasError } }) => {
-      onFulfilledEvent(state, hasError);
+      const st = state;
+      onFulfilledEvent(st, hasError);
 
       if (!hasError) {
-        state.events = state.events.filter((event) => event.id !== eventId);
+        st.events = st.events.filter((event) => event.id !== eventId);
 
-        if (state.selectedEvent && state.selectedEvent.id === eventId)
-          state.selectedEvent = null;
-        if (state.eventInfo && state.eventInfo.id === eventId)
-          state.eventInfo = null;
+        if (
+          st.selectedEvent
+          && st.selectedEvent.id === eventId) {
+          st.selectedEvent = null;
+        }
+        if (
+          st.eventInfo
+          && st.eventInfo.id === eventId) {
+          st.eventInfo = null;
+        }
       }
     },
     [deleteEvent.rejected]: (state) => {
@@ -225,12 +258,13 @@ const eventSlice = createSlice({
     },
     [uploadEventAvatar.fulfilled]: (
       state,
-      { payload: { updatedEvent, hasError } }
+      { payload: { updatedEvent, hasError } },
     ) => {
-      onFulfilledEvent(state, hasError);
+      const st = state;
+      onFulfilledEvent(st, hasError);
 
       if (!hasError) {
-        state.eventInfo = updatedEvent;
+        st.eventInfo = updatedEvent;
       }
     },
     [uploadEventAvatar.rejected]: (state) => {

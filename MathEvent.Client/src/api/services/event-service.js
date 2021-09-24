@@ -19,6 +19,18 @@ const eventService = {
 
     return response;
   },
+  fetchEventsCountByDate: async (
+    startDateFrom,
+    startDateTo,
+  ) => {
+    const url = api.events.fetchEventsCountByDate(
+      startDateFrom,
+      startDateTo,
+    );
+    const response = await baseService.get(url);
+
+    return response;
+  },
   fetchEvent: async (eventId) => {
     const url = api.events.fetchEvent(eventId);
     const response = await baseService.get(url);

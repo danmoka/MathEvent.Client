@@ -35,7 +35,7 @@ const days = [
 
 const prepareDateTime = (dateTime) => {
   moment.locale('ru');
-  const preparedDateTime = moment(dateTime).format('LLLL');
+  const preparedDateTime = moment(dateTime).format('LL');
 
   return preparedDateTime;
 };
@@ -51,7 +51,7 @@ const Calendar = ({
   const handleOnTooltip = (value) => {
     if (value.date) {
       return {
-        'data-tip': `${prepareDateTime(value.date)} ${value.count} события`,
+        'data-tip': `${prepareDateTime(value.date)} ${value.count} шт.`,
       };
     }
 

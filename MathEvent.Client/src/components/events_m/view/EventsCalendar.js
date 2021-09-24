@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Calendar from '../../_common/Calendar';
+import Loader from '../../_common/Loader';
+import {
+  setStartDateFromFilter,
+  setStartDateToFilter,
+} from '../../../store/actions/filters';
+import { fetchEventsCountByDate } from '../../../store/actions/event';
 import './EventsView.scss';
 
 const shiftDate = (date, numDays) => {
@@ -10,36 +18,87 @@ const shiftDate = (date, numDays) => {
   return newDate;
 };
 
-const getRange = (count) => Array.from({ length: count }, (_, i) => i);
+const prepareEvents = (events) => {
+  const preparedEvents = [];
+  // console.log(events);
+  try {
+    Object.entries(events)
+      .forEach(([key, value]) => preparedEvents.push({
+        date: new Date(key),
+        count: value,
+      }));
+  } catch {
+    return [];
+  }
 
-const getRandomInt = (min, max) => Math.floor(
-  Math.random() * (max - min + 1),
-) + min;
+  return preparedEvents;
+};
 
-const today = new Date();
-const randomValues = getRange(200).map((index) => ({
-  date: shiftDate(today, -index),
-  count: getRandomInt(1, 3),
-}));
+const EventsCalendar = ({ startDate, endDate }) => {
+  const dispatch = useDispatch();
+  const {
+    eventsCountByDate,
+    isFetchingEventsCountByDate,
+  } = useSelector((state) => state.event);
+  const preparedEvents = prepareEvents(eventsCountByDate);
 
-const EventsCalendar = () => (
-  <div className="events-calendar">
-    <div className="events-calendar__title">
-      <Typography
-        className="events-calendar__title__name"
-        variant="body1"
-        color="textSecondary"
-      >
-        Календарь
-      </Typography>
-      <Divider className="events-calendar__title__divider" />
+  const handleStartDateFromToFilterChange = useCallback((data) => {
+    if (data) {
+      const { date } = data;
+      dispatch(setStartDateFromFilter(date));
+      dispatch(setStartDateToFilter(shiftDate(date, 1)));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchEventsCountByDate({
+      startDateFrom: startDate
+        ? new Date(startDate).toISOString()
+        : null,
+      startDateTo: endDate
+        ? new Date(endDate).toISOString()
+        : null,
+    }));
+  }, [dispatch, endDate, startDate]);
+
+  return (
+    <div className="events-calendar">
+      {isFetchingEventsCountByDate ? (
+        <div className="events-calendar__loader-section">
+          <Loader />
+        </div>
+      ) : (
+        <>
+          <div className="events-calendar__title">
+            <Typography
+              className="events-calendar__title__name"
+              variant="body1"
+              color="textSecondary"
+            >
+              Календарь событий
+            </Typography>
+            <Divider className="events-calendar__title__divider" />
+          </div>
+          <Calendar
+            startDate={startDate}
+            endDate={endDate}
+            values={preparedEvents}
+            onClick={handleStartDateFromToFilterChange}
+          />
+        </>
+      )}
     </div>
-    <Calendar
-      startDate={shiftDate(today, -100)}
-      endDate={shiftDate(today, 100)}
-      values={randomValues}
-    />
-  </div>
-);
+  );
+};
+
+EventsCalendar.propTypes = {
+  startDate: PropTypes.instanceOf(Date),
+  endDate: PropTypes.instanceOf(Date),
+};
+
+EventsCalendar.defaultProps = {
+  startDate: shiftDate(new Date(), -100),
+  endDate: shiftDate(new Date(), 100),
+};
 
 export default EventsCalendar;
