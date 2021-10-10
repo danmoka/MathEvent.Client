@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   navigateToEvents,
@@ -41,10 +41,19 @@ const tabs = [
 ];
 
 const AppMenu = () => {
+  const [value, setValue] = useState(0);
   const currentRoute = useSelector((state) => state.router.location.pathname);
 
+  useEffect(() => {
+    tabRoutes.forEach((v, i) => {
+      if (v.includes(currentRoute)) {
+        setValue(i);
+      }
+    });
+  }, [currentRoute, value]);
+
   return (
-    <TabPanel tabs={tabs} value={tabRoutes.indexOf(currentRoute)} />
+    <TabPanel tabs={tabs} value={value} />
   );
 };
 

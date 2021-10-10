@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 import 'moment/locale/ru';
 import Loader from '../../_common/Loader';
 import CardCollection from '../../_common/CardCollection';
 import EventsBreadcrumbs from './EventsBreadcrumbs';
 import { getImageSrc } from '../../../utils/get-image-src';
-import { iconTypes } from '../../_common/Icon';
+import { navigateToEvent } from '../../../utils/navigator';
 import images from '../../../constants/images';
 import './EventsView.scss';
 
@@ -45,14 +45,13 @@ const prepareEvents = (
 }));
 
 const EventsCollection = () => {
-  const dispatch = useDispatch();
   const { events, selectedEvent, isFetchingEvents } = useSelector(
     (state) => state.event,
   );
   const { isDarkTheme } = useSelector((state) => state.app);
 
-  const handleEventClick = useCallback(() => {
-    console.log('clicked...');
+  const handleEventClick = useCallback((event) => {
+    navigateToEvent(event.id);
   }, []);
 
   const preparedEvents = prepareEvents(
@@ -69,7 +68,6 @@ const EventsCollection = () => {
         <div className="events-collection__loader-section">
           <Loader />
         </div>
-
       ) : (
         <CardCollection items={preparedEvents} />
       )}

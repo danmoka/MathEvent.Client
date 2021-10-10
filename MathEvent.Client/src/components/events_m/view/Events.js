@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import EventsView from './EventsView';
+import Event from './Event';
 import routes from '../../../utils/routes';
 
 const Events = () => (
@@ -10,11 +11,11 @@ const Events = () => (
       exact
       render={() => <EventsView />}
     />
-    {/* <Route
+    <Route
       path={`${routes.events.event(':id')}`}
       exact
-      render={(props) => <EventView {...props} />}
-    /> */}
+      render={() => <Event />}
+    />
     {/* <Route
       path={`${routes.events.edit(':id')}`}
       exact

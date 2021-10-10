@@ -10,6 +10,10 @@ export const navigateToUserEdit = (userId) => history.push(
 );
 
 export const navigateToEvents = () => history.push(routes.events.main);
+
+export const navigateToEvent = (eventId) => history.push(
+  `${routes.events.event(eventId)}`,
+);
 export const navigateToEventEdit = (eventId) => history.push(
   `${routes.events.edit(eventId)}`,
 );

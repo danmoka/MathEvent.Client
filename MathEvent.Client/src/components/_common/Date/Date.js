@@ -1,19 +1,28 @@
-import React from "react";
-import Moment from "react-moment";
-import Typography from "@material-ui/core/Typography";
+import React from 'react';
+import Moment from 'react-moment';
+import PropTypes from 'prop-types';
+import { SmallText } from '../Text/Text';
 
-const Date = ({primaryText, date, variant="h6"}) => {
-    return (
-        <Typography variant={variant}>
-            {primaryText}
-            <Moment
-            className="date__time"
-            format="LLLL"
-            date={date}
-            withTitle
-            locale="ru"/>
-        </Typography>
-    );
+const Date = ({ date, format }) => (
+  <SmallText>
+    <Moment
+      className="date__time"
+      format={format}
+      date={date}
+      withTitle
+      locale="ru"
+    />
+  </SmallText>
+);
+
+Date.propTypes = {
+  date: PropTypes.string,
+  format: PropTypes.string,
+};
+
+Date.defaultProps = {
+  date: null,
+  format: 'LLLL',
 };
 
 export default Date;

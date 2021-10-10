@@ -48,14 +48,11 @@ const EventsBreadcrumbs = () => {
       : (
         <>
           {crumbs.length > 0
-            ? (
+            && (
               <CommonBreadcrumbs
                 items={preparedCrumbs}
                 backButtonOnClick={handleBackButtonClick}
               />
-            )
-            : (
-              <></>
             )}
         </>
       )

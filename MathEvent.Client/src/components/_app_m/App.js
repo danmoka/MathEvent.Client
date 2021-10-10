@@ -1,20 +1,20 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import {
   createMuiTheme,
   ThemeProvider,
 } from '@material-ui/core/styles';
-import { Scrollbars } from 'react-custom-scrollbars';
+import AppContent from './AppContent';
+import AppMenu from './AppMenu';
+import { HugeText } from '../_common/Text/Text';
 import { fetchTokens, fetchUserInfo } from '../../store/actions/account';
 import { palette, paletteDark } from '../../styles/palette';
 import colors from '../../constants/colors';
-import AppContent from './AppContent';
-import AppMenu from './AppMenu';
 import './App.scss';
 
 const useInterval = (callback, delay) => {
@@ -72,14 +72,14 @@ const App = () => {
         elevation={1}
       >
         <Toolbar className="app-header__toolbar">
-          <Typography variant="h6" noWrap>
+          <HugeText>
             MathEvent
-          </Typography>
+          </HugeText>
           <Button color="inherit">Войти</Button>
         </Toolbar>
       </AppBar>
       <Toolbar id="back-to-top-anchor" />
-      <Scrollbars>
+      <Scrollbars autoHide>
         <div className="app-content">
           <div className="app-content__body">
             <AppMenu />
