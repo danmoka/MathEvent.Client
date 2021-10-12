@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
 const Dropdown = ({
-  className, items, value, label, variant, onChange,
+  className, items, value, label, variant, displayEmpty, onChange,
 }) => {
   const [dropdownValue, setDropdownValue] = useState(value);
 
@@ -22,20 +22,21 @@ const Dropdown = ({
   };
 
   return (
-    <FormControl className={className} variant={variant}>
-      <InputLabel
-        shrink
-        id="placeholder-label-label"
-      >
-        {label}
-      </InputLabel>
+    <FormControl variant={variant} className={className}>
+      {displayEmpty
+        ? (
+          <InputLabel shrink id="dropdown-label">{label}</InputLabel>
+        )
+        : (
+          <InputLabel id="dropdown-label">{label}</InputLabel>
+        )}
       <Select
-        labelId="placeholder-label-label"
-        id="placeholder-label"
+        labelId="dropdown-label"
+        id={`dropdown-label-${variant}`}
         value={dropdownValue}
-        variant={variant}
-        displayEmpty
         onChange={handleChange}
+        label={label}
+        displayEmpty={displayEmpty}
       >
         {items.map((item) => (
           <MenuItem key={`dropdown-item-${item.value}`} value={item.value}>
@@ -56,6 +57,7 @@ Dropdown.propTypes = {
   value: PropTypes.string,
   label: PropTypes.string,
   variant: PropTypes.string,
+  displayEmpty: PropTypes.bool,
   onChange: PropTypes.func,
 };
 
@@ -65,6 +67,7 @@ Dropdown.defaultProps = {
   value: '',
   label: 'Выберите',
   variant: 'standard',
+  displayEmpty: false,
   onChange: () => {},
 };
 

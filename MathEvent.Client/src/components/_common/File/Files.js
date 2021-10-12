@@ -26,7 +26,19 @@ const Files = ({ items }) => (
 );
 
 Files.propTypes = {
-  items: PropTypes.arrayOf(),
+  items: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    ext: PropTypes.string,
+    hierarchy: PropTypes.bool,
+    onClick: PropTypes.func,
+    actions: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      icon: PropTypes.string,
+      label: PropTypes.string,
+      onClick: PropTypes.func,
+    })),
+  })),
 };
 
 Files.defaultProps = {

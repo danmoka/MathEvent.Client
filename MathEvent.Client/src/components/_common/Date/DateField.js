@@ -9,9 +9,10 @@ import './Date.scss';
 const DateField = ({
   className,
   label,
-  variant,
+  inputVariant,
   okLabel,
   cancelLabel,
+  showCloseButton,
   value,
   minDate,
   minDateMessage,
@@ -28,6 +29,11 @@ const DateField = ({
     onChange(newValue);
   };
 
+  const handleClear = (e) => {
+    e.stopPropagation();
+    handleChange(null);
+  };
+
   return (
     <MuiPickersUtilsProvider
       locale={ruLocale}
@@ -37,7 +43,7 @@ const DateField = ({
         className={className}
         autoOk
         ampm={false}
-        variant={variant}
+        inputVariant={inputVariant}
         okLabel={okLabel}
         cancelLabel={cancelLabel}
         value={fieldValue}
@@ -47,11 +53,13 @@ const DateField = ({
         minDate={minDate}
         InputProps={{
           endAdornment: (
-            <IconButton
-              type={iconTypes.close}
-              size="small"
-              onClick={() => handleChange(null)}
-            />
+            showCloseButton && (
+              <IconButton
+                type={iconTypes.close}
+                size="small"
+                onClick={handleClear}
+              />
+            )
           ),
         }}
       />
@@ -62,9 +70,10 @@ const DateField = ({
 DateField.propTypes = {
   className: PropTypes.string,
   label: PropTypes.string,
-  variant: PropTypes.string,
+  inputVariant: PropTypes.string,
   okLabel: PropTypes.string,
   cancelLabel: PropTypes.string,
+  showCloseButton: PropTypes.bool,
   value: PropTypes.instanceOf(Date),
   minDate: PropTypes.instanceOf(Date),
   minDateMessage: PropTypes.string,
@@ -74,9 +83,10 @@ DateField.propTypes = {
 DateField.defaultProps = {
   className: 'datefield',
   label: 'Дата и время',
-  variant: 'inline',
+  inputVariant: 'standard',
   okLabel: 'Готово',
   cancelLabel: 'Отмена',
+  showCloseButton: false,
   value: new Date(),
   minDate: null,
   minDateMessage: 'Выход за пределы минимальной даты',

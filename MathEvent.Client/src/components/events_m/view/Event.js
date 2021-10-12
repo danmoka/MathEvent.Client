@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import Scrollbars from 'react-custom-scrollbars-2';
@@ -7,16 +7,19 @@ import Loader from '../../_common/Loader';
 import Button, { buttonTypes } from '../../_common/Button';
 import { HugeText, NormalText, SmallText } from '../../_common/Text/Text';
 import { Date } from '../../_common/Date';
-import { Icon, iconTypes } from '../../_common/Icon';
+import { Icon, IconButton, iconTypes } from '../../_common/Icon';
 import Image from '../../_common/Image';
 import List from '../../_common/List';
 import EventFiles from './EventFiles';
 import {
   fetchEvent,
 } from '../../../store/actions/event';
+import { useTitle } from '../../../hooks';
 import { getImageSrc } from '../../../utils/get-image-src';
 import images from '../../../constants/images';
 import getInitials from '../../../utils/get_initials';
+import { isAbleToEditEvent } from '../../../utils/user_rights';
+import { navigateToEventEdit } from '../../../utils/navigator';
 import './EventsView.scss';
 
 const prepareImage = (path, isDarkTheme) => {
@@ -30,24 +33,53 @@ const prepareImage = (path, isDarkTheme) => {
   return images.eventDefault;
 };
 
-const prepareUsers = (users) => users.map((user, index) => ({
-  id: user.id,
-  primaryText: `${user.name} ${user.surname}`,
-  secondaryText: user.userName,
-  avatarText: getInitials(user.name, user.surname),
-  index: index + 1,
-  onClick: () => {},
-}));
+const prepareUsers = (users) => (users
+  ? users.map((user, index) => ({
+    id: user.id,
+    primaryText: `${user.name} ${user.surname}`,
+    secondaryText: user.userName,
+    avatarText: getInitials(user.name, user.surname),
+    index: index + 1,
+    onClick: () => {},
+  }))
+  : []);
 
 const Event = () => {
   const dispatch = useDispatch();
   const { eventInfo, isFetchingEvent } = useSelector((state) => state.event);
+  const { userInfo } = useSelector((state) => state.account);
   const { isDarkTheme } = useSelector((state) => state.app);
+
   const { id } = useParams();
+  useTitle('Событие');
 
   useEffect(() => {
     dispatch(fetchEvent(id));
   }, [dispatch, id]);
+
+  const handleEditButtonClick = useCallback(() => {
+    navigateToEventEdit(id);
+  }, [id]);
+
+  const preparedImage = useMemo(
+    () => prepareImage(eventInfo.avatarPath, isDarkTheme),
+    [eventInfo.avatarPath, isDarkTheme],
+  );
+
+  const preparedManagers = useMemo(
+    () => prepareUsers(eventInfo.managers),
+    [eventInfo.managers],
+  );
+
+  const preparedSubscribers = useMemo(
+    () => prepareUsers(eventInfo.applicationUsers),
+    [eventInfo.applicationUsers],
+  );
+
+  // TODO: после ауфа - использовать
+  const isAbleToEdit = useMemo(
+    () => isAbleToEditEvent(userInfo, eventInfo), [userInfo, eventInfo],
+  );
 
   return (
     <div className="event">
@@ -60,9 +92,18 @@ const Event = () => {
         : (
           <Paper className="event__body">
             <div className="event__header-section">
-              <HugeText>
-                {eventInfo.name}
-              </HugeText>
+              <div className="event__header-section__name">
+                <HugeText>
+                  {eventInfo.name}
+                </HugeText>
+                {true && (
+                <IconButton
+                  type={iconTypes.edit}
+                  size="small"
+                  onClick={handleEditButtonClick}
+                />
+                )}
+              </div>
               <Date date={eventInfo.startDate} />
             </div>
             <div className="event__buttons-section">
@@ -101,7 +142,7 @@ const Event = () => {
             <div className="event__image-section">
               <Image
                 className="event__image-section__image"
-                src={prepareImage(eventInfo.avatarPath, isDarkTheme)}
+                src={preparedImage}
                 alt={eventInfo.name}
               />
             </div>
@@ -150,11 +191,11 @@ const Event = () => {
                 </NormalText>
               </div>
               <div className="event__info-section__info">
-                {eventInfo.managers
+                {eventInfo.managers?.length > 0
                   ? (
                     <Scrollbars autoHide autoHeight autoHeightMax={500}>
                       <List
-                        items={prepareUsers(eventInfo.managers)}
+                        items={preparedManagers}
                       />
                     </Scrollbars>
                   )
@@ -173,11 +214,11 @@ const Event = () => {
                 </NormalText>
               </div>
               <div className="event__info-section__info">
-                {eventInfo.applicationUsers
+                {eventInfo.applicationUsers?.length > 0
                   ? (
                     <Scrollbars autoHide autoHeight autoHeightMax={500}>
                       <List
-                        items={prepareUsers(eventInfo.applicationUsers)}
+                        items={preparedSubscribers}
                       />
                     </Scrollbars>
                   )

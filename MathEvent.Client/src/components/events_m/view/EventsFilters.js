@@ -64,11 +64,12 @@ const EventsFilters = () => {
           label="Организация"
           value={preparedOrganizations[0].value}
           items={preparedOrganizations}
+          displayEmpty
           onChange={handleOrganizationFilterChange}
         />
         <DateField
           className="events-filters__datefield"
-          variant="dialog"
+          showCloseButton
           value={startDateFrom}
           minDate={new Date(2015, 10)}
           onChange={handleStartDateFromFilterChange}
@@ -76,7 +77,7 @@ const EventsFilters = () => {
         />
         <DateField
           className="events-filters__datefield"
-          variant="dialog"
+          showCloseButton
           value={startDateTo}
           minDate={startDateFrom || new Date(2015, 10)}
           onChange={handleStartDateToFilterChange}

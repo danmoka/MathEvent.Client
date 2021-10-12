@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import EventsView from './EventsView';
 import Event from './Event';
+import EventEdit from '../edit/EventEdit';
 import routes from '../../../utils/routes';
 
 const Events = () => (
@@ -16,11 +17,11 @@ const Events = () => (
       exact
       render={() => <Event />}
     />
-    {/* <Route
+    <Route
       path={`${routes.events.edit(':id')}`}
       exact
-      render={(props) => <EventEdit {...props} />}
-    /> */}
+      render={() => <EventEdit />}
+    />
   </>
 );
 
