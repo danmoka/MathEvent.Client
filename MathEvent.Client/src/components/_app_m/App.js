@@ -12,6 +12,7 @@ import {
 import AppContent from './AppContent';
 import AppMenu from './AppMenu';
 import { HugeText } from '../_common/Text/Text';
+import { navigateToLogin } from '../../utils/navigator';
 import { fetchTokens, fetchUserInfo } from '../../store/actions/account';
 import { palette, paletteDark } from '../../styles/palette';
 import colors from '../../constants/colors';
@@ -62,6 +63,8 @@ const App = () => {
     dispatch(fetchTokens({ userName: null, password: null }));
   }, tokenInterval);
 
+  const handleLoginClick = () => navigateToLogin();
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -75,7 +78,12 @@ const App = () => {
           <HugeText>
             MathEvent
           </HugeText>
-          <Button color="inherit">Войти</Button>
+          <Button
+            color="inherit"
+            onClick={handleLoginClick}
+          >
+            Войти
+          </Button>
         </Toolbar>
       </AppBar>
       <Toolbar id="back-to-top-anchor" />

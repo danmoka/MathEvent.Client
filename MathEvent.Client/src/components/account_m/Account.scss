@@ -1,0 +1,19 @@
+.account {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 24px;
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        min-width: 50%;
+        padding: 24px;
+        gap: 24px;
+
+        &__control {
+            width: 100%;
+        }
+    }
+}

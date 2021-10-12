@@ -66,7 +66,7 @@ export const fetchTokens = createAsyncThunk(
       hasToken: false,
       hasError: true,
     };
-  }
+  },
 );
 
 export const fetchUserInfo = createAsyncThunk('fetchUserInfo', async () => {
@@ -95,7 +95,7 @@ export const showLogoutModal = createAsyncThunk(
   'showLogoutModal',
   (params, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.logout));
-  }
+  },
 );
 
 export const revocation = createAsyncThunk('revocation', async () => {
