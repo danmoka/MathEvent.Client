@@ -21,6 +21,8 @@ import {
 import { fetchOrganizations } from '../../../store/actions/organization';
 import { useTitle } from '../../../hooks';
 import { getImageSrc } from '../../../utils/get-image-src';
+import { isAbleToEditEvent } from '../../../utils/user_rights';
+import { navigateToEvent } from '../../../utils/navigator';
 import images from '../../../constants/images';
 import './EventEdit.scss';
 
@@ -46,6 +48,7 @@ const prepareOrganizations = (organizations) => (organizations
 
 const EventEdit = () => {
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.account);
   const { eventInfo, isFetchingEvent } = useSelector((state) => state.event);
   const { organizations } = useSelector((state) => state.organization);
   const { isDarkTheme } = useSelector((state) => state.app);
@@ -61,6 +64,14 @@ const EventEdit = () => {
 
   const { id } = useParams();
   useTitle('Редактирование события');
+
+  const isAbleToEdit = isAbleToEditEvent(userInfo, eventInfo);
+
+  useEffect(() => {
+    if (!isAbleToEdit) {
+      navigateToEvent(id);
+    }
+  }, [dispatch, id, isAbleToEdit, userInfo]);
 
   useEffect(() => {
     dispatch(fetchEvent(id));

@@ -26,6 +26,7 @@ const prepareImage = (path, isDarkTheme) => {
   if (path) {
     return getImageSrc(path);
   }
+
   if (isDarkTheme) {
     return images.eventDefaultDark;
   }
@@ -61,10 +62,8 @@ const Event = () => {
     navigateToEventEdit(id);
   }, [id]);
 
-  const preparedImage = useMemo(
-    () => prepareImage(eventInfo.avatarPath, isDarkTheme),
-    [eventInfo.avatarPath, isDarkTheme],
-  );
+  const preparedImage = prepareImage(eventInfo.avatarPath, isDarkTheme);
+  const isAbleToEdit = isAbleToEditEvent(userInfo, eventInfo);
 
   const preparedManagers = useMemo(
     () => prepareUsers(eventInfo.managers),
@@ -74,11 +73,6 @@ const Event = () => {
   const preparedSubscribers = useMemo(
     () => prepareUsers(eventInfo.applicationUsers),
     [eventInfo.applicationUsers],
-  );
-
-  // TODO: после ауфа - использовать
-  const isAbleToEdit = useMemo(
-    () => isAbleToEditEvent(userInfo, eventInfo), [userInfo, eventInfo],
   );
 
   return (
@@ -96,7 +90,7 @@ const Event = () => {
                 <HugeText>
                   {eventInfo.name}
                 </HugeText>
-                {true && (
+                {isAbleToEdit && (
                 <IconButton
                   type={iconTypes.edit}
                   size="small"

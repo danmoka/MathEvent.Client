@@ -7,7 +7,6 @@ import {
   setRefreshToken,
 } from '../../utils/local-storage-manager';
 import { hideModal, showModal } from './modal';
-import { navigateToHome } from '../../utils/navigator';
 import accountService from '../../api/services/account-service';
 import statusCode from '../../utils/status-code-reader';
 import config from '../../config';
@@ -86,7 +85,6 @@ export const fetchUserInfo = createAsyncThunk('fetchUserInfo', async () => {
 
 export const logout = createAsyncThunk('logout', (params, thunkAPI) => {
   thunkAPI.dispatch(hideModal());
-  navigateToHome();
   clearAccessToken();
   clearRefreshToken();
 });

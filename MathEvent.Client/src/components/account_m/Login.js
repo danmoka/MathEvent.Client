@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '../_common/Button';
 import TextField from '../_common/TextField';
 import { fetchTokens } from '../../store/actions/account';
-import { navigateToHome } from '../../utils/navigator';
+import { navigateToEvents } from '../../utils/navigator';
 import { useTitle } from '../../hooks';
 import './Account.scss';
 
@@ -24,7 +24,7 @@ const Login = () => {
     const credentials = {
       userName,
       password,
-      successAction: () => { navigateToHome(); },
+      successAction: () => { navigateToEvents(); },
     };
     dispatch(fetchTokens(credentials));
     clearFields();

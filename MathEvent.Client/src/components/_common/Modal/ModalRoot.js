@@ -7,7 +7,7 @@ import CreateEventModal from '../../events/view/CreateEventModal';
 import CreateFolderModal from '../../files/view/CreateFolderModal';
 import DeleteEventModal from '../../events/view/DeleteEventModal';
 import DeleteFileModal from '../../files/view/DeleteFileModal';
-import LogoutModal from '../../_app/LogoutModal';
+import LogoutModal from '../../account_m/LogoutModal';
 import UploadEventAvatarModal from '../../events/edit/UploadEventAvatar';
 import UploadFilesModal from '../../files/view/UploadFilesModal';
 import UserStatisticsModal from '../../statistics/user/UserStatisticsModal';
