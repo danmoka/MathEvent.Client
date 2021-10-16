@@ -166,7 +166,7 @@ const Event = () => {
               </div>
               <div className="event__info-section__info">
                 <SmallText>
-                  {`${eventInfo.organizationName
+                  {`${eventInfo.organization?.name
                   || 'Организация отсутствует'}`}
                 </SmallText>
               </div>

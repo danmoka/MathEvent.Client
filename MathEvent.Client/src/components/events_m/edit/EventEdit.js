@@ -88,7 +88,7 @@ const EventEdit = () => {
     setDesctiption(eventInfo.description || '');
     setStartDate(new Date(eventInfo.startDate) || new Date(Date.now()));
     setLocation(eventInfo.location || '');
-    setOrganization(eventInfo.organization?.id);
+    setOrganization(eventInfo.organization?.id.toString());
     setHierarchy(eventInfo.hierarchy || false);
   }, [eventInfo]);
 

@@ -13,7 +13,10 @@ import {
   setIsSortOpened,
   setIsCalendarOpened,
 } from '../../../store/actions/filters';
-import { fetchEvents } from '../../../store/actions/event';
+import {
+  fetchEvents,
+  showCreateEventModal,
+} from '../../../store/actions/event';
 
 const EventView = () => {
   useTitle('События');
@@ -53,6 +56,10 @@ const EventView = () => {
     dispatch(setIsCalendarOpened(!isCalendarOpened));
   }, [dispatch, isCalendarOpened]);
 
+  const handleEventCreateButtonClick = useCallback(() => {
+    dispatch(showCreateEventModal());
+  }, [dispatch]);
+
   return (
     <div>
       <div className="events-view__search-section">
@@ -79,6 +86,7 @@ const EventView = () => {
           <IconButton
             type={iconTypes.add}
             title="Новое событие"
+            onClick={handleEventCreateButtonClick}
           />
         </div>
       </div>

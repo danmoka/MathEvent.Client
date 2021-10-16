@@ -19,8 +19,9 @@ const prepareDateTime = (dateTime) => {
 
 const prepareImage = (path, isDarkTheme) => {
   if (path) {
-    return getImageSrc(path);
+    return getImageSrc(path).replace(/\\/g, '/');
   }
+
   if (isDarkTheme) {
     return images.eventDefaultDark;
   }
