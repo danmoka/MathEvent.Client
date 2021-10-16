@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import EditManagersEventModal from '../../events/edit/EditManagersEventModal';
-import EventLocationModal from '../../events/view/EventLocationModal';
+import EventLocationModal from '../../events_m/view/EventLocationModel';
 import EventStatisticsModal from '../../statistics/event/EventStatisticsModal';
 import CreateEventModal from '../../events/view/CreateEventModal';
 import CreateFolderModal from '../../files/view/CreateFolderModal';
@@ -36,7 +36,7 @@ const ModalRoot = () => {
 
   const SpecificModal = modals[modalType];
 
-  return <SpecificModal {...modalProps} />;
+  return <SpecificModal modalProps={modalProps} />;
 };
 
 export default ModalRoot;

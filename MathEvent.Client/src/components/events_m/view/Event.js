@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, {
+  useCallback, useEffect, useMemo,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import Scrollbars from 'react-custom-scrollbars-2';
@@ -13,7 +15,9 @@ import List from '../../_common/List';
 import EventFiles from './EventFiles';
 import {
   fetchEvent,
+  showEventLocation,
 } from '../../../store/actions/event';
+import { fetchPosition } from '../../../store/actions/map';
 import { useTitle } from '../../../hooks';
 import { getImageSrc } from '../../../utils/get-image-src';
 import images from '../../../constants/images';
@@ -50,20 +54,17 @@ const Event = () => {
   const { eventInfo, isFetchingEvent } = useSelector((state) => state.event);
   const { userInfo } = useSelector((state) => state.account);
   const { isDarkTheme } = useSelector((state) => state.app);
+  const {
+    positionResults,
+    isFetchingPosition,
+  } = useSelector((state) => state.map);
 
   const { id } = useParams();
   useTitle('Событие');
 
-  useEffect(() => {
-    dispatch(fetchEvent(id));
-  }, [dispatch, id]);
-
-  const handleEditButtonClick = useCallback(() => {
-    navigateToEventEdit(id);
-  }, [id]);
-
   const preparedImage = prepareImage(eventInfo.avatarPath, isDarkTheme);
   const isAbleToEdit = isAbleToEditEvent(userInfo, eventInfo);
+  const position = positionResults.length > 0 ? positionResults[0] : null;
 
   const preparedManagers = useMemo(
     () => prepareUsers(eventInfo.managers),
@@ -74,6 +75,24 @@ const Event = () => {
     () => prepareUsers(eventInfo.applicationUsers),
     [eventInfo.applicationUsers],
   );
+
+  useEffect(() => {
+    if (eventInfo.location) {
+      dispatch(fetchPosition(eventInfo.location));
+    }
+  }, [dispatch, eventInfo]);
+
+  useEffect(() => {
+    dispatch(fetchEvent(id));
+  }, [dispatch, id]);
+
+  const handleEditButtonClick = useCallback(() => {
+    navigateToEventEdit(id);
+  }, [id]);
+
+  const handleShowLocation = useCallback(() => {
+    dispatch(showEventLocation({ position }));
+  }, [dispatch, position]);
 
   return (
     <div className="event">
@@ -151,7 +170,7 @@ const Event = () => {
                   || 'Организация отсутствует'}`}
                 </SmallText>
               </div>
-              {eventInfo.isFetchingPosition
+              {isFetchingPosition
                 ? (
                   <div className="event__loader-section">
                     <Loader />
@@ -166,7 +185,10 @@ const Event = () => {
                     <div className="event__info-section__info">
                       {eventInfo.location
                         ? (
-                          <Button type={buttonTypes.text} onClick={() => {}}>
+                          <Button
+                            type={buttonTypes.text}
+                            onClick={handleShowLocation}
+                          >
                             {eventInfo.location}
                           </Button>
                         )
