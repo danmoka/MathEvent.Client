@@ -3,6 +3,7 @@ import { showModal, hideModal } from './modal';
 import eventService from '../../api/services/event-service';
 import statusCode from '../../utils/status-code-reader';
 import modalTypes from '../../constants/modal-types';
+import { navigateToEvents } from '../../utils/navigator';
 
 export const fetchEvents = createAsyncThunk('fetchEvents', async (
   {
@@ -169,6 +170,8 @@ export const deleteEvent = createAsyncThunk(
     const response = await eventService.deleteEvent(eventId);
 
     if (statusCode(response).noContent) {
+      thunkAPI.dispatch(navigateToEvents());
+
       return { eventId, hasError: false };
     }
 

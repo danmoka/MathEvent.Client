@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useDebouncedCallback } from 'use-debounce';
 import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
 import Loader from '../../_common/Loader';
 import TextField from '../../_common/TextField';
 import { DateField } from '../../_common/Date';
@@ -17,6 +18,7 @@ import {
   fetchEvent,
   patchEvent,
   showUploadEventAvatarModal,
+  showDeleteEventModal,
 } from '../../../store/actions/event';
 import { fetchOrganizations } from '../../../store/actions/organization';
 import { useTitle } from '../../../hooks';
@@ -192,6 +194,10 @@ const EventEdit = () => {
     [handlePatchEvent],
   );
 
+  const handleEventDeleteClick = useCallback(() => {
+    dispatch(showDeleteEventModal({ event: eventInfo }));
+  }, [dispatch, eventInfo]);
+
   return (
     <div className="event-edit">
       {isFetchingEvent
@@ -201,64 +207,79 @@ const EventEdit = () => {
           </div>
         )
         : (
-          <Paper className="event-edit__body">
-            <TextField
-              className="event-edit__body__control"
-              label="Название"
-              value={name}
-              onChange={handleNameValueChange}
-            />
-            <div className="event-edit__body__image-section">
-              <Image
-                className="event-edit__body__image-section__image"
-                src={preparedImage}
-                alt={name}
+          <>
+            <Paper className="event-edit__body">
+              <TextField
+                className="event-edit__body__control"
+                label="Название"
+                value={name}
+                onChange={handleNameValueChange}
               />
-            </div>
-            <Button
-              className="event-edit__body__control"
-              startIcon={iconTypes.upload}
-              onClick={handleEventAvatarUpload}
+              <div className="event-edit__body__image-section">
+                <Image
+                  className="event-edit__body__image-section__image"
+                  src={preparedImage}
+                  alt={name}
+                />
+              </div>
+              <Button
+                className="event-edit__body__control"
+                startIcon={iconTypes.upload}
+                onClick={handleEventAvatarUpload}
+              >
+                Загрузить изображение
+              </Button>
+              <TextField
+                className="event-edit__body__control"
+                label="Описание"
+                multiline
+                rows={10}
+                value={description}
+                onChange={handleDescriptionValueChange}
+              />
+              <DateField
+                className="event-edit__body__control"
+                label="Дата и время начала"
+                inputVariant="outlined"
+                value={startDate}
+                minDate={new Date(Date.now())}
+                onChange={handleDateValueChange}
+              />
+              <TextField
+                className="event-edit__body__control"
+                label="Адрес"
+                value={location}
+                onChange={handleLocationValueChange}
+              />
+              <Dropdown
+                className="event-edit__body__control"
+                label="Организация"
+                variant="outlined"
+                value={organization}
+                items={preparedOrganizations}
+                onChange={handleOrganizationChange}
+              />
+              <Checkbox
+                className="event-edit__body__control"
+                label="Является множеством других событий"
+                value={hierarchy}
+                onChange={handleHierarchyValueChange}
+              />
+            </Paper>
+            <Box
+              className="event-edit__body"
+              bgcolor="error.dark"
+              borderRadius={4}
             >
-              Загрузить изображение
-            </Button>
-            <TextField
-              className="event-edit__body__control"
-              label="Описание"
-              multiline
-              rows={10}
-              value={description}
-              onChange={handleDescriptionValueChange}
-            />
-            <DateField
-              className="event-edit__body__control"
-              label="Дата и время начала"
-              inputVariant="outlined"
-              value={startDate}
-              minDate={new Date(Date.now())}
-              onChange={handleDateValueChange}
-            />
-            <TextField
-              className="event-edit__body__control"
-              label="Адрес"
-              value={location}
-              onChange={handleLocationValueChange}
-            />
-            <Dropdown
-              className="event-edit__body__control"
-              label="Организация"
-              variant="outlined"
-              value={organization}
-              items={preparedOrganizations}
-              onChange={handleOrganizationChange}
-            />
-            <Checkbox
-              className="event-edit__body__control"
-              label="Является множеством других событий"
-              value={hierarchy}
-              onChange={handleHierarchyValueChange}
-            />
-          </Paper>
+              <Button
+                className="event-edit__body__control"
+                startIcon={iconTypes.delete}
+                onClick={handleEventDeleteClick}
+              >
+                Удалить событие
+              </Button>
+            </Box>
+          </>
         )}
     </div>
   );

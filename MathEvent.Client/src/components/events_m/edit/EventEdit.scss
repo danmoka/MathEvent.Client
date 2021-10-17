@@ -1,12 +1,12 @@
 .event-edit {
     display: flex;
     flex-direction: column;
-    margin-top: 24px;
 
     &__body {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        margin-top: 24px;
         padding: 24px;
         gap: 24px;
 

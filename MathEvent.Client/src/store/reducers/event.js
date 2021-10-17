@@ -235,16 +235,7 @@ const eventSlice = createSlice({
       onFulfilledEvent(st, hasError);
 
       if (!hasError) {
-        st.events = st.events.filter((event) => event.id !== eventId);
-
-        if (
-          st.selectedEvent
-          && st.selectedEvent.id === eventId) {
-          st.selectedEvent = null;
-        }
-        if (
-          st.eventInfo
-          && st.eventInfo.id === eventId) {
+        if (st.eventInfo?.id === eventId) {
           st.eventInfo = {};
         }
       }
