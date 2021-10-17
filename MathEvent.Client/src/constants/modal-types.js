@@ -2,7 +2,7 @@ const modalTypes = {
   createEvent: 'createEvent',
   deleteEvent: 'deleteEvent',
   uploadEventAvatar: 'uploadEventAvatar',
-  editManagersEventModal: 'editManagersEventModal',
+  eventAddManagerModal: 'eventAddManagerModal',
   eventLocation: 'eventLocationModal',
   eventStatistics: 'eventStatistics',
   createFolder: 'createFolder',

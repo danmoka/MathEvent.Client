@@ -4,6 +4,7 @@ import React, {
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useDebouncedCallback } from 'use-debounce';
+import Scrollbars from 'react-custom-scrollbars-2';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Loader from '../../_common/Loader';
@@ -11,20 +12,24 @@ import TextField from '../../_common/TextField';
 import { DateField } from '../../_common/Date';
 import Dropdown from '../../_common/Dropdown';
 import Image from '../../_common/Image';
-import { iconTypes } from '../../_common/Icon';
+import { IconButton, iconTypes } from '../../_common/Icon';
 import Button from '../../_common/Button';
 import Checkbox from '../../_common/Checkbox';
+import { HugeText, SmallText } from '../../_common/Text/Text';
+import List from '../../_common/List';
 import {
   fetchEvent,
   patchEvent,
   showUploadEventAvatarModal,
   showDeleteEventModal,
+  showEventAddManagerModal,
 } from '../../../store/actions/event';
 import { fetchOrganizations } from '../../../store/actions/organization';
 import { useTitle } from '../../../hooks';
 import { getImageSrc } from '../../../utils/get-image-src';
 import { isAbleToEditEvent } from '../../../utils/user_rights';
 import { navigateToEvent } from '../../../utils/navigator';
+import { getInitials } from '../../../utils/get_initials';
 import images from '../../../constants/images';
 import './EventEdit.scss';
 
@@ -46,6 +51,25 @@ const prepareOrganizations = (organizations) => (organizations
       name: organization.name,
     })),
   ]
+  : []);
+
+const prepareManagers = (managers, onManagerDelete) => (managers
+  ? managers.map((manager, index) => ({
+    id: manager.id,
+    primaryText: `${manager.name} ${manager.surname}`,
+    secondaryText: manager.userName,
+    avatarText: getInitials(manager.name, manager.surname),
+    index: index + 1,
+    onClick: () => {},
+    actions: [
+      {
+        id: 'delete',
+        label: 'Удалить',
+        icon: iconTypes.delete,
+        onClick: () => onManagerDelete(manager),
+      },
+    ],
+  }))
   : []);
 
 const EventEdit = () => {
@@ -114,6 +138,26 @@ const EventEdit = () => {
       );
     },
     [dispatch, eventId],
+  );
+
+  const handleManagerDeleteClick = useCallback(
+    (user) => {
+      handlePatchEvent([
+        {
+          value: eventInfo.managers
+            .filter((m) => m.id !== user.id)
+            .map((m) => m.id),
+          path: '/Managers',
+          op: 'replace',
+        },
+      ]);
+    },
+    [eventInfo.managers, handlePatchEvent],
+  );
+
+  const preparedManagers = useMemo(
+    () => prepareManagers(eventInfo.managers, handleManagerDeleteClick),
+    [eventInfo.managers, handleManagerDeleteClick],
   );
 
   const handleNameValueChange = useDebouncedCallback((newName) => {
@@ -198,6 +242,10 @@ const EventEdit = () => {
     dispatch(showDeleteEventModal({ event: eventInfo }));
   }, [dispatch, eventInfo]);
 
+  const handleManagerAddClick = useCallback(() => {
+    dispatch(showEventAddManagerModal());
+  }, [dispatch]);
+
   return (
     <div className="event-edit">
       {isFetchingEvent
@@ -265,6 +313,31 @@ const EventEdit = () => {
                 value={hierarchy}
                 onChange={handleHierarchyValueChange}
               />
+            </Paper>
+            <Paper className="event-edit__body">
+              <section className="event-edit__managers__header-section">
+                <HugeText>
+                  Менеджеры
+                </HugeText>
+                <IconButton
+                  type={iconTypes.add}
+                  size="small"
+                  onClick={handleManagerAddClick}
+                />
+              </section>
+              {eventInfo.managers?.length > 0
+                ? (
+                  <Scrollbars autoHide autoHeight autoHeightMax={500}>
+                    <List
+                      items={preparedManagers}
+                    />
+                  </Scrollbars>
+                )
+                : (
+                  <SmallText>
+                    Менеджеры отсутствуют
+                  </SmallText>
+                )}
             </Paper>
             <Box
               className="event-edit__body"

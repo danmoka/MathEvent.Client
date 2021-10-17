@@ -31,7 +31,7 @@ const EventCreateModal = () => {
   const [location, setLocation] = useState('');
   const [description, setDesctiption] = useState('');
   const [organization, setOrganization] = useState('');
-  const [hierarchy, setHierarchy] = useState(null);
+  const [hierarchy, setHierarchy] = useState(false);
 
   useEffect(() => {
     dispatch(fetchOrganizations());
@@ -53,7 +53,7 @@ const EventCreateModal = () => {
 
   const handleOrganizationChange = (value) => setOrganization(value);
 
-  const handleHierarchyValueChange = (value) => setHierarchy(value || null);
+  const handleHierarchyValueChange = (value) => setHierarchy(value);
 
   const handleCreate = useCallback(() => {
     const event = {

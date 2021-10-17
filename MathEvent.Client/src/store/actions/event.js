@@ -221,14 +221,11 @@ export const showUploadEventAvatarModal = createAsyncThunk(
     thunkAPI.dispatch(showModal(modalTypes.uploadEventAvatar, { eventId }));
   },
 );
-export const showEditManagersEventModal = createAsyncThunk(
-  'showEditManagersEventModal',
-  async ({ event, preparedNewManagers }, thunkAPI) => {
+export const showEventAddManagerModal = createAsyncThunk(
+  'showEventAddManagerModal',
+  async (params, thunkAPI) => {
     thunkAPI.dispatch(
-      showModal(modalTypes.editManagersEventModal, {
-        event,
-        preparedNewManagers,
-      }),
+      showModal(modalTypes.eventAddManagerModal),
     );
   },
 );

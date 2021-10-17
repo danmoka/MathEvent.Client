@@ -35,6 +35,14 @@
         }
     }
 
+    &__managers {
+        &__header-section {
+            display: flex;
+            justify-content:space-between;
+            width: 100%;
+        }
+    }
+
     &__loader-section {
         display: flex;
         justify-content: center;

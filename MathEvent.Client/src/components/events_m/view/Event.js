@@ -21,7 +21,7 @@ import { fetchPosition } from '../../../store/actions/map';
 import { useTitle } from '../../../hooks';
 import { getImageSrc } from '../../../utils/get-image-src';
 import images from '../../../constants/images';
-import getInitials from '../../../utils/get_initials';
+import { getInitials } from '../../../utils/get_initials';
 import { isAbleToEditEvent } from '../../../utils/user_rights';
 import { navigateToEventEdit } from '../../../utils/navigator';
 import './EventsView.scss';
