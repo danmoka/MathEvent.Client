@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
-import Button from '../_common/Button';
+import Button, { buttonTypes, colors } from '../_common/Button';
 import TextField from '../_common/TextField';
 import { fetchTokens } from '../../store/actions/account';
-import { navigateToEvents } from '../../utils/navigator';
+import {
+  navigateToEvents,
+  navigateToForgotPassword,
+} from '../../utils/navigator';
 import { useTitle } from '../../hooks';
 import './Account.scss';
 
@@ -30,6 +33,10 @@ const Login = () => {
     clearFields();
   }, [dispatch, password, userName]);
 
+  const handleForgetPasswordClick = useCallback(() => {
+    navigateToForgotPassword();
+  }, []);
+
   const handleUserNameChange = (value) => setUserName(value);
   const handlePasswordChange = (value) => setPassword(value);
 
@@ -54,6 +61,14 @@ const Login = () => {
           onClick={handleSubmit}
         >
           Войти
+        </Button>
+        <Button
+          className="account__body__control"
+          type={buttonTypes.text}
+          color={colors.inherit}
+          onClick={handleForgetPasswordClick}
+        >
+          Забыли пароль?
         </Button>
       </Paper>
     </div>

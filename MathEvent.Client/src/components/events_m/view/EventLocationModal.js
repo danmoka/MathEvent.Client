@@ -8,7 +8,7 @@ const EventLocationModal = () => {
   const { position } = useSelector((state) => state.modal.modalProps);
 
   return (
-    <ShowModal title="Местоположение" size={modalSizes.medium}>
+    <ShowModal title="Адрес" size={modalSizes.small}>
       {position
         ? (
           <Location
@@ -16,7 +16,7 @@ const EventLocationModal = () => {
             label={position.label}
           />
         )
-        : (<NormalText>Не удалось определить местоположение</NormalText>)}
+        : (<NormalText>Не удалось определить адрес на карте</NormalText>)}
     </ShowModal>
   );
 };

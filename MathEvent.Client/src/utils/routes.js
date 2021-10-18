@@ -3,6 +3,8 @@ const routes = {
   account: {
     login: '/login',
     register: '/register',
+    forgotPassword: '/forgotpassword',
+    forgotPasswordReset: (email) => `/resetpassword/${email}`,
   },
   events: {
     main: '/events',

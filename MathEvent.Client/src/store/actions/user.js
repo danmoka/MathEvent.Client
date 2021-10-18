@@ -1,5 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { navigateToLogin } from '../../utils/navigator';
+import {
+  navigateToForgotPasswordReset,
+  navigateToLogin,
+} from '../../utils/navigator';
 import { showModal } from './modal';
 import modalTypes from '../../constants/modal-types';
 import userService from '../../api/services/user-service';
@@ -41,7 +44,7 @@ export const patchUser = createAsyncThunk(
     }
 
     return { hasError: true };
-  }
+  },
 );
 
 export const register = createAsyncThunk('register', async (credentials) => {
@@ -51,6 +54,29 @@ export const register = createAsyncThunk('register', async (credentials) => {
     navigateToLogin();
   }
 });
+
+export const forgotPassword = createAsyncThunk(
+  'forgotPassword',
+  async (emailData) => {
+    const response = await userService.forgotPassword(emailData);
+
+    if (statusCode(response).ok) {
+      const { email } = emailData;
+      navigateToForgotPasswordReset(email);
+    }
+  },
+);
+
+export const forgotPasswordReset = createAsyncThunk(
+  'forgotPasswordReset',
+  async (passwordData) => {
+    const response = await userService.forgotPasswordReset(passwordData);
+
+    if (statusCode(response).ok) {
+      navigateToLogin();
+    }
+  },
+);
 
 export const fetchStatistics = createAsyncThunk(
   'fetchStatistics',
@@ -64,7 +90,7 @@ export const fetchStatistics = createAsyncThunk(
     }
 
     return { statistics: [] };
-  }
+  },
 );
 
 export const fetchUserStatistics = createAsyncThunk(
@@ -79,12 +105,12 @@ export const fetchUserStatistics = createAsyncThunk(
     }
 
     return { statistics: [] };
-  }
+  },
 );
 
 export const showUserStatistics = createAsyncThunk(
   'showUserStatistics',
   async ({ user }, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.userStatistics, { user }));
-  }
+  },
 );

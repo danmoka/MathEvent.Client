@@ -28,7 +28,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordConfirm, setpasswordConfirm] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [organization, setOrganization] = useState('');
@@ -37,7 +37,7 @@ const Register = () => {
     setEmail('');
     setUserName('');
     setPassword('');
-    setpasswordConfirm('');
+    setPasswordConfirm('');
     setName('');
     setSurname('');
     setOrganization('');
@@ -51,7 +51,7 @@ const Register = () => {
   const handleEmailChange = (value) => setEmail(value);
   const handleUserNameChange = (value) => setUserName(value);
   const handlePasswordChange = (value) => setPassword(value);
-  const handlepasswordConfirmChange = (value) => setpasswordConfirm(value);
+  const handlePasswordConfirmChange = (value) => setPasswordConfirm(value);
   const handleNameChange = (value) => setName(value);
   const handleSurnameChange = (value) => setSurname(value);
   const handleOrganizationChange = (value) => setOrganization(value);
@@ -116,7 +116,7 @@ const Register = () => {
           label="Повторите пароль"
           type="password"
           value={passwordConfirm}
-          onChange={handlepasswordConfirmChange}
+          onChange={handlePasswordConfirmChange}
         />
         <Dropdown
           className="account__body__control"
