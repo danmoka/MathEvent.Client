@@ -17,6 +17,7 @@ import Button from '../../_common/Button';
 import Checkbox from '../../_common/Checkbox';
 import { HugeText, SmallText } from '../../_common/Text/Text';
 import List from '../../_common/List';
+import EventEditFiles from './EventFilesEdit';
 import {
   fetchEvent,
   patchEvent,
@@ -322,6 +323,7 @@ const EventEdit = () => {
                 <IconButton
                   type={iconTypes.add}
                   size="small"
+                  title="Добавить менеджера"
                   onClick={handleManagerAddClick}
                 />
               </section>
@@ -339,6 +341,7 @@ const EventEdit = () => {
                   </SmallText>
                 )}
             </Paper>
+            <EventEditFiles className="event-edit-files" />
             <Box
               className="event-edit__body"
               bgcolor="error.dark"

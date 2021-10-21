@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import MuiListItemIcon from '@material-ui/core/ListItemIcon';
 import MuiMenuItem from '@material-ui/core/MenuItem';
@@ -10,7 +11,9 @@ import FileImage from './FileImage';
 import './File.scss';
 import '../List/List.scss';
 
-const File = ({ name, ext, hierarchy, actions, onClick }) => {
+const File = ({
+  name, ext, hierarchy, actions, onClick,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuOpen = (e) => {
@@ -18,18 +21,15 @@ const File = ({ name, ext, hierarchy, actions, onClick }) => {
     setAnchorEl(e.currentTarget);
   };
 
-  const handleMenuClose = (e) => {
+  const handleMenuClose = useCallback((e) => {
     e.stopPropagation();
     setAnchorEl(null);
-  };
+  }, []);
 
-  const handleSecondaryAction = useCallback(
-    (e, action) => {
-      handleMenuClose(e);
-      action();
-    },
-    [handleMenuClose]
-  );
+  const handleSecondaryAction = useCallback((e, action) => {
+    handleMenuClose(e);
+    action();
+  }, [handleMenuClose]);
 
   return (
     <Card className="file" onClick={onClick}>
@@ -45,38 +45,62 @@ const File = ({ name, ext, hierarchy, actions, onClick }) => {
             {name}
           </Typography>
         </Tooltip>
-        <>
-          <IconButton
-            size="small"
-            type={iconTypes.more}
-            onClick={handleMenuOpen}
-          />
-          <Popover
-            id="list-item-popover"
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            onClose={handleMenuClose}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-          >
-            <div className="list-item__secondary-menu">
-              {actions.map((action) => (
-                <MuiMenuItem
-                  key={action.id}
-                  onClick={(e) => handleSecondaryAction(e, action.onClick)}
-                >
-                  <MuiListItemIcon>
-                    <Icon type={action.icon} />
-                  </MuiListItemIcon>
-                  {action.label}
-                </MuiMenuItem>
-              ))}
-            </div>
-          </Popover>
-        </>
+        { actions?.length > 0
+        && (
+          <>
+            <IconButton
+              size="small"
+              type={iconTypes.more}
+              onClick={handleMenuOpen}
+            />
+            <Popover
+              id="list-item-popover"
+              open={Boolean(anchorEl)}
+              anchorEl={anchorEl}
+              onClose={handleMenuClose}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+              <div className="list-item__secondary-menu">
+                {actions.map((action) => (
+                  <MuiMenuItem
+                    key={action.id}
+                    onClick={(e) => handleSecondaryAction(e, action.onClick)}
+                  >
+                    <MuiListItemIcon>
+                      <Icon type={action.icon} />
+                    </MuiListItemIcon>
+                    {action.label}
+                  </MuiMenuItem>
+                ))}
+              </div>
+            </Popover>
+          </>
+        )}
       </div>
     </Card>
   );
+};
+
+File.propTypes = {
+  name: PropTypes.string,
+  ext: PropTypes.string,
+  hierarchy: PropTypes.bool,
+  onClick: PropTypes.func,
+  actions: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    icon: PropTypes.string,
+    label: PropTypes.string,
+    onClick: PropTypes.func,
+  })),
+};
+
+File.defaultProps = {
+  name: 'Файл',
+  ext: '',
+  hierarchy: null,
+  onClick: () => {},
+  actions: [],
 };
 
 export default File;

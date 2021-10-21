@@ -25,6 +25,7 @@ const icons = {
   [iconTypes.logout]: materialIcons.ExitToApp,
   [iconTypes.menu]: materialIcons.Menu,
   [iconTypes.more]: materialIcons.MoreHoriz,
+  [iconTypes.newFolder]: materialIcons.CreateNewFolder,
   [iconTypes.people]: materialIcons.People,
   [iconTypes.person]: materialIcons.Person,
   [iconTypes.personAdd]: materialIcons.PersonAdd,

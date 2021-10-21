@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchFiles, fetchFileBreadcrumbs } from '../../../store/actions/file';
@@ -20,7 +20,7 @@ const EventFileBreadcrumbs = ({ className }) => {
   const { isFetchingFileBreadcrumbs } = useSelector((state) => state.file);
   let { crumbs } = useSelector((state) => state.file);
 
-  crumbs = crumbs.length > 0 ? [{ id: null, name: '' }, ...crumbs] : [];
+  crumbs = crumbs.length > 0 ? [{ id: null, name: 'Корень' }, ...crumbs] : [];
 
   const handleCrumbClick = useCallback((crumb) => {
     dispatch(fetchFiles({ fileId: crumb.id, ownerId: eventInfo.ownerId }));
@@ -38,7 +38,8 @@ const EventFileBreadcrumbs = ({ className }) => {
     dispatch(fetchFileBreadcrumbs(lastCrumb ? lastCrumb.id : null));
   }, [crumbs, dispatch, eventInfo.ownerId]);
 
-  const preparedCrumbs = prepareCrumbs(crumbs, handleCrumbClick);
+  const preparedCrumbs = useMemo(() => prepareCrumbs(crumbs, handleCrumbClick),
+    [crumbs, handleCrumbClick]);
 
   return (
     <div className={className}>

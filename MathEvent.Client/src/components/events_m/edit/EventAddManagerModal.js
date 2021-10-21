@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Scrollbars from 'react-custom-scrollbars-2';
 import { ShowModal } from '../../_common/Modal';
 import List from '../../_common/List';
 import { NormalText } from '../../_common/Text/Text';
@@ -70,13 +69,11 @@ const EventAddManagerModal = () => {
 
   return (
     <ShowModal
-      title="Нажмите на пользователя, которого хотите добавить в менеджеры"
+      title="Пользователи"
     >
       {preparedUsers.length > 0
         ? (
-          <Scrollbars autoHide autoHeight autoHeightMax={500}>
-            <List items={preparedUsers} />
-          </Scrollbars>
+          <List items={preparedUsers} />
         )
         : (
           <NormalText>Все пользователи являются менеджерами события</NormalText>

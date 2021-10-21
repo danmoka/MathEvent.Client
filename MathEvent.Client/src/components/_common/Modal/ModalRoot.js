@@ -4,12 +4,12 @@ import EventLocationModal from '../../events_m/view/EventLocationModal';
 import EventStatisticsModal from '../../statistics/event/EventStatisticsModal';
 import EventCreateModal from '../../events_m/create/EventCreateModal';
 import EventAddManagerModal from '../../events_m/edit/EventAddManagerModal';
-import CreateFolderModal from '../../files/view/CreateFolderModal';
+import CreateFolderModal from '../File/CreateFolderModal';
 import EventDeleteModal from '../../events_m/delete/EventDeleteModal';
-import DeleteFileModal from '../../files/view/DeleteFileModal';
+import DeleteFileModal from '../File/DeleteFileModal';
 import LogoutModal from '../../account_m/LogoutModal';
 import UploadEventAvatarModal from '../../events/edit/UploadEventAvatar';
-import UploadFilesModal from '../../files/view/UploadFilesModal';
+import UploadFilesModal from '../File/UploadFilesModal';
 import UserStatisticsModal from '../../statistics/user/UserStatisticsModal';
 import modalTypes from '../../../constants/modal-types';
 

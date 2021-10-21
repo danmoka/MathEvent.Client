@@ -113,6 +113,7 @@ const Event = () => {
                 <IconButton
                   type={iconTypes.edit}
                   size="small"
+                  title="Редактировать"
                   onClick={handleEditButtonClick}
                 />
                 )}

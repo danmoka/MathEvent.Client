@@ -8,15 +8,18 @@ import {
   fetchFile,
   fetchFiles,
   fetchFileBreadcrumbs,
+  showCreateFolderModal,
+  showUploadFilesModal,
+  showDeleteFileModal,
 } from '../../../store/actions/file';
-import { iconTypes } from '../../_common/Icon';
+import { IconButton, iconTypes } from '../../_common/Icon';
 import Files from '../../_common/File/Files';
 import Loader from '../../_common/Loader';
 import { HugeText, NormalText } from '../../_common/Text/Text';
-import EventFileBreadcrumbs from './EventFileBreadcrumbs';
-import './EventsView.scss';
+import EventFileBreadcrumbs from '../view/EventFileBreadcrumbs';
+import './EventEdit.scss';
 
-const prepareFiles = (files, onFileDownload, onClick) => {
+const prepareFiles = (files, onFileDownload, onFileDelete, onClick) => {
   const fileActions = (file) => [
     {
       id: 'download',
@@ -24,8 +27,21 @@ const prepareFiles = (files, onFileDownload, onClick) => {
       icon: iconTypes.download,
       onClick: () => onFileDownload(file),
     },
+    {
+      id: 'delete',
+      label: 'Удалить',
+      icon: iconTypes.delete,
+      onClick: () => onFileDelete(file),
+    },
   ];
-  const folderActions = () => [];
+  const folderActions = (file) => [
+    {
+      id: 'delete',
+      label: 'Удалить',
+      icon: iconTypes.delete,
+      onClick: () => onFileDelete(file),
+    },
+  ];
 
   const mappedfiles = files.map((file, index) => ({
     id: file.id,
@@ -40,10 +56,10 @@ const prepareFiles = (files, onFileDownload, onClick) => {
   return mappedfiles;
 };
 
-const EventFiles = ({ className }) => {
+const EventEditFiles = ({ className }) => {
   const dispatch = useDispatch();
   const { eventInfo } = useSelector((state) => state.event);
-  const { files, isFetchingFiles } = useSelector((state) => state.file);
+  const { files, crumbs, isFetchingFiles } = useSelector((state) => state.file);
 
   useEffect(() => {
     if (eventInfo) {
@@ -65,11 +81,24 @@ const EventFiles = ({ className }) => {
     dispatch(downloadFile(file.id));
   }, [dispatch]);
 
+  const handleFileDelete = useCallback((file) => {
+    dispatch(showDeleteFileModal({ file }));
+  }, [dispatch]);
+
+  const handleFolderCreate = useCallback(() => {
+    dispatch(showCreateFolderModal({ owner: eventInfo, crumbs }));
+  }, [dispatch, eventInfo, crumbs]);
+
+  const handleFilesUpload = useCallback(() => {
+    dispatch(showUploadFilesModal({ owner: eventInfo, crumbs }));
+  }, [dispatch, eventInfo, crumbs]);
+
   const preparedFiles = useMemo(() => prepareFiles(
     files,
     handleFileDownload,
+    handleFileDelete,
     handleFileClick,
-  ), [files, handleFileClick, handleFileDownload]);
+  ), [files, handleFileClick, handleFileDelete, handleFileDownload]);
 
   return (
     <div className={className}>
@@ -81,11 +110,25 @@ const EventFiles = ({ className }) => {
         )
         : (
           <Paper className={`${className}__body`}>
-            <section className={`${className}__header-section`}>
+            <div className={`${className}__header-section`}>
               <HugeText>
                 Материалы
               </HugeText>
-            </section>
+              <div className={`${className}__header-section__buttons`}>
+                <IconButton
+                  type={iconTypes.upload}
+                  size="small"
+                  title="Загрузить"
+                  onClick={handleFilesUpload}
+                />
+                <IconButton
+                  type={iconTypes.newFolder}
+                  size="small"
+                  title="Добавить папку"
+                  onClick={handleFolderCreate}
+                />
+              </div>
+            </div>
             <EventFileBreadcrumbs
               className={`${className}__breadcrumbs`}
             />
@@ -108,12 +151,12 @@ const EventFiles = ({ className }) => {
   );
 };
 
-EventFiles.propTypes = {
+EventEditFiles.propTypes = {
   className: PropTypes.string,
 };
 
-EventFiles.defaultProps = {
-  className: 'event-files',
+EventEditFiles.defaultProps = {
+  className: 'event-edit-files',
 };
 
-export default EventFiles;
+export default EventEditFiles;

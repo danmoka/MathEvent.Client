@@ -22,6 +22,7 @@ const iconTypes = {
   logout: 'logout',
   menu: 'menu',
   more: 'more',
+  newFolder: 'newFolder',
   people: 'people',
   person: 'person',
   personAdd: 'personAdd',

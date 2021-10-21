@@ -27,7 +27,13 @@ const CommonBreadcrumbs = ({ className, items, backButtonOnClick }) => (
 
 CommonBreadcrumbs.propTypes = {
   className: PropTypes.string,
-  items: PropTypes.arrayOf(),
+  items: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
+    primaryText: PropTypes.string,
+    isLast: PropTypes.bool,
+    index: PropTypes.number,
+    onClick: PropTypes.func,
+  })),
   backButtonOnClick: PropTypes.func,
 };
 
