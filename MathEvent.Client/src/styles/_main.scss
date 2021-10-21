@@ -1,40 +1,61 @@
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  color: #121821;
+  background-color: #e1e4e9;
+  height: 100%;
+  line-height: normal;
+}
+
+#root {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+}
+
+.main-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.unselectable-text {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.section-title {
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__control {
+    width: 100%;
+    margin-bottom: 25px !important;
+
+    &:last-child {
+      margin-bottom: 0 !important;
+    }
   }
-  
-  html {
-    height: 100%;
-  }
-  
-  body {
-    display: flex;
-    flex-direction: column;
-    color: #121821;
-    height: 100%;
-    line-height: normal;
-  }
-  
-  #root {
-    display: flex;
-    flex: 1 0 auto;
-    flex-direction: column;
-  }
-  
-  .main-text {
-    font-size: 14px;
-    font-weight: 600;
-  }
-  
-  .unselectable-text {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  
-  .section-title {
-    font-size: 1.6rem;
-    font-weight: 300;
-    line-height: 1.2;
-  }
+}

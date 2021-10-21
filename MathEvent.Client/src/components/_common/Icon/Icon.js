@@ -6,18 +6,20 @@ import colors from '../../../constants/colors';
 import icons from './icons';
 import './Icon.scss';
 
-const Icon = ({ type }) => {
+const Icon = ({ type, color }) => {
   const SpecificIcon = icons[type];
 
-  return <SpecificIcon />;
+  return <SpecificIcon color={color} />;
 };
 
 Icon.propTypes = {
   type: PropTypes.string,
+  color: PropTypes.string,
 };
 
 Icon.defaultProps = {
   type: undefined,
+  color: colors.inherit,
 };
 
 const IconButton = ({
@@ -65,7 +67,7 @@ IconButton.propTypes = {
 
 IconButton.defaultProps = {
   className: 'icon',
-  color: 'inherit',
+  color: colors.action,
   type: undefined,
   size: 'medium',
   selected: false,

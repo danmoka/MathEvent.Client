@@ -24,6 +24,7 @@ import images from '../../../constants/images';
 import { getInitials } from '../../../utils/get_initials';
 import { isAbleToEditEvent } from '../../../utils/user_rights';
 import { navigateToEventEdit } from '../../../utils/navigator';
+import colors from '../../../constants/colors';
 import './EventsView.scss';
 
 const prepareImage = (path, isDarkTheme) => {
@@ -142,7 +143,7 @@ const Event = () => {
             </div>
             <div className="event__info-section">
               <div className="event__info-section__horizontal_icon_text">
-                <Icon type={iconTypes.description} />
+                <Icon type={iconTypes.description} color={colors.disabled} />
                 <NormalText>
                   Описание
                 </NormalText>
@@ -162,7 +163,7 @@ const Event = () => {
             </div>
             <div className="event__info-section">
               <div className="event__info-section__horizontal_icon_text">
-                <Icon type={iconTypes.business} />
+                <Icon type={iconTypes.business} color={colors.disabled} />
                 <NormalText>Организация</NormalText>
               </div>
               <div className="event__info-section__info">
@@ -180,7 +181,7 @@ const Event = () => {
                 : (
                   <>
                     <div className="event__info-section__horizontal_icon_text">
-                      <Icon type={iconTypes.location} />
+                      <Icon type={iconTypes.location} color={colors.disabled} />
                       <NormalText>Адрес</NormalText>
                     </div>
                     <div className="event__info-section__info">
@@ -202,7 +203,7 @@ const Event = () => {
             </div>
             <div className="event__info-section">
               <div className="event__info-section__horizontal_icon_text">
-                <Icon type={iconTypes.settings} />
+                <Icon type={iconTypes.settings} color={colors.disabled} />
                 <NormalText>
                   Менеджеры
                 </NormalText>
@@ -225,7 +226,7 @@ const Event = () => {
             </div>
             <div className="event__info-section">
               <div className="event__info-section__horizontal_icon_text">
-                <Icon type={iconTypes.supervisedUser} />
+                <Icon type={iconTypes.supervisedUser} color={colors.disabled} />
                 <NormalText>
                   Подписчики
                 </NormalText>

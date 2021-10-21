@@ -1,4 +1,7 @@
 const palette = {
+  background: {
+    default: '#F5F5F5',
+  },
   error: {
     light: '#e33371',
     main: '#dc004e',
