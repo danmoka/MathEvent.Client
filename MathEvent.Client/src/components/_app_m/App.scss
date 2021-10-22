@@ -7,6 +7,18 @@
         display: flex;
         justify-content: space-between;
         width: 700px;
+
+        &__name-section {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 2px;
+        }
+
+        &__logo {
+            width: 28px;
+            height: 28px;
+        }
     }
 
     &__loader-section {

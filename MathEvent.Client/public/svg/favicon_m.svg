@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+<g>
+	<g>
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-69.013" y1="256" x2="727.2904" y2="256">
+			<stop  offset="0" style="stop-color:#FF00A6"/>
+			<stop  offset="0.543" style="stop-color:#00B4EC"/>
+			<stop  offset="1" style="stop-color:#FFFA00"/>
+		</linearGradient>
+		<polygon fill="url(#SVGID_1_)" points="512,363 426,363 313.1,149 399.1,149 		"/>
+	</g>
+	<g>
+		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="-69.0071" y1="256" x2="727.2908" y2="256">
+			<stop  offset="0" style="stop-color:#FF00A6"/>
+			<stop  offset="0.543" style="stop-color:#00B4EC"/>
+			<stop  offset="1" style="stop-color:#FFFA00"/>
+		</linearGradient>
+		<polygon fill="url(#SVGID_2_)" points="295.6,363 209.6,363 313.1,149 399.1,149 		"/>
+	</g>
+	<g>
+		<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="-69.0122" y1="256" x2="727.2824" y2="256">
+			<stop  offset="0" style="stop-color:#FF00A6"/>
+			<stop  offset="0.543" style="stop-color:#00B4EC"/>
+			<stop  offset="1" style="stop-color:#FFFA00"/>
+		</linearGradient>
+		<polygon fill="url(#SVGID_3_)" points="295.6,363 209.6,363 91.4,149 177.4,149 		"/>
+	</g>
+	<g>
+		<linearGradient id="SVGID_4_" gradientUnits="userSpaceOnUse" x1="-69.0077" y1="256" x2="727.2725" y2="256">
+			<stop  offset="0" style="stop-color:#FF00A6"/>
+			<stop  offset="0.543" style="stop-color:#00B4EC"/>
+			<stop  offset="1" style="stop-color:#FFFA00"/>
+		</linearGradient>
+		<polygon fill="url(#SVGID_4_)" points="86,363 0,363 91.4,149 177.4,149 		"/>
+	</g>
+	<polygon opacity="0.1" fill="#FFFFFF" points="0,363 177.4,149 91.4,149 	"/>
+	<polygon opacity="0.1" fill="#FFFFFF" points="177.4,149 209.6,363 91.4,149 	"/>
+	<polygon opacity="0.1" fill="#FFFFFF" points="295.6,363 313.1,149 399.1,149 	"/>
+	<polygon opacity="0.1" fill="#FFFFFF" points="512,363 313.1,149 399.1,149 	"/>
+	<polygon opacity="0.1" fill="#FFFFFF" points="295.6,363 91.4,149 177.4,149 	"/>
+	<polygon opacity="0.1" fill="#FFFFFF" points="209.6,363 399.1,149 313.1,149 	"/>
+</g>
+</svg>

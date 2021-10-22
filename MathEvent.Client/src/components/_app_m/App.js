@@ -17,6 +17,7 @@ import AppContent from './AppContent';
 import AppMenu from './AppMenu';
 import { HugeText } from '../_common/Text/Text';
 import { Icon, iconTypes } from '../_common/Icon';
+import Image from '../_common/Image';
 import Loader from '../_common/Loader';
 import { navigateToRegister, navigateToLogin } from '../../utils/navigator';
 import {
@@ -26,6 +27,7 @@ import {
 } from '../../store/actions/account';
 import { palette, paletteDark } from '../../styles/palette';
 import colors from '../../constants/colors';
+import images from '../../constants/images';
 import './App.scss';
 
 const useInterval = (callback, delay) => {
@@ -102,9 +104,15 @@ const App = () => {
         elevation={1}
       >
         <Toolbar className="app-header__toolbar">
-          <HugeText>
-            MathEvent
-          </HugeText>
+          <div className="app-header__toolbar__name-section">
+            <Image
+              className="app-header__toolbar__logo"
+              src={images.favicon}
+            />
+            <HugeText>
+              athEvent
+            </HugeText>
+          </div>
           {isAuthenticated ? (
             <>
               {isFetchingAccount
