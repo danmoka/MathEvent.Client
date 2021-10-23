@@ -124,7 +124,6 @@ const App = () => {
                 : (
                   <div>
                     <Button
-                      color="inherit"
                       endIcon={iconTypes.account}
                       onClick={handleMenuOpen}
                     >
@@ -155,13 +154,12 @@ const App = () => {
           ) : (
             <div>
               <Button
-                color="inherit"
                 onClick={handleRegisterClick}
               >
                 Регистрация
               </Button>
               <Button
-                color="inherit"
+                color={colors.inherit}
                 onClick={handleLoginClick}
               >
                 Войти

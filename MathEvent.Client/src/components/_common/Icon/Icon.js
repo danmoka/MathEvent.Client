@@ -38,7 +38,7 @@ const IconButton = ({
             size={size}
             color={buttonColor}
           >
-            <SpecificIcon color={buttonColor} />
+            <SpecificIcon />
           </MaterialIconButton>
         </Tooltip>
       )
@@ -49,7 +49,7 @@ const IconButton = ({
           size={size}
           color={buttonColor}
         >
-          <SpecificIcon color={buttonColor} />
+          <SpecificIcon />
         </MaterialIconButton>
       )
   );
@@ -67,7 +67,7 @@ IconButton.propTypes = {
 
 IconButton.defaultProps = {
   className: 'icon',
-  color: colors.action,
+  color: colors.default,
   type: undefined,
   size: 'medium',
   selected: false,
