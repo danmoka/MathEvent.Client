@@ -11,6 +11,9 @@ export const navigateToForgotPassword = () => history.push(
 export const navigateToForgotPasswordReset = (email) => history.push(
   routes.account.forgotPasswordReset(email),
 );
+export const navigateToUser = (userId) => history.push(
+  `${routes.users.user(userId)}`,
+);
 export const navigateToUserEdit = (userId) => history.push(
   `${routes.users.edit(userId)}`,
 );

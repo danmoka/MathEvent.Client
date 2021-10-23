@@ -80,7 +80,7 @@ export const fetchUserInfo = createAsyncThunk('fetchUserInfo', async () => {
   clearAccessToken();
   clearRefreshToken();
 
-  return { userInfo: {}, isAuthenticated: false, hasError: false };
+  return { userInfo: null, isAuthenticated: false, hasError: false };
 });
 
 export const logout = createAsyncThunk('logout', (params, thunkAPI) => {

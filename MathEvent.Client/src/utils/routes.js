@@ -22,6 +22,7 @@ const routes = {
   },
   users: {
     main: '/users',
+    user: (userId) => `/users/${userId}`,
     edit: (userId) => `/users/${userId}/edit`,
   },
 };

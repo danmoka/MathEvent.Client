@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useEffect, useMemo,
+  useCallback, useEffect, useMemo, useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
@@ -60,25 +60,32 @@ const Event = () => {
     isFetchingPosition,
   } = useSelector((state) => state.map);
 
+  const [isAbleToEdit, setIsAbleToEdit] = useState(false);
+
   const { id } = useParams();
   useTitle('Событие');
 
-  const preparedImage = prepareImage(eventInfo.avatarPath, isDarkTheme);
-  const isAbleToEdit = isAbleToEditEvent(userInfo, eventInfo);
+  const preparedImage = eventInfo
+    ? prepareImage(eventInfo.avatarPath, isDarkTheme)
+    : null;
   const position = positionResults.length > 0 ? positionResults[0] : null;
 
   const preparedManagers = useMemo(
-    () => prepareUsers(eventInfo.managers),
-    [eventInfo.managers],
+    () => (eventInfo ? prepareUsers(eventInfo.managers) : []),
+    [eventInfo],
   );
 
   const preparedSubscribers = useMemo(
-    () => prepareUsers(eventInfo.applicationUsers),
-    [eventInfo.applicationUsers],
+    () => (eventInfo ? prepareUsers(eventInfo.applicationUsers) : []),
+    [eventInfo],
   );
 
   useEffect(() => {
-    if (eventInfo.location) {
+    setIsAbleToEdit(isAbleToEditEvent(userInfo, eventInfo));
+  }, [eventInfo, userInfo]);
+
+  useEffect(() => {
+    if (eventInfo?.location) {
       dispatch(fetchPosition(eventInfo.location));
     }
   }, [dispatch, eventInfo]);
@@ -104,152 +111,170 @@ const Event = () => {
           </div>
         )
         : (
-          <Paper className="event__body">
-            <div className="event__header-section">
-              <div className="event__header-section__name">
-                <HugeText>
-                  {eventInfo.name}
-                </HugeText>
-                {isAbleToEdit && (
-                <IconButton
-                  type={iconTypes.edit}
-                  size="small"
-                  title="Редактировать"
-                  onClick={handleEditButtonClick}
-                />
-                )}
-              </div>
-              <Date date={eventInfo.startDate} />
-            </div>
-            <div className="event__buttons-section">
-              <Button
-                startIcon={
+          <>
+            { eventInfo
+            && (
+            <>
+              <Paper className="event__body">
+                <div className="event__header-section">
+                  <div className="event__header-section__name">
+                    <HugeText>
+                      {eventInfo.name}
+                    </HugeText>
+                    {isAbleToEdit && (
+                    <IconButton
+                      type={iconTypes.edit}
+                      size="small"
+                      title="Редактировать"
+                      onClick={handleEditButtonClick}
+                    />
+                    )}
+                  </div>
+                  <Date date={eventInfo.startDate} />
+                </div>
+                <div className="event__buttons-section">
+                  <Button
+                    startIcon={
               eventInfo.subscribed
                 ? iconTypes.personAddDisabled
                 : iconTypes.personAdd
               }
-                onClick={() => {}}
-              >
-                {eventInfo.subscribed ? 'Отписаться' : 'Записаться'}
-              </Button>
-              {eventInfo.hierarchy && (
-              <Button
-                startIcon={iconTypes.events}
-                onClick={() => {}}
-              >
-                Дочерние события
-              </Button>
-              )}
-            </div>
-            <div className="event__info-section">
-              <div className="event__info-section__horizontal_icon_text">
-                <Icon type={iconTypes.description} color={colors.disabled} />
-                <NormalText>
-                  Описание
-                </NormalText>
-              </div>
-              <div className="event__info-section__info">
-                <SmallText>
-                  {eventInfo.description}
-                </SmallText>
-              </div>
-            </div>
-            <div className="event__image-section">
-              <Image
-                className="event__image-section__image"
-                src={preparedImage}
-                alt={eventInfo.name}
-              />
-            </div>
-            <div className="event__info-section">
-              <div className="event__info-section__horizontal_icon_text">
-                <Icon type={iconTypes.business} color={colors.disabled} />
-                <NormalText>Организация</NormalText>
-              </div>
-              <div className="event__info-section__info">
-                <SmallText>
-                  {`${eventInfo.organization?.name
-                  || 'Организация отсутствует'}`}
-                </SmallText>
-              </div>
-              {isFetchingPosition
-                ? (
-                  <div className="event__loader-section">
-                    <Loader />
+                    onClick={() => {}}
+                  >
+                    {eventInfo.subscribed ? 'Отписаться' : 'Записаться'}
+                  </Button>
+                  {eventInfo.hierarchy && (
+                  <Button
+                    startIcon={iconTypes.events}
+                    onClick={() => {}}
+                  >
+                    Дочерние события
+                  </Button>
+                  )}
+                </div>
+                <div className="event__info-section">
+                  <div className="event__info-section__horizontal_icon_text">
+                    <Icon
+                      type={iconTypes.description}
+                      color={colors.disabled}
+                    />
+                    <NormalText>
+                      Описание
+                    </NormalText>
                   </div>
-                )
-                : (
-                  <>
-                    <div className="event__info-section__horizontal_icon_text">
-                      <Icon type={iconTypes.location} color={colors.disabled} />
-                      <NormalText>Адрес</NormalText>
-                    </div>
-                    <div className="event__info-section__info">
-                      {eventInfo.location
-                        ? (
-                          <Button
-                            type={buttonTypes.text}
-                            onClick={handleShowLocation}
-                          >
-                            {eventInfo.location}
-                          </Button>
-                        )
-                        : (
-                          <SmallText>Местоположение не указано</SmallText>
-                        )}
-                    </div>
-                  </>
-                )}
-            </div>
-            <div className="event__info-section">
-              <div className="event__info-section__horizontal_icon_text">
-                <Icon type={iconTypes.settings} color={colors.disabled} />
-                <NormalText>
-                  Менеджеры
-                </NormalText>
-              </div>
-              <div className="event__info-section__info">
-                {eventInfo.managers?.length > 0
-                  ? (
-                    <Scrollbars autoHide autoHeight autoHeightMax={500}>
-                      <List
-                        items={preparedManagers}
-                      />
-                    </Scrollbars>
-                  )
-                  : (
+                  <div className="event__info-section__info">
                     <SmallText>
-                      Менеджеры отсутствуют
+                      {eventInfo.description}
                     </SmallText>
-                  )}
-              </div>
-            </div>
-            <div className="event__info-section">
-              <div className="event__info-section__horizontal_icon_text">
-                <Icon type={iconTypes.supervisedUser} color={colors.disabled} />
-                <NormalText>
-                  Подписчики
-                </NormalText>
-              </div>
-              <div className="event__info-section__info">
-                {eventInfo.applicationUsers?.length > 0
-                  ? (
-                    <Scrollbars autoHide autoHeight autoHeightMax={500}>
-                      <List
-                        items={preparedSubscribers}
-                      />
-                    </Scrollbars>
-                  )
-                  : (
+                  </div>
+                </div>
+                <div className="event__image-section">
+                  <Image
+                    className="event__image-section__image"
+                    src={preparedImage}
+                    alt={eventInfo.name}
+                  />
+                </div>
+                <div className="event__info-section">
+                  <div className="event__info-section__horizontal_icon_text">
+                    <Icon type={iconTypes.business} color={colors.disabled} />
+                    <NormalText>Организация</NormalText>
+                  </div>
+                  <div className="event__info-section__info">
                     <SmallText>
-                      Подписчиков нет. Станьте первым!
+                      {`${eventInfo.organization?.name
+                  || 'Организация отсутствует'}`}
                     </SmallText>
-                  )}
-              </div>
-            </div>
-          </Paper>
+                  </div>
+                  {isFetchingPosition
+                    ? (
+                      <div className="event__loader-section">
+                        <Loader />
+                      </div>
+                    )
+                    : (
+                      <>
+                        <div
+                          className="event__info-section__horizontal_icon_text"
+                        >
+                          <Icon
+                            type={iconTypes.location}
+                            color={colors.disabled}
+                          />
+                          <NormalText>Адрес</NormalText>
+                        </div>
+                        <div className="event__info-section__info">
+                          {eventInfo.location
+                            ? (
+                              <Button
+                                type={buttonTypes.text}
+                                onClick={handleShowLocation}
+                              >
+                                {eventInfo.location}
+                              </Button>
+                            )
+                            : (
+                              <SmallText>Местоположение не указано</SmallText>
+                            )}
+                        </div>
+                      </>
+                    )}
+                </div>
+                <div className="event__info-section">
+                  <div className="event__info-section__horizontal_icon_text">
+                    <Icon type={iconTypes.settings} color={colors.disabled} />
+                    <NormalText>
+                      Менеджеры
+                    </NormalText>
+                  </div>
+                  <div className="event__info-section__info">
+                    {eventInfo.managers?.length > 0
+                      ? (
+                        <Scrollbars autoHide autoHeight autoHeightMax={500}>
+                          <List
+                            items={preparedManagers}
+                          />
+                        </Scrollbars>
+                      )
+                      : (
+                        <SmallText>
+                          Менеджеры отсутствуют
+                        </SmallText>
+                      )}
+                  </div>
+                </div>
+                <div className="event__info-section">
+                  <div className="event__info-section__horizontal_icon_text">
+                    <Icon
+                      type={iconTypes.supervisedUser}
+                      color={colors.disabled}
+                    />
+                    <NormalText>
+                      Подписчики
+                    </NormalText>
+                  </div>
+                  <div className="event__info-section__info">
+                    {eventInfo.applicationUsers?.length > 0
+                      ? (
+                        <Scrollbars autoHide autoHeight autoHeightMax={500}>
+                          <List
+                            items={preparedSubscribers}
+                          />
+                        </Scrollbars>
+                      )
+                      : (
+                        <SmallText>
+                          Подписчиков нет. Станьте первым!
+                        </SmallText>
+                      )}
+                  </div>
+                </div>
+              </Paper>
+              <EventFiles className="event-files" />
+            </>
+            )}
+          </>
         )}
-      <EventFiles className="event-files" />
     </div>
   );
 };

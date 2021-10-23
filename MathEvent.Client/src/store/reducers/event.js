@@ -37,7 +37,7 @@ import {
 
 const initialState = {
   events: [],
-  eventInfo: {},
+  eventInfo: null,
   selectedEvent: null,
   crumbs: [],
   eventStatistics: [],
@@ -109,7 +109,7 @@ const eventSlice = createSlice({
     [fetchEvent.rejected]: (state) => {
       const st = state;
       onRejectedEvent(st);
-      st.eventInfo = {};
+      st.eventInfo = null;
     },
     [createEvent.pending]: (state) => {
       onPendingEvents(state);
@@ -204,7 +204,7 @@ const eventSlice = createSlice({
     [updateEvent.rejected]: (state) => {
       const st = state;
       onRejectedEvent(st);
-      st.eventInfo = {};
+      st.eventInfo = null;
     },
 
     [patchEvent.pending]: (state) => {
@@ -224,7 +224,7 @@ const eventSlice = createSlice({
     [patchEvent.rejected]: (state) => {
       const st = state;
       onRejectedEvent(st);
-      st.eventInfo = {};
+      st.eventInfo = null;
     },
 
     [deleteEvent.pending]: (state) => {
@@ -236,7 +236,7 @@ const eventSlice = createSlice({
 
       if (!hasError) {
         if (st.eventInfo?.id === eventId) {
-          st.eventInfo = {};
+          st.eventInfo = null;
         }
       }
     },

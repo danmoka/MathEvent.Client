@@ -64,7 +64,7 @@ const userSlice = createSlice({
     },
     [fetchUser.rejected]: (state) => {
       onRejectedUser(state);
-      state.user = null;
+      state.userInfo = null;
     },
 
     [patchUser.pending]: (state) => {
@@ -79,7 +79,7 @@ const userSlice = createSlice({
     },
     [patchUser.rejected]: (state) => {
       onRejectedUser(state);
-      state.user = null;
+      state.userInfo = null;
     },
 
     [fetchStatistics.pending]: (state) => {
@@ -87,7 +87,7 @@ const userSlice = createSlice({
     },
     [fetchStatistics.fulfilled]: (
       state,
-      { payload: { statistics, hasError } }
+      { payload: { statistics, hasError } },
     ) => {
       onFulfilledUsersStatistics(state, hasError);
 
@@ -105,7 +105,7 @@ const userSlice = createSlice({
     },
     [fetchUserStatistics.fulfilled]: (
       state,
-      { payload: { statistics, hasError } }
+      { payload: { statistics, hasError } },
     ) => {
       onFulfilledUserStatistics(state, hasError);
 

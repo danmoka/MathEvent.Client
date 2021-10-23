@@ -42,15 +42,16 @@ const prepareFiles = (files, onFileDownload, onClick) => {
 
 const EventFiles = ({ className }) => {
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.account);
   const { eventInfo } = useSelector((state) => state.event);
   const { files, isFetchingFiles } = useSelector((state) => state.file);
 
   useEffect(() => {
-    if (eventInfo) {
+    if (eventInfo && userInfo) {
       dispatch(fetchFiles({ fileId: null, ownerId: eventInfo.ownerId }));
       dispatch(fetchFileBreadcrumbs(null));
     }
-  }, [dispatch, eventInfo]);
+  }, [dispatch, eventInfo, userInfo]);
 
   const handleFileClick = useCallback((file) => {
     dispatch(fetchFile(file.id));
@@ -86,20 +87,30 @@ const EventFiles = ({ className }) => {
                 Материалы
               </HugeText>
             </section>
-            <EventFileBreadcrumbs
-              className={`${className}__breadcrumbs`}
-            />
-            {preparedFiles.length > 0
+            { userInfo
               ? (
                 <>
-                  <Scrollbars autoHide autoHeight autoHeightMax={300}>
-                    <Files items={preparedFiles} />
-                  </Scrollbars>
+                  <EventFileBreadcrumbs
+                    className={`${className}__breadcrumbs`}
+                  />
+                  {preparedFiles.length > 0
+                    ? (
+                      <>
+                        <Scrollbars autoHide autoHeight autoHeightMax={300}>
+                          <Files items={preparedFiles} />
+                        </Scrollbars>
+                      </>
+                    )
+                    : (
+                      <NormalText>
+                        Файлы отсутствуют
+                      </NormalText>
+                    )}
                 </>
               )
               : (
                 <NormalText>
-                  Файлы отсутствуют
+                  Файлы доступны только авторизованным пользователям
                 </NormalText>
               )}
           </Paper>

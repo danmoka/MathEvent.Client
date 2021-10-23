@@ -80,6 +80,7 @@ const EventEdit = () => {
   const { organizations } = useSelector((state) => state.organization);
   const { isDarkTheme } = useSelector((state) => state.app);
 
+  const [isAbleToEdit, setIsAbleToEdit] = useState(true);
   const [eventId, setEventId] = useState(null);
   const [name, setName] = useState('');
   const [avatarPath, setAvatarPath] = useState('');
@@ -87,36 +88,44 @@ const EventEdit = () => {
   const [startDate, setStartDate] = useState(null);
   const [location, setLocation] = useState('');
   const [organization, setOrganization] = useState('');
-  const [hierarchy, setHierarchy] = useState(null);
+  const [hierarchy, setHierarchy] = useState(false);
 
   const { id } = useParams();
   useTitle('Редактирование события');
 
-  const isAbleToEdit = isAbleToEditEvent(userInfo, eventInfo);
+  useEffect(() => {
+    if (isAbleToEdit && userInfo) {
+      dispatch(fetchEvent(id));
+    }
+  }, [dispatch, id, isAbleToEdit, userInfo]);
+
+  useEffect(() => {
+    if (eventInfo && userInfo) {
+      setIsAbleToEdit(isAbleToEditEvent(userInfo, eventInfo));
+    }
+  }, [eventInfo, userInfo]);
 
   useEffect(() => {
     if (!isAbleToEdit) {
       navigateToEvent(id);
     }
-  }, [dispatch, id, isAbleToEdit, userInfo]);
-
-  useEffect(() => {
-    dispatch(fetchEvent(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, isAbleToEdit]);
 
   useEffect(() => {
     dispatch(fetchOrganizations());
   }, [dispatch]);
 
   useEffect(() => {
-    setEventId(eventInfo.id);
-    setName(eventInfo.name || '');
-    setAvatarPath(eventInfo.avatarPath || '');
-    setDesctiption(eventInfo.description || '');
-    setStartDate(new Date(eventInfo.startDate) || new Date(Date.now()));
-    setLocation(eventInfo.location || '');
-    setOrganization(eventInfo.organization?.id.toString());
-    setHierarchy(eventInfo.hierarchy || false);
+    if (eventInfo) {
+      setEventId(eventInfo.id);
+      setName(eventInfo.name);
+      setAvatarPath(eventInfo.avatarPath);
+      setDesctiption(eventInfo.description);
+      setStartDate(new Date(eventInfo.startDate));
+      setLocation(eventInfo.location);
+      setOrganization(eventInfo.organization?.id.toString());
+      setHierarchy(eventInfo.hierarchy);
+    }
   }, [eventInfo]);
 
   const preparedImage = useMemo(
@@ -153,12 +162,14 @@ const EventEdit = () => {
         },
       ]);
     },
-    [eventInfo.managers, handlePatchEvent],
+    [eventInfo, handlePatchEvent],
   );
 
   const preparedManagers = useMemo(
-    () => prepareManagers(eventInfo.managers, handleManagerDeleteClick),
-    [eventInfo.managers, handleManagerDeleteClick],
+    () => (eventInfo
+      ? prepareManagers(eventInfo.managers, handleManagerDeleteClick)
+      : []),
+    [eventInfo, handleManagerDeleteClick],
   );
 
   const handleNameValueChange = useDebouncedCallback((newName) => {
@@ -257,104 +268,109 @@ const EventEdit = () => {
         )
         : (
           <>
-            <Paper className="event-edit__body">
-              <TextField
-                className="event-edit__body__control"
-                label="Название"
-                value={name}
-                onChange={handleNameValueChange}
-              />
-              <div className="event-edit__body__image-section">
-                <Image
-                  className="event-edit__body__image-section__image"
-                  src={preparedImage}
-                  alt={name}
+            { eventInfo
+            && (
+            <>
+              <Paper className="event-edit__body">
+                <TextField
+                  className="event-edit__body__control"
+                  label="Название"
+                  value={name}
+                  onChange={handleNameValueChange}
                 />
-              </div>
-              <Button
-                className="event-edit__body__control"
-                startIcon={iconTypes.upload}
-                onClick={handleEventAvatarUpload}
-              >
-                Загрузить изображение
-              </Button>
-              <TextField
-                className="event-edit__body__control"
-                label="Описание"
-                multiline
-                rows={10}
-                value={description}
-                onChange={handleDescriptionValueChange}
-              />
-              <DateField
-                className="event-edit__body__control"
-                label="Дата и время начала"
-                inputVariant="outlined"
-                value={startDate}
-                minDate={new Date(Date.now())}
-                onChange={handleDateValueChange}
-              />
-              <TextField
-                className="event-edit__body__control"
-                label="Адрес"
-                value={location}
-                onChange={handleLocationValueChange}
-              />
-              <Dropdown
-                className="event-edit__body__control"
-                label="Организация"
-                variant="outlined"
-                value={organization}
-                items={preparedOrganizations}
-                onChange={handleOrganizationChange}
-              />
-              <Checkbox
-                className="event-edit__body__control"
-                label="Является множеством других событий"
-                value={hierarchy}
-                onChange={handleHierarchyValueChange}
-              />
-            </Paper>
-            <Paper className="event-edit__body">
-              <section className="event-edit__managers__header-section">
-                <HugeText>
-                  Менеджеры
-                </HugeText>
-                <IconButton
-                  type={iconTypes.add}
-                  size="small"
-                  title="Добавить менеджера"
-                  onClick={handleManagerAddClick}
+                <div className="event-edit__body__image-section">
+                  <Image
+                    className="event-edit__body__image-section__image"
+                    src={preparedImage}
+                    alt={name}
+                  />
+                </div>
+                <Button
+                  className="event-edit__body__control"
+                  startIcon={iconTypes.upload}
+                  onClick={handleEventAvatarUpload}
+                >
+                  Загрузить изображение
+                </Button>
+                <TextField
+                  className="event-edit__body__control"
+                  label="Описание"
+                  multiline
+                  rows={10}
+                  value={description}
+                  onChange={handleDescriptionValueChange}
                 />
-              </section>
-              {eventInfo.managers?.length > 0
-                ? (
-                  <Scrollbars autoHide autoHeight autoHeightMax={500}>
-                    <List
-                      items={preparedManagers}
-                    />
-                  </Scrollbars>
-                )
-                : (
-                  <SmallText>
-                    Менеджеры отсутствуют
-                  </SmallText>
-                )}
-            </Paper>
-            <EventEditFiles className="event-edit-files" />
-            <Box
-              className="event-edit__body"
-              bgcolor="error.dark"
-              borderRadius={4}
-            >
-              <Button
-                className="event-edit__body__control"
-                startIcon={iconTypes.delete}
-                onClick={handleEventDeleteClick}
+                <DateField
+                  className="event-edit__body__control"
+                  label="Дата и время начала"
+                  inputVariant="outlined"
+                  value={startDate}
+                  minDate={new Date(Date.now())}
+                  onChange={handleDateValueChange}
+                />
+                <TextField
+                  className="event-edit__body__control"
+                  label="Адрес"
+                  value={location}
+                  onChange={handleLocationValueChange}
+                />
+                <Dropdown
+                  className="event-edit__body__control"
+                  label="Организация"
+                  variant="outlined"
+                  value={organization}
+                  items={preparedOrganizations}
+                  onChange={handleOrganizationChange}
+                />
+                <Checkbox
+                  className="event-edit__body__control"
+                  label="Является множеством других событий"
+                  value={hierarchy}
+                  onChange={handleHierarchyValueChange}
+                />
+              </Paper>
+              <Paper className="event-edit__body">
+                <section className="event-edit__managers__header-section">
+                  <HugeText>
+                    Менеджеры
+                  </HugeText>
+                  <IconButton
+                    type={iconTypes.add}
+                    size="small"
+                    title="Добавить менеджера"
+                    onClick={handleManagerAddClick}
+                  />
+                </section>
+                {eventInfo.managers?.length > 0
+                  ? (
+                    <Scrollbars autoHide autoHeight autoHeightMax={500}>
+                      <List
+                        items={preparedManagers}
+                      />
+                    </Scrollbars>
+                  )
+                  : (
+                    <SmallText>
+                      Менеджеры отсутствуют
+                    </SmallText>
+                  )}
+              </Paper>
+              <EventEditFiles className="event-edit-files" />
+              <Box
+                className="event-edit__body"
+                bgcolor="error.dark"
+                borderRadius={4}
               >
-                Удалить событие
-              </Button>
-            </Box>
+                <Button
+                  className="event-edit__body__control"
+                  startIcon={iconTypes.delete}
+                  onClick={handleEventDeleteClick}
+                >
+                  Удалить событие
+                </Button>
+              </Box>
+            </>
+            )}
           </>
         )}
     </div>
