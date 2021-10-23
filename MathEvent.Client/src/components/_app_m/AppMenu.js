@@ -46,7 +46,7 @@ const AppMenu = () => {
 
   useEffect(() => {
     tabRoutes.forEach((v, i) => {
-      if (v.includes(currentRoute)) {
+      if (currentRoute.includes(v)) {
         setValue(i);
       }
     });

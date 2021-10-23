@@ -19,7 +19,11 @@ import { HugeText } from '../_common/Text/Text';
 import { Icon, iconTypes } from '../_common/Icon';
 import Image from '../_common/Image';
 import Loader from '../_common/Loader';
-import { navigateToRegister, navigateToLogin } from '../../utils/navigator';
+import {
+  navigateToRegister,
+  navigateToLogin,
+  navigateToUserEdit,
+} from '../../utils/navigator';
 import {
   fetchTokens,
   fetchUserInfo,
@@ -91,6 +95,11 @@ const App = () => {
     dispatch(showLogoutModal());
   };
 
+  const handleUserEditClick = () => {
+    setAnchorEl(null);
+    navigateToUserEdit(userInfo.sub);
+  };
+
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
@@ -137,7 +146,7 @@ const App = () => {
                       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                     >
-                      <MenuItem onClick={handleMenuClose}>
+                      <MenuItem onClick={handleUserEditClick}>
                         {userInfo.email}
                       </MenuItem>
                       <Divider />

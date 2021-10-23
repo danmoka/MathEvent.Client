@@ -5,6 +5,7 @@ import Login from '../account_m/Login';
 import Register from '../account_m/Register';
 import ForgotPassword from '../account_m/ForgotPassword';
 import ForgotPasswordReset from '../account_m/ForgotPasswordReset';
+import Users from '../users_m';
 import ModalRoot from '../_common/Modal/ModalRoot';
 import routes from '../../utils/routes';
 
@@ -21,6 +22,7 @@ const AppContent = () => (
         exact
         render={() => <ForgotPasswordReset />}
       />
+      <Route path={routes.users.main} component={Users} />
     </Switch>
     <ModalRoot />
   </div>
