@@ -10,9 +10,10 @@ import Loader from '../../_common/Loader';
 import TextField from '../../_common/TextField';
 import Dropdown from '../../_common/Dropdown';
 import CardCollection from '../../_common/CardCollection';
-import { iconTypes } from '../../_common/Icon';
+import { iconTypes, IconButton } from '../../_common/Icon';
 import { HugeText } from '../../_common/Text/Text';
 import { patchUser, fetchUser } from '../../../store/actions/user';
+import { setIsDarkTheme } from '../../../store/actions/app';
 import { fetchOrganizations } from '../../../store/actions/organization';
 import {
   navigateToUser,
@@ -102,6 +103,14 @@ const UserEdit = () => {
       setOrganization(userInfo.organization?.id.toString());
     }
   }, [userInfo]);
+
+  const handleLightThemeClick = useCallback(() => {
+    dispatch(setIsDarkTheme(false));
+  }, [dispatch]);
+
+  const handleDarkThemeClick = useCallback(() => {
+    dispatch(setIsDarkTheme(true));
+  }, [dispatch]);
 
   const preparedOrganizations = useMemo(
     () => prepareOrganizations(organizations),
@@ -234,6 +243,24 @@ const UserEdit = () => {
             { userInfo
           && (
             <>
+              <Paper className="user-edit__header">
+                <HugeText>
+                  Личный кабинет
+                </HugeText>
+                {isDarkTheme ? (
+                  <IconButton
+                    type={iconTypes.setLight}
+                    title="Включить светлую тему"
+                    onClick={handleLightThemeClick}
+                  />
+                ) : (
+                  <IconButton
+                    type={iconTypes.setDark}
+                    title="Включить темную тему"
+                    onClick={handleDarkThemeClick}
+                  />
+                )}
+              </Paper>
               <Paper className="user-edit__body">
                 <TextField
                   className="user-edit__body__control"

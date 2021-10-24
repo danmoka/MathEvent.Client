@@ -112,7 +112,7 @@ const EventEdit = () => {
       setStartDate(new Date(eventInfo.startDate));
       setLocation(eventInfo.location);
       setOrganization(eventInfo.organization?.id.toString());
-      setHierarchy(eventInfo.hierarchy);
+      setHierarchy(eventInfo.hierarchy !== null);
     }
   }, [eventInfo]);
 

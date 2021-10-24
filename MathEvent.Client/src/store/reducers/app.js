@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { getTheme } from '../../utils/local-storage-manager';
 import { setHeader, setIsDarkTheme } from '../actions/app';
 
 const initialState = {
   header: 'MathEvent',
-  isDarkTheme: false,
+  isDarkTheme: getTheme() === 'true',
 };
 
 const appSlice = createSlice({
