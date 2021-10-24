@@ -1,13 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import 'moment/locale/ru';
 import Loader from '../../_common/Loader';
 import CardCollection from '../../_common/CardCollection';
 import EventsBreadcrumbs from './EventsBreadcrumbs';
-import { getImageSrc } from '../../../utils/get-image-src';
+import { prepareImage } from '../../../utils/get-image-src';
 import { navigateToEvent } from '../../../utils/navigator';
-import images from '../../../constants/images';
 import './EventsView.scss';
 
 const prepareDateTime = (dateTime) => {
@@ -15,18 +14,6 @@ const prepareDateTime = (dateTime) => {
   const preparedDateTime = moment(dateTime).format('LL');
 
   return preparedDateTime;
-};
-
-const prepareImage = (path, isDarkTheme) => {
-  if (path) {
-    return getImageSrc(path).replace(/\\/g, '/');
-  }
-
-  if (isDarkTheme) {
-    return images.eventDefaultDark;
-  }
-
-  return images.eventDefault;
 };
 
 const prepareEvents = (
@@ -55,12 +42,12 @@ const EventsCollection = () => {
     navigateToEvent(event.id);
   }, []);
 
-  const preparedEvents = prepareEvents(
+  const preparedEvents = useMemo(() => prepareEvents(
     events,
     selectedEvent,
     handleEventClick,
     isDarkTheme,
-  );
+  ), [handleEventClick, events, isDarkTheme, selectedEvent]);
 
   return (
     <div className="events-collection">

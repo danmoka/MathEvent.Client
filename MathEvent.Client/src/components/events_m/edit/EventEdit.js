@@ -27,23 +27,11 @@ import {
 } from '../../../store/actions/event';
 import { fetchOrganizations } from '../../../store/actions/organization';
 import { useTitle } from '../../../hooks';
-import { getImageSrc } from '../../../utils/get-image-src';
+import { prepareImage } from '../../../utils/get-image-src';
 import { isAbleToEditEvent } from '../../../utils/user_rights';
 import { navigateToEvent } from '../../../utils/navigator';
 import { getInitials } from '../../../utils/get_initials';
-import images from '../../../constants/images';
 import './EventEdit.scss';
-
-const prepareImage = (path, isDarkTheme) => {
-  if (path) {
-    return getImageSrc(path);
-  }
-  if (isDarkTheme) {
-    return images.eventDefaultDark;
-  }
-
-  return images.eventDefault;
-};
 
 const prepareOrganizations = (organizations) => (organizations
   ? [{ value: '', name: 'Без организации' },

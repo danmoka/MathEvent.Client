@@ -81,7 +81,7 @@ const Card = ({
           : (<></>)}
       />
       <CardMedia
-        className="card__media"
+        className={`${className}__media`}
         title={primaryText}
         image={image}
       />

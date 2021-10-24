@@ -8,6 +8,7 @@ const CardCollection = ({ className, items }) => (
     {items.map((item) => (
       <Card
         key={item.id}
+        className={`${className}__card`}
         primaryText={item.primaryText}
         secondaryText={item.secondaryText}
         additionalInfo={item.additionalInfo}
