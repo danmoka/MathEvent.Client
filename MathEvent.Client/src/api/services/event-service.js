@@ -8,12 +8,14 @@ const eventService = {
     organizationId,
     startDateFrom,
     startDateTo,
+    sortByValue,
   ) => {
     const url = api.events.fetchEvents(
       parentId,
       organizationId,
       startDateFrom,
       startDateTo,
+      sortByValue,
     );
     const response = await baseService.get(url);
 
@@ -51,6 +53,12 @@ const eventService = {
   },
   fetchEventStatistics: async (eventId) => {
     const url = api.events.fetchEventStatistics(eventId);
+    const response = await baseService.get(url);
+
+    return response;
+  },
+  fetchSortByValues: async () => {
+    const url = api.events.fetchSortByValues();
     const response = await baseService.get(url);
 
     return response;

@@ -1,5 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
+  onPendingSortByValues,
+  onFulfilledSortByValues,
+  onRejectedSortByValues,
+} from './defaults';
+import {
+  fetchSortByValues,
+  selectSortByValue,
   setIsCalendarOpened,
   setIsFilterOpened,
   setIsSortOpened,
@@ -15,6 +22,9 @@ const initialState = {
   organizationId: '',
   startDateFrom: null,
   startDateTo: null,
+  sortByValues: [],
+  isFetchingSortByValues: false,
+  selectedSortByValue: '0',
 };
 
 const filtersSlice = createSlice({
@@ -44,6 +54,32 @@ const filtersSlice = createSlice({
     [setStartDateToFilter]: (state, { payload: { startDateTo } }) => {
       const st = state;
       st.startDateTo = startDateTo;
+    },
+
+    [fetchSortByValues.pending]: (state) => {
+      const st = state;
+      onPendingSortByValues(st);
+    },
+    [fetchSortByValues.fulfilled]: (state, {
+      payload: { sortByValues, hasError },
+    }) => {
+      const st = state;
+      onFulfilledSortByValues(st, hasError);
+
+      if (!hasError) {
+        st.sortByValues = sortByValues;
+      }
+    },
+    [fetchSortByValues.rejected]: (state) => {
+      const st = state;
+      onRejectedSortByValues(st);
+      st.sortByValues = [];
+      st.selectedSortByValue = null;
+    },
+
+    [selectSortByValue]: (state, { payload: { sortByValue } }) => {
+      const st = state;
+      st.selectedSortByValue = sortByValue;
     },
   },
 });

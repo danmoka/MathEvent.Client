@@ -1,4 +1,6 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import eventService from '../../api/services/event-service';
+import statusCode from '../../utils/status-code-reader';
 
 export const setIsFilterOpened = createAction(
   'setIsFilterOpened',
@@ -28,4 +30,24 @@ export const setStartDateFromFilter = createAction(
 export const setStartDateToFilter = createAction(
   'setStartDateToFilter',
   (startDateTo) => ({ payload: { startDateTo } }),
+);
+
+export const fetchSortByValues = createAsyncThunk(
+  'fetchSortByValues',
+  async () => {
+    const response = await eventService.fetchSortByValues();
+
+    if (statusCode(response).ok) {
+      const sortByValues = await response.json();
+
+      return { sortByValues, hasError: false };
+    }
+
+    return { hasError: true };
+  },
+);
+
+export const selectSortByValue = createAction(
+  'selectSortByValue',
+  (sortByValue) => ({ payload: { sortByValue } }),
 );

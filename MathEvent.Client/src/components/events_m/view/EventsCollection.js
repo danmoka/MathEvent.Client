@@ -4,6 +4,7 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import Loader from '../../_common/Loader';
 import CardCollection from '../../_common/CardCollection';
+import { NormalText } from '../../_common/Text/Text';
 import EventsBreadcrumbs from './EventsBreadcrumbs';
 import { prepareImage } from '../../../utils/get-image-src';
 import { navigateToEvent } from '../../../utils/navigator';
@@ -57,7 +58,17 @@ const EventsCollection = () => {
           <Loader />
         </div>
       ) : (
-        <CardCollection items={preparedEvents} />
+        <>
+          { preparedEvents.length < 1
+            ? (
+              <NormalText>
+                Событий нет, попробуйте изменить фильтры или сортировку
+              </NormalText>
+            )
+            : (
+              <CardCollection items={preparedEvents} />
+            )}
+        </>
       )}
     </div>
   );

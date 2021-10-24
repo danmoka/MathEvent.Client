@@ -129,6 +129,26 @@ export const onRejectedEventsCountByDate = (state) => {
   onRejectedDefault(state);
 };
 
+// Events sort by values
+
+export const onPendingSortByValues = (state) => {
+  const st = state;
+  st.isFetchingSortByValues = defaultOnPendingFetchValue;
+  onPendingDefault(state);
+};
+
+export const onFulfilledSortByValues = (state, hasError) => {
+  const st = state;
+  st.isFetchingSortByValues = false;
+  onFulfilledDefault(state, hasError);
+};
+
+export const onRejectedSortByValues = (state) => {
+  const st = state;
+  st.isFetchingSortByValues = false;
+  onRejectedDefault(state);
+};
+
 // Organizations
 export const onPendingOrganizations = (state) => {
   const st = state;

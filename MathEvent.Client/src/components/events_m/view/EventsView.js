@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IconButton, iconTypes } from '../../_common/Icon';
 import EventsSearch from './EventsSearch';
 import EventsCollection from './EventsCollection';
-import { useTitle } from '../../../hooks';
-import './EventsView.scss';
 import EventsFilters from './EventsFilters';
 import EventsSort from './EventsSort';
 import EventsCalendar from './EventsCalendar';
@@ -17,6 +15,8 @@ import {
   fetchEvents,
   showCreateEventModal,
 } from '../../../store/actions/event';
+import { useTitle } from '../../../hooks';
+import './EventsView.scss';
 
 const EventView = () => {
   useTitle('События');
@@ -29,6 +29,7 @@ const EventView = () => {
     organizationId,
     startDateFrom,
     startDateTo,
+    selectedSortByValue,
   } = useSelector((state) => state.filters);
 
   useEffect(() => {
@@ -41,8 +42,15 @@ const EventView = () => {
       startDateTo: startDateTo
         ? new Date(startDateTo).toISOString()
         : null,
+      sortByValue: selectedSortByValue,
     }));
-  }, [dispatch, organizationId, startDateFrom, startDateTo]);
+  }, [
+    dispatch,
+    organizationId,
+    selectedSortByValue,
+    startDateFrom,
+    startDateTo,
+  ]);
 
   const handleFiltersButtonClick = useCallback(() => {
     dispatch(setIsFilterOpened(!isFilterOpened));

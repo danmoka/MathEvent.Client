@@ -118,6 +118,12 @@
         min-width: 120px;
         width: 120px;
     }
+
+    &__loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 .events-calendar {

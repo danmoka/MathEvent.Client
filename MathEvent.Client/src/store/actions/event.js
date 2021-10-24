@@ -11,6 +11,7 @@ export const fetchEvents = createAsyncThunk('fetchEvents', async (
     organizationId,
     startDateFrom,
     startDateTo,
+    sortByValue,
   },
 ) => {
   const response = await eventService.fetchEvents(
@@ -18,6 +19,7 @@ export const fetchEvents = createAsyncThunk('fetchEvents', async (
     organizationId,
     startDateFrom,
     startDateTo,
+    sortByValue,
   );
 
   if (statusCode(response).ok) {

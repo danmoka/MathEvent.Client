@@ -6,11 +6,13 @@ const eventRoutes = {
     organizationId,
     startDateFrom,
     startDateTo,
+    sortByValue,
   ) => getRoute(
     `events/?parent=${parentId}`
     + `&organization=${organizationId}`
     + `&startDateFrom=${startDateFrom}`
-    + `&startDateTo=${startDateTo}`,
+    + `&startDateTo=${startDateTo}`
+    + `&sortBy=${sortByValue}`,
   ),
   fetchEventsCountByDate: (
     startDateFrom,
@@ -31,6 +33,7 @@ const eventRoutes = {
     `events/statistics/?eventSubsStatisticsTop=${eventSubsStatisticsTop}`,
   ),
   fetchEventStatistics: (eventId) => getRoute(`events/statistics/${eventId}`),
+  fetchSortByValues: () => getRoute('events/sortbyvalues'),
   uploadAvatar: (eventId) => getRoute(`events/avatar/?id=${eventId}`),
 };
 

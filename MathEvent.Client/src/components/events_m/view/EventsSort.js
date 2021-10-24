@@ -1,22 +1,39 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Dropdown from '../../_common/Dropdown';
+import Loader from '../../_common/Loader';
+import {
+  fetchSortByValues, selectSortByValue,
+} from '../../../store/actions/filters';
 import './EventsView.scss';
 
-const prepareDateTimes = () => [
-  { value: 'newest', name: 'От новых к старым' },
-  { value: 'oldest', name: 'От старых к новым' },
-];
-
-const prepareAlphabeticalOrder = () => [
-  { value: 'alphabetical', name: 'От А до Я' },
-  { value: 'alphabeticalReverse', name: 'От Я до А' },
-];
+const prepareSortValues = (sortByDateValues) => (
+  sortByDateValues
+    ? sortByDateValues.map((v) => ({
+      value: v.id.toString(),
+      name: v.name,
+    }))
+    : []
+);
 
 const EventsSort = () => {
-  const preparedDateTimes = prepareDateTimes();
-  const preparedAlphabeticalOrder = prepareAlphabeticalOrder();
+  const dispatch = useDispatch();
+  const {
+    sortByValues,
+    isFetchingSortByValues,
+    selectedSortByValue,
+  } = useSelector((state) => state.filters);
+  const preparedSortByValues = prepareSortValues(sortByValues);
+
+  useEffect(() => {
+    dispatch(fetchSortByValues());
+  }, [dispatch]);
+
+  const handleSortByValueChange = useCallback((sortByValue) => {
+    dispatch(selectSortByValue(sortByValue));
+  }, [dispatch]);
 
   return (
     <div className="events-sort">
@@ -30,22 +47,28 @@ const EventsSort = () => {
         </Typography>
         <Divider className="events-sort__title__divider" />
       </div>
-      <div className="events-sort__main">
-        <Dropdown
-          className="events-sort__dropdown"
-          label="По дате"
-          value={preparedDateTimes[0].value}
-          items={preparedDateTimes}
-          onChange={() => {}}
-        />
-        <Dropdown
-          className="events-sort__dropdown"
-          label="По названию"
-          value={preparedAlphabeticalOrder[0].value}
-          items={preparedAlphabeticalOrder}
-          onChange={() => {}}
-        />
-      </div>
+      { isFetchingSortByValues
+        ? (
+          <div className="events-sort__loader">
+            <Loader />
+          </div>
+        )
+        : (
+          <>
+            { preparedSortByValues.length > 0
+              && (
+                <div className="events-sort__main">
+                  <Dropdown
+                    className="events-sort__dropdown"
+                    label="Значения"
+                    value={selectedSortByValue}
+                    items={preparedSortByValues}
+                    onChange={handleSortByValueChange}
+                  />
+                </div>
+              )}
+          </>
+        )}
     </div>
   );
 };
