@@ -19,7 +19,6 @@ const icons = {
   [iconTypes.filter]: materialIcons.FilterList,
   [iconTypes.login]: materialIcons.MeetingRoom,
   [iconTypes.home]: materialIcons.Home,
-  [iconTypes.left]: materialIcons.KeyboardArrowLeft,
   [iconTypes.list]: materialIcons.ViewList,
   [iconTypes.location]: materialIcons.LocationOn,
   [iconTypes.logout]: materialIcons.ExitToApp,
@@ -37,6 +36,7 @@ const icons = {
   [iconTypes.sort]: materialIcons.Sort,
   [iconTypes.stats]: materialIcons.Equalizer,
   [iconTypes.supervisedUser]: materialIcons.SupervisedUserCircle,
+  [iconTypes.up]: materialIcons.KeyboardArrowUp,
   [iconTypes.upload]: materialIcons.Publish,
   [iconTypes.uploadCloud]: materialIcons.CloudUpload,
 };

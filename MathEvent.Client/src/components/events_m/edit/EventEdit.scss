@@ -1,12 +1,24 @@
 .event-edit {
     display: flex;
     flex-direction: column;
+    margin-top: 12px;
+
+    &__main-section {
+        margin-top: 0px;
+    }
+
+    &__manager-section {
+        margin-top: 24px;
+    }
+
+    &__delete-section {
+        margin-top: 24px;
+    }
 
     &__body {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        margin-top: 24px;
         padding: 24px;
         gap: 24px;
 

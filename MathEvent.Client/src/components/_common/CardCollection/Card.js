@@ -4,6 +4,7 @@ import { Card as MuiCard } from '@material-ui/core/';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import MuiListItemIcon from '@material-ui/core/ListItemIcon';
 import MuiMenuItem from '@material-ui/core/MenuItem';
 import Popover from '@material-ui/core/Popover';
@@ -47,49 +48,53 @@ const Card = ({
       className={className}
       onClick={onClick}
     >
-      <CardHeader
-        title={primaryText}
-        subheader={secondaryText}
-        action={actions.length > 0
-          ? (
-            <>
-              <IconButton type={iconTypes.more} onClick={handleMenuOpen} />
-              <Popover
-                id="list-item-popover"
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={handleMenuClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-              >
-                <div>
-                  {actions.map((action) => (
-                    <MuiMenuItem
-                      key={action.id}
-                      onClick={(e) => handleSecondaryAction(e, action.onClick)}
-                    >
-                      <MuiListItemIcon>
-                        <Icon type={action.icon} />
-                      </MuiListItemIcon>
-                      {action.label}
-                    </MuiMenuItem>
-                  ))}
-                </div>
-              </Popover>
-            </>
-          )
-          : (<></>)}
-      />
-      <CardMedia
-        className={`${className}__media`}
-        title={primaryText}
-        image={image}
-      />
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {additionalText}
-        </Typography>
-      </CardContent>
+      <CardActionArea>
+        <CardHeader
+          title={primaryText}
+          subheader={secondaryText}
+          action={actions.length > 0
+            ? (
+              <>
+                <IconButton type={iconTypes.more} onClick={handleMenuOpen} />
+                <Popover
+                  id="list-item-popover"
+                  open={Boolean(anchorEl)}
+                  anchorEl={anchorEl}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                  <div>
+                    {actions.map((action) => (
+                      <MuiMenuItem
+                        key={action.id}
+                        onClick={
+                          (e) => handleSecondaryAction(e, action.onClick)
+                        }
+                      >
+                        <MuiListItemIcon>
+                          <Icon type={action.icon} />
+                        </MuiListItemIcon>
+                        {action.label}
+                      </MuiMenuItem>
+                    ))}
+                  </div>
+                </Popover>
+              </>
+            )
+            : (<></>)}
+        />
+        <CardMedia
+          className={`${className}__media`}
+          title={primaryText}
+          image={image}
+        />
+        <CardContent>
+          <Typography variant="body2" color="textSecondary" component="p">
+            {additionalText}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
     </MuiCard>
   );
 };

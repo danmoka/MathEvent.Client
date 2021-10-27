@@ -34,6 +34,7 @@ const iconTypes = {
   sort: 'sort',
   stats: 'stats',
   supervisedUser: 'supervisedUser',
+  up: 'up',
   upload: 'upload',
   uploadCloud: 'uploadCloud',
 };

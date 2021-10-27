@@ -11,6 +11,8 @@ const images = {
   home: '/public/svg/home.svg',
   homeDark: '/public/svg/home-dark.svg',
   jpg: '/public/svg/jpg.svg',
+  logoLight: '/public/svg/logo_light.svg',
+  logoDark: '/public/svg/logo_dark.svg',
   pattern: '/public/svg/pattern.svg',
   pdf: '/public/svg/pdf.svg',
   png: '/public/svg/png.svg',

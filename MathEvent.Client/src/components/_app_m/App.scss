@@ -32,12 +32,33 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 24px;
 
     &__body {
-        padding: 24px;
-        padding-top: 12px;
+        padding-left: 24px;
+        padding-right: 24px;
         width: 700px;
     }
+}
+
+.app-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__body {
+        margin-top: 12px;
+        margin-bottom: 12px;
+        padding-right: 24px;
+        padding-left: 24px;
+        width: 700px;
+    }
+}
+
+.up-button {
+    position: fixed;
+    bottom: 12px;
+    right: 12px;
 }
 
 @media (max-width: 801px) {
@@ -50,6 +71,35 @@
     .app-content {
         &__body {
             width: 100%;
+        }
+    }
+
+    .app-menu {
+        &__body {
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .app-header {
+        &__toolbar {
+            padding-right: 16px;
+            padding-left: 16px;
+        }
+    }
+
+    .app-content {
+        &__body {
+            padding-right: 16px;
+            padding-left: 16px;
+        }
+    }
+
+    .app-menu {
+        &__body {
+            padding-right: 16px;
+            padding-left: 16px;
         }
     }
 }

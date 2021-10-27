@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useDebouncedCallback } from 'use-debounce';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import AppBar from '@material-ui/core/AppBar';
+import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -15,8 +18,9 @@ import {
 } from '@material-ui/core/styles';
 import AppContent from './AppContent';
 import AppMenu from './AppMenu';
+import Button, { buttonTypes } from '../_common/Button';
 import { HugeText } from '../_common/Text/Text';
-import { Icon, iconTypes } from '../_common/Icon';
+import { Icon, IconButton, iconTypes } from '../_common/Icon';
 import Image from '../_common/Image';
 import Loader from '../_common/Loader';
 import {
@@ -29,7 +33,7 @@ import {
   fetchUserInfo,
   showLogoutModal,
 } from '../../store/actions/account';
-import { palette, paletteDark } from '../../styles/palette';
+import { palette2, paletteDark2 } from '../../styles/palette';
 import colors from '../../constants/colors';
 import images from '../../constants/images';
 import './App.scss';
@@ -68,10 +72,13 @@ const App = () => {
     isFetchingAccount,
   } = useSelector((state) => state.account);
 
+  const scrollbar = useRef();
+
   const [anchorEl, setAnchorEl] = useState(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const theme = createMuiTheme({
-    palette: isDarkTheme ? paletteDark : palette,
+    palette: isDarkTheme ? paletteDark2 : palette2,
   });
 
   useEffect(() => {
@@ -87,6 +94,19 @@ const App = () => {
   useInterval(() => {
     dispatch(fetchTokens({ userName: null, password: null }));
   }, tokenInterval);
+
+  const onTopHandler = useCallback(() => {
+    if (scrollbar?.current) {
+      setScrollPosition(0);
+      scrollbar.current.scrollTop(0);
+    }
+  }, []);
+
+  const handleScrollPositionUpdate = useDebouncedCallback((values) => {
+    if (values) {
+      setScrollPosition(values.scrollTop);
+    }
+  }, 500);
 
   const handleRegisterClick = () => navigateToRegister();
   const handleLoginClick = () => navigateToLogin();
@@ -116,7 +136,9 @@ const App = () => {
           <div className="app-header__toolbar__name-section">
             <Image
               className="app-header__toolbar__logo"
-              src={images.favicon}
+              src={isDarkTheme
+                ? images.logoDark
+                : images.logoLight}
             />
             <HugeText>
               athEvent
@@ -133,6 +155,8 @@ const App = () => {
                 : (
                   <div>
                     <Button
+                      color={colors.default}
+                      type={buttonTypes.text}
                       endIcon={iconTypes.account}
                       onClick={handleMenuOpen}
                     >
@@ -163,12 +187,15 @@ const App = () => {
           ) : (
             <div>
               <Button
+                color={colors.default}
+                type={buttonTypes.text}
                 onClick={handleRegisterClick}
               >
                 Регистрация
               </Button>
               <Button
-                color={colors.inherit}
+                color={colors.default}
+                type={buttonTypes.text}
                 onClick={handleLoginClick}
               >
                 Войти
@@ -178,14 +205,39 @@ const App = () => {
         </Toolbar>
       </AppBar>
       <Toolbar id="back-to-top-anchor" />
-      <Scrollbars autoHide>
+      <div className="app-menu">
+        <div className="app-menu__body">
+          <AppMenu />
+        </div>
+      </div>
+      <Scrollbars
+        ref={scrollbar}
+        onUpdate={handleScrollPositionUpdate}
+        autoHide
+      >
         <div className="app-content">
           <div className="app-content__body">
-            <AppMenu />
             <AppContent />
           </div>
         </div>
       </Scrollbars>
+      { scrollPosition > 100
+        && (
+          <Box
+            className="up-button"
+            bgcolor="background.default"
+            border={2}
+            borderRadius={50}
+            borderColor="secondary.main"
+            boxShadow={3}
+          >
+            <IconButton
+              type={iconTypes.up}
+              color={colors.secondary}
+              onClick={onTopHandler}
+            />
+          </Box>
+        )}
     </ThemeProvider>
   );
 };
