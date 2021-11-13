@@ -11,6 +11,7 @@ import LogoutModal from '../../account_m/LogoutModal';
 import UploadEventAvatarModal from '../../events/edit/UploadEventAvatar';
 import UploadFilesModal from '../File/UploadFilesModal';
 import UserStatisticsModal from '../../statistics/user/UserStatisticsModal';
+import { ZoomImageModal } from '../ZoomImage';
 import modalTypes from '../../../constants/modal-types';
 
 const modals = {
@@ -25,6 +26,7 @@ const modals = {
   [modalTypes.uploadFiles]: UploadFilesModal,
   [modalTypes.userStatistics]: UserStatisticsModal,
   [modalTypes.logout]: LogoutModal,
+  [modalTypes.zoomImage]: ZoomImageModal,
 };
 
 const ModalRoot = () => {

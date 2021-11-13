@@ -3,8 +3,8 @@
     "accountUrl": "https://localhost:5001",
     "prodBaseUrl": "https://matheventapi20210520141313.azurewebsites.net",
     "prodAccountUrl": "https://matheventidentityserver20210520135557.azurewebsites.net",
-    "clientId": "react_spa",
-    "clientSecret": "secret",
+    "clientId": "MathEvetnClient_ReactApp",
+    "clientSecret": "N[8n&#>[2TzW[8y}=",
     "passwordGrantType": "password",
     "refreshGrantType": "refresh_token"
 }

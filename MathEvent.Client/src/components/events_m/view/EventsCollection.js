@@ -62,6 +62,7 @@ const EventsCollection = () => {
           { preparedEvents.length < 1
             ? (
               <NormalText>
+                {/* TODO: flex center */}
                 Событий нет, попробуйте изменить фильтры или сортировку
               </NormalText>
             )

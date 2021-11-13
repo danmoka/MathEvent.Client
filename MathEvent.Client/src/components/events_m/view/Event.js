@@ -10,8 +10,8 @@ import Button, { buttonTypes } from '../../_common/Button';
 import { HugeText, NormalText, SmallText } from '../../_common/Text/Text';
 import { Date } from '../../_common/Date';
 import { Icon, IconButton, iconTypes } from '../../_common/Icon';
-import Image from '../../_common/Image';
 import List from '../../_common/List';
+import ZoomImage from '../../_common/ZoomImage';
 import EventFiles from './EventFiles';
 import {
   fetchEvent,
@@ -19,25 +19,12 @@ import {
 } from '../../../store/actions/event';
 import { fetchPosition } from '../../../store/actions/map';
 import { useTitle } from '../../../hooks';
-import { getImageSrc } from '../../../utils/get-image-src';
-import images from '../../../constants/images';
+import { prepareImage } from '../../../utils/get-image-src';
 import { getInitials } from '../../../utils/get_initials';
 import { isAbleToEditEvent } from '../../../utils/user_rights';
 import { navigateToEventEdit } from '../../../utils/navigator';
 import colors from '../../../constants/colors';
 import './EventsView.scss';
-
-const prepareImage = (path, isDarkTheme) => {
-  if (path) {
-    return getImageSrc(path);
-  }
-
-  if (isDarkTheme) {
-    return images.eventDefaultDark;
-  }
-
-  return images.eventDefault;
-};
 
 const prepareUsers = (users) => (users
   ? users.map((user, index) => ({
@@ -169,7 +156,7 @@ const Event = () => {
                   </div>
                 </div>
                 <div className="event__image-section">
-                  <Image
+                  <ZoomImage
                     className="event__image-section__image"
                     src={preparedImage}
                     alt={eventInfo.name}

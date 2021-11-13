@@ -60,7 +60,7 @@ const useInterval = (callback, delay) => {
   }, [delay]);
 };
 
-const tokenInterval = 1000 * 60 * 4;
+const tokenInterval = 1000 * 60 * 55;
 
 const App = () => {
   const dispatch = useDispatch();

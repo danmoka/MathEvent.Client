@@ -243,3 +243,9 @@ export const showEventStatistics = createAsyncThunk(
     thunkAPI.dispatch(showModal(modalTypes.eventStatistics, { event }));
   },
 );
+
+export const showZoomImage = createAsyncThunk(
+  'showZoomImage', ({ src }, thunkApi) => {
+    thunkApi.dispatch(showModal(modalTypes.zoomImage, { src }));
+  },
+);

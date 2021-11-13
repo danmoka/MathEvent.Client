@@ -307,6 +307,7 @@ const UserEdit = () => {
                     События, которыми вы управляете
                   </HugeText>
                 </Paper>
+                {/* TODO: create message if empty */}
                 <Scrollbars autoHeight autoHeightMax={450}>
                   <CardCollection
                     className="user-edit__events__card-collection"
@@ -320,6 +321,7 @@ const UserEdit = () => {
                     События, на которые вы подписаны
                   </HugeText>
                 </Paper>
+                {/* TODO: create message if empty */}
                 <Scrollbars autoHeight autoHeightMax={450}>
                   <CardCollection
                     className="user-edit__events__card-collection"

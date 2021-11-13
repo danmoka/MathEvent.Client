@@ -1,13 +1,15 @@
-import CreateModal from "./CreateModal";
-import DeleteModal from "./DeleteModal";
-import InfoModal from "./InfoModal";
-import ShowModal from "./ShowModal";
-import modalSizes from "../../../constants/modal-sizes";
+import BorderlessModal from './BorderlessModal';
+import CreateModal from './CreateModal';
+import DeleteModal from './DeleteModal';
+import InfoModal from './InfoModal';
+import ShowModal from './ShowModal';
+import modalSizes from '../../../constants/modal-sizes';
 
 export {
-    CreateModal,
-    DeleteModal,
-    InfoModal,
-    ShowModal,
-    modalSizes
+  BorderlessModal,
+  CreateModal,
+  DeleteModal,
+  InfoModal,
+  ShowModal,
+  modalSizes,
 };

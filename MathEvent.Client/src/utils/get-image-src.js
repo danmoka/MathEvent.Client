@@ -1,7 +1,7 @@
 import { getRoute } from './get-route';
 import images from '../constants/images';
 
-export const getImageSrc = (src) => getRoute(`images/?src=${src}`);
+export const getImageSrc = (src) => getRoute(`webrootdata/?src=${src}`);
 
 export const prepareImage = (path, isDarkTheme) => {
   if (path) {

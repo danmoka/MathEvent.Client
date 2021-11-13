@@ -10,6 +10,7 @@ const modalTypes = {
   uploadFiles: 'uploadFiles',
   userStatistics: 'userStatistics',
   logout: 'logout',
+  zoomImage: 'zoomImage',
 };
 
 export default modalTypes;
