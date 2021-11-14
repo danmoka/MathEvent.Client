@@ -58,7 +58,7 @@ const EventCreateModal = () => {
   const handleCreate = useCallback(() => {
     const event = {
       Name: name,
-      StartDate: startDate,
+      StartDate: new Date(startDate).toISOString(),
       Location: location,
       Description: description,
       OrganizationId: organization,
@@ -68,14 +68,14 @@ const EventCreateModal = () => {
 
     dispatch(createEvent({ event }));
   }, [
+    dispatch,
     name,
     startDate,
     location,
     description,
     organization,
     parent,
-    hierarchy,
-    dispatch]);
+    hierarchy]);
 
   return (
     <CreateModal

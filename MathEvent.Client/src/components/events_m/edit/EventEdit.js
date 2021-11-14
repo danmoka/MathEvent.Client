@@ -31,6 +31,7 @@ import { prepareImage } from '../../../utils/get-image-src';
 import { isAbleToEditEvent } from '../../../utils/user_rights';
 import { navigateToEvent } from '../../../utils/navigator';
 import { getInitials } from '../../../utils/get_initials';
+import { getLocaleDateTimeFromUTC } from '../../../utils/time';
 import './EventEdit.scss';
 
 const prepareOrganizations = (organizations) => (organizations
@@ -109,7 +110,7 @@ const EventEdit = () => {
       setName(eventInfo.name);
       setAvatarPath(eventInfo.avatarPath);
       setDesctiption(eventInfo.description);
-      setStartDate(new Date(eventInfo.startDate));
+      setStartDate(new Date(getLocaleDateTimeFromUTC(eventInfo.startDate)));
       setLocation(eventInfo.location);
       setOrganization(eventInfo.organization?.id.toString());
       setHierarchy(eventInfo.hierarchy !== null);
@@ -188,7 +189,7 @@ const EventEdit = () => {
     setStartDate(newStartDate);
     handlePatchEvent([
       {
-        value: newStartDate,
+        value: new Date(newStartDate).toISOString(),
         path: '/StartDate',
         op: 'replace',
       },

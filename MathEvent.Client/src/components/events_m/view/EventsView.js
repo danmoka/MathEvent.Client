@@ -31,6 +31,9 @@ const EventView = () => {
     startDateTo,
     selectedSortByValue,
   } = useSelector((state) => state.filters);
+  const {
+    isAuthenticated,
+  } = useSelector((state) => state.account);
 
   useEffect(() => {
     dispatch(fetchEvents({
@@ -91,11 +94,13 @@ const EventView = () => {
             selected={isCalendarOpened}
             onClick={handleCalendarButtonClick}
           />
-          <IconButton
-            type={iconTypes.add}
-            title="Новое событие"
-            onClick={handleEventCreateButtonClick}
-          />
+          { isAuthenticated && (
+            <IconButton
+              type={iconTypes.add}
+              title="Новое событие"
+              onClick={handleEventCreateButtonClick}
+            />
+          )}
         </div>
       </div>
       {isSortOpened

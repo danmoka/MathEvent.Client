@@ -23,6 +23,7 @@ import { prepareImage } from '../../../utils/get-image-src';
 import { getInitials } from '../../../utils/get_initials';
 import { isAbleToEditEvent } from '../../../utils/user_rights';
 import { navigateToEventEdit } from '../../../utils/navigator';
+import { getLocaleDateTimeFromUTC } from '../../../utils/time';
 import colors from '../../../constants/colors';
 import './EventsView.scss';
 
@@ -117,7 +118,7 @@ const Event = () => {
                     />
                     )}
                   </div>
-                  <Date date={eventInfo.startDate} />
+                  <Date date={getLocaleDateTimeFromUTC(eventInfo.startDate)} />
                 </div>
                 <div className="event__buttons-section">
                   <Button
