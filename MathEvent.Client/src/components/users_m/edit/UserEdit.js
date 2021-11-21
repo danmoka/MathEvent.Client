@@ -6,13 +6,18 @@ import { useParams } from 'react-router';
 import { useDebouncedCallback } from 'use-debounce';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
 import Loader from '../../_common/Loader';
 import TextField from '../../_common/TextField';
 import Dropdown from '../../_common/Dropdown';
 import CardCollection from '../../_common/CardCollection';
 import { iconTypes, IconButton } from '../../_common/Icon';
-import { HugeText } from '../../_common/Text/Text';
-import { patchUser, fetchUser } from '../../../store/actions/user';
+import { NormalText, HugeText } from '../../_common/Text/Text';
+import {
+  patchUserAccount,
+  fetchUserAccount,
+} from '../../../store/actions/account';
+import { patchUserInfo, fetchUserInfo } from '../../../store/actions/user';
 import { setIsDarkTheme } from '../../../store/actions/app';
 import { fetchOrganizations } from '../../../store/actions/organization';
 import {
@@ -52,54 +57,72 @@ const prepareOrganizations = (organizations) => (organizations
 const UserEdit = () => {
   const dispatch = useDispatch();
   const {
-    userInfo: account,
+    account,
+    userAccount,
+    isFetchingUserAccount,
   } = useSelector((state) => state.account);
   const { userInfo, isFetchingUser } = useSelector((state) => state.user);
   const { organizations } = useSelector((state) => state.organization);
   const { isDarkTheme } = useSelector((state) => state.app);
 
-  const [isAbleToEdit, setIsAbleToEdit] = useState(true);
+  const [isAbleToEditUserAccount, setIsAbleToEditUserAccount] = useState(true);
+  const [isAbleToEditUserInfo, setIsAbleToEditUserInfo] = useState(true);
   const [userId, setUserId] = useState(null);
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const [patronymic, setPatronymic] = useState('');
   const [organization, setOrganization] = useState('');
 
   const { id } = useParams();
   useTitle('Редактирование пользователя');
 
   useEffect(() => {
-    if (isAbleToEdit && account) {
-      dispatch(fetchUser(id));
+    if (isAbleToEditUserAccount && account) {
+      dispatch(fetchUserAccount(id));
     }
-  }, [account, dispatch, id, isAbleToEdit]);
+  }, [dispatch, account, id, isAbleToEditUserAccount]);
+
+  useEffect(() => {
+    if (isAbleToEditUserInfo && account) {
+      dispatch(fetchUserInfo(account));
+    }
+  }, [dispatch, account, isAbleToEditUserInfo]);
+
+  useEffect(() => {
+    if (userAccount && account) {
+      setIsAbleToEditUserAccount(isAbleToEditUser(account, userAccount));
+    }
+  }, [account, userAccount]);
 
   useEffect(() => {
     if (userInfo && account) {
-      setIsAbleToEdit(isAbleToEditUser(account, userInfo));
+      setIsAbleToEditUserInfo(isAbleToEditUser(account, userInfo));
     }
   }, [account, userInfo]);
 
   useEffect(() => {
-    if (!isAbleToEdit) {
+    if (!isAbleToEditUserAccount) {
       navigateToUser(id);
     }
-  }, [dispatch, id, isAbleToEdit]);
+  }, [dispatch, id, isAbleToEditUserAccount]);
 
   useEffect(() => {
     dispatch(fetchOrganizations());
   }, [dispatch]);
 
   useEffect(() => {
+    if (userAccount) {
+      setUserId(userAccount.id);
+      setName(userAccount.name);
+      setSurname(userAccount.surname);
+      setEmail(userAccount.email);
+      setUsername(userAccount.userName);
+    }
+  }, [userAccount]);
+
+  useEffect(() => {
     if (userInfo) {
-      setUserId(userInfo.id);
-      setName(userInfo.name);
-      setSurname(userInfo.surname);
-      setEmail(userInfo.email);
-      setUsername(userInfo.userName);
-      setPatronymic(userInfo.patronymic);
       setOrganization(userInfo.organization?.id.toString());
     }
   }, [userInfo]);
@@ -126,12 +149,12 @@ const UserEdit = () => {
       ? prepareEvents(
         userInfo.managedEvents,
         handleEventClick,
-        (event) => [
+        (ev) => [
           {
             id: 'edit',
             label: 'Редактировать',
             icon: iconTypes.edit,
-            onClick: () => navigateToEventEdit(event.id),
+            onClick: () => navigateToEventEdit(ev.id),
           },
         ],
         isDarkTheme,
@@ -152,10 +175,10 @@ const UserEdit = () => {
     [handleEventClick, isDarkTheme, userInfo],
   );
 
-  const handlePatchUser = useCallback(
+  const handlePatchUserAccount = useCallback(
     (data) => {
       dispatch(
-        patchUser({
+        patchUserAccount({
           userId,
           data,
         }),
@@ -164,42 +187,40 @@ const UserEdit = () => {
     [dispatch, userId],
   );
 
+  const handlePatchUserInfo = useCallback(
+    (data) => {
+      dispatch(
+        patchUserInfo(data),
+      );
+    },
+    [dispatch],
+  );
+
   const handleNameValueChange = useDebouncedCallback((newName) => {
     setName(newName);
-    handlePatchUser([
-      {
-        value: newName,
-        path: '/Name',
-        op: 'replace',
-      },
-    ]);
+    const patchName = {
+      value: newName,
+      path: '/Name',
+      op: 'replace',
+    };
+    handlePatchUserAccount([patchName]);
+    handlePatchUserInfo([patchName]);
   }, 1000);
 
   const handleSurnameValueChange = useDebouncedCallback((newSurname) => {
     setSurname(newSurname);
-    handlePatchUser([
-      {
-        value: newSurname,
-        path: '/Surname',
-        op: 'replace',
-      },
-    ]);
-  }, 1000);
-
-  const handleEmailValueChange = useDebouncedCallback((newEmail) => {
-    setEmail(newEmail);
-    handlePatchUser([
-      {
-        value: newEmail,
-        path: '/Email',
-        op: 'replace',
-      },
-    ]);
+    const patchSurname = {
+      value: newSurname,
+      path: '/Surname',
+      op: 'replace',
+    };
+    handlePatchUserAccount([patchSurname]);
+    handlePatchUserInfo([patchSurname]);
   }, 1000);
 
   const handleUsernameValueChange = useDebouncedCallback((newUsername) => {
     setUsername(newUsername);
-    handlePatchUser([
+    handlePatchUserAccount([
       {
         value: newUsername,
         path: '/UserName',
@@ -208,31 +229,38 @@ const UserEdit = () => {
     ]);
   }, 1000);
 
-  const handlePatronymicValueChange = useDebouncedCallback((newPatronymic) => {
-    setUsername(newPatronymic);
-    handlePatchUser([
-      {
-        value: newPatronymic,
-        path: '/Patronymic',
-        op: 'replace',
-      },
-    ]);
-  }, 1000);
-
   const handleOrganizationChange = useCallback((newOrganization) => {
     setOrganization(newOrganization);
-    handlePatchUser([
+    handlePatchUserInfo([
       {
         value: newOrganization || null,
         path: '/OrganizationId',
         op: 'replace',
       },
     ]);
-  }, [handlePatchUser]);
+  }, [handlePatchUserInfo]);
 
   return (
     <div className="user-edit">
-      { isFetchingUser
+      <Paper className="user-edit__header">
+        <HugeText>
+          Личный кабинет
+        </HugeText>
+        {isDarkTheme ? (
+          <IconButton
+            type={iconTypes.setLight}
+            title="Включить светлую тему"
+            onClick={handleLightThemeClick}
+          />
+        ) : (
+          <IconButton
+            type={iconTypes.setDark}
+            title="Включить темную тему"
+            onClick={handleDarkThemeClick}
+          />
+        )}
+      </Paper>
+      { isFetchingUserAccount
         ? (
           <div className="user-edit__loader-section">
             <Loader />
@@ -240,28 +268,17 @@ const UserEdit = () => {
         )
         : (
           <>
-            { userInfo
-          && (
+            { userAccount
+            && (
             <>
-              <Paper className="user-edit__header">
-                <HugeText>
-                  Личный кабинет
-                </HugeText>
-                {isDarkTheme ? (
-                  <IconButton
-                    type={iconTypes.setLight}
-                    title="Включить светлую тему"
-                    onClick={handleLightThemeClick}
-                  />
-                ) : (
-                  <IconButton
-                    type={iconTypes.setDark}
-                    title="Включить темную тему"
-                    onClick={handleDarkThemeClick}
-                  />
-                )}
-              </Paper>
               <Paper className="user-edit__body">
+                <TextField
+                  className="user-edit__body__control"
+                  label="Email"
+                  value={email}
+                  disabled
+                  onChange={() => {}}
+                />
                 <TextField
                   className="user-edit__body__control"
                   label="Фамилия"
@@ -276,61 +293,75 @@ const UserEdit = () => {
                 />
                 <TextField
                   className="user-edit__body__control"
-                  label="Отчество"
-                  value={patronymic}
-                  onChange={handlePatronymicValueChange}
-                />
-                <TextField
-                  className="user-edit__body__control"
-                  label="Email"
-                  value={email}
-                  onChange={handleEmailValueChange}
-                />
-                <TextField
-                  className="user-edit__body__control"
                   label="Логин"
                   value={username}
                   onChange={handleUsernameValueChange}
                 />
-                <Dropdown
-                  className="user-edit__body__control"
-                  label="Организация"
-                  variant="outlined"
-                  value={organization}
-                  items={preparedOrganizations}
-                  onChange={handleOrganizationChange}
-                />
+                { userInfo && (
+                  <Dropdown
+                    className="user-edit__body__control"
+                    label="Организация"
+                    variant="outlined"
+                    value={organization}
+                    items={preparedOrganizations}
+                    onChange={handleOrganizationChange}
+                  />
+                )}
               </Paper>
-              <div className="user-edit__events">
-                <Paper className="user-edit__events__header">
-                  <HugeText>
-                    События, которыми вы управляете
-                  </HugeText>
-                </Paper>
-                {/* TODO: create message if empty */}
-                <Scrollbars autoHeight autoHeightMax={450}>
-                  <CardCollection
-                    className="user-edit__events__card-collection"
-                    items={preparedManagedEvents}
-                  />
-                </Scrollbars>
-              </div>
-              <div className="user-edit__events">
-                <Paper className="user-edit__events__header">
-                  <HugeText>
-                    События, на которые вы подписаны
-                  </HugeText>
-                </Paper>
-                {/* TODO: create message if empty */}
-                <Scrollbars autoHeight autoHeightMax={450}>
-                  <CardCollection
-                    className="user-edit__events__card-collection"
-                    items={preparedEvents}
-                  />
-                </Scrollbars>
-              </div>
             </>
-          )}
+            )}
+          </>
+        )}
+      { isFetchingUser
+        ? (
+          <div className="user-edit__loader-section">
+            <Loader />
+          </div>
+        )
+        : (
+          <>
+            { userInfo && (
+              <>
+                { preparedManagedEvents.length > 0 && (
+                  <div className="user-edit__events">
+                    <div className="user-edit__events__title">
+                      <NormalText
+                        className="user-edit__events__title__name"
+                        color="textSecondary"
+                      >
+                        События, которыми вы управляете
+                      </NormalText>
+                      <Divider className="user-edit__events__title__divider" />
+                    </div>
+                    <Scrollbars autoHeight autoHeightMax={450}>
+                      <CardCollection
+                        className="user-edit__events__card-collection"
+                        items={preparedManagedEvents}
+                      />
+                    </Scrollbars>
+                  </div>
+                )}
+                { preparedEvents.length > 0 && (
+                  <div className="user-edit__events">
+                    <div className="user-edit__events__title">
+                      <NormalText
+                        className="user-edit__events__title__name"
+                        color="textSecondary"
+                      >
+                        События, на которые вы подписаны
+                      </NormalText>
+                      <Divider className="user-edit__events__title__divider" />
+                    </div>
+                    <Scrollbars autoHeight autoHeightMax={450}>
+                      <CardCollection
+                        className="user-edit__events__card-collection"
+                        items={preparedEvents}
+                      />
+                    </Scrollbars>
+                  </div>
+                )}
+              </>
+            )}
           </>
         )}
     </div>

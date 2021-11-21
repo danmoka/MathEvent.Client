@@ -1,29 +1,15 @@
 import React, {
-  useCallback, useEffect, useState, useMemo,
+  useCallback, useEffect, useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import TextField from '../_common/TextField';
 import Button from '../_common/Button';
-import Dropdown from '../_common/Dropdown';
-import { register } from '../../store/actions/user';
-import { fetchOrganizations } from '../../store/actions/organization';
+import { register } from '../../store/actions/account';
 import './Account.scss';
-
-const prepareOrganizations = (organizations) => [
-  { value: '', name: 'Без организации' },
-  ...organizations.map((organization) => ({
-    value: organization.id.toString(),
-    name: organization.name,
-  })),
-];
 
 const Register = () => {
   const dispatch = useDispatch();
-  const { organizations } = useSelector((state) => state.organization);
-
-  const preparedOrganizations = useMemo((
-  ) => prepareOrganizations(organizations), [organizations]);
 
   const [email, setEmail] = useState('');
   const [userName, setUserName] = useState('');
@@ -31,7 +17,6 @@ const Register = () => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
-  const [organization, setOrganization] = useState('');
 
   const clearFields = () => {
     setEmail('');
@@ -40,12 +25,10 @@ const Register = () => {
     setPasswordConfirm('');
     setName('');
     setSurname('');
-    setOrganization('');
   };
 
   useEffect(() => {
     clearFields();
-    dispatch(fetchOrganizations());
   }, [dispatch]);
 
   const handleEmailChange = (value) => setEmail(value);
@@ -54,7 +37,6 @@ const Register = () => {
   const handlePasswordConfirmChange = (value) => setPasswordConfirm(value);
   const handleNameChange = (value) => setName(value);
   const handleSurnameChange = (value) => setSurname(value);
-  const handleOrganizationChange = (value) => setOrganization(value);
 
   const handleSubmit = useCallback(() => {
     const credentials = {
@@ -64,14 +46,12 @@ const Register = () => {
       passwordConfirm,
       name,
       surname,
-      organizationId: organization || null,
     };
     dispatch(register(credentials));
   }, [
     dispatch,
     email,
     name,
-    organization,
     password,
     passwordConfirm,
     surname,
@@ -117,14 +97,6 @@ const Register = () => {
           type="password"
           value={passwordConfirm}
           onChange={handlePasswordConfirmChange}
-        />
-        <Dropdown
-          className="account__body__control"
-          label="Организация"
-          variant="outlined"
-          value={organization}
-          items={preparedOrganizations}
-          onChange={handleOrganizationChange}
         />
         <Button
           className="account__body__control"

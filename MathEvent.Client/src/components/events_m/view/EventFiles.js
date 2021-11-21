@@ -42,7 +42,7 @@ const prepareFiles = (files, onFileDownload, onClick) => {
 
 const EventFiles = ({ className }) => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.account);
+  const { userInfo } = useSelector((state) => state.user);
   const { eventInfo } = useSelector((state) => state.event);
   const { files, isFetchingFiles } = useSelector((state) => state.file);
 

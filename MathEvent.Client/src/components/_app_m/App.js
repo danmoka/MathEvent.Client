@@ -30,9 +30,10 @@ import {
 } from '../../utils/navigator';
 import {
   fetchTokens,
-  fetchUserInfo,
+  fetchAccount,
   showLogoutModal,
 } from '../../store/actions/account';
+import { clearUserInfo, fetchUserInfo } from '../../store/actions/user';
 import { palette2, paletteDark2 } from '../../styles/palette';
 import colors from '../../constants/colors';
 import images from '../../constants/images';
@@ -66,7 +67,7 @@ const App = () => {
   const dispatch = useDispatch();
   const { isDarkTheme } = useSelector((state) => state.app);
   const {
-    userInfo,
+    account,
     hasToken,
     isAuthenticated,
     isFetchingAccount,
@@ -87,9 +88,17 @@ const App = () => {
 
   useEffect(() => {
     if (hasToken) {
-      dispatch(fetchUserInfo());
+      dispatch(fetchAccount());
     }
   }, [dispatch, hasToken]);
+
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchUserInfo(account));
+    } else {
+      dispatch(clearUserInfo());
+    }
+  }, [dispatch, account]);
 
   useInterval(() => {
     dispatch(fetchTokens({ userName: null, password: null }));
@@ -117,7 +126,7 @@ const App = () => {
 
   const handleUserEditClick = () => {
     setAnchorEl(null);
-    navigateToUserEdit(userInfo.sub);
+    navigateToUserEdit(account.sub);
   };
 
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
@@ -160,7 +169,7 @@ const App = () => {
                       endIcon={iconTypes.account}
                       onClick={handleMenuOpen}
                     >
-                      {userInfo.name}
+                      {account.given_name}
                     </Button>
                     <Popover
                       id="app-bar-popover"
@@ -171,7 +180,7 @@ const App = () => {
                       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                     >
                       <MenuItem onClick={handleUserEditClick}>
-                        {userInfo.email}
+                        {account.name}
                       </MenuItem>
                       <Divider />
                       <MenuItem onClick={handleLogoutClick}>

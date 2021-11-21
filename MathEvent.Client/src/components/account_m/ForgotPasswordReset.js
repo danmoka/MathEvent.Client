@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '../_common/Button';
 import TextField from '../_common/TextField';
 import { NormalText } from '../_common/Text/Text';
-import { forgotPasswordReset } from '../../store/actions/user';
+import { forgotPasswordReset } from '../../store/actions/account';
 import { useTitle } from '../../hooks';
 import './Account.scss';
 

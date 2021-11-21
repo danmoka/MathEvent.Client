@@ -2,11 +2,9 @@ import { getRoute } from '../../utils/get-route';
 
 const userRoutes = {
   fetchUsers: () => getRoute('users/'),
-  fetchUser: (userId) => getRoute(`users/${userId}`),
-  patchUser: (userId) => getRoute(`users/${userId}`),
-  register: () => getRoute('users/'),
-  forgotPassword: () => getRoute('users/forgotPassword/'),
-  forgotPasswordReset: () => getRoute('users/resetPassword/'),
+  fetchUserInfo: () => getRoute('users/me/'),
+  patchUserInfo: () => getRoute('users/me/'),
+  createUserInfo: () => getRoute('users/'),
   fetchStatistics: (
     activeUsersTop,
   ) => getRoute(`users/statistics/?activeUsersTop=${activeUsersTop}`),

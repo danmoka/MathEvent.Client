@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '../_common/Button';
 import TextField from '../_common/TextField';
 import { useTitle } from '../../hooks';
-import { forgotPassword } from '../../store/actions/user';
+import { forgotPassword } from '../../store/actions/account';
 import './Account.scss';
 
 const ForgotPassword = () => {

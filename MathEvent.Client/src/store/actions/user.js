@@ -1,8 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  navigateToForgotPasswordReset,
-  navigateToLogin,
-} from '../../utils/navigator';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { showModal } from './modal';
 import modalTypes from '../../constants/modal-types';
 import userService from '../../api/services/user-service';
@@ -14,68 +10,72 @@ export const fetchUsers = createAsyncThunk('fecthUsers', async () => {
   if (statusCode(response).ok) {
     const users = await response.json();
 
-    return { users };
+    return { users, hasError: false };
   }
 
-  return { users: [] };
+  return { users: [], hasError: true };
 });
 
-export const fetchUser = createAsyncThunk('fecthUser', async (userId) => {
-  const response = await userService.fetchUser(userId);
+export const createUserInfo = createAsyncThunk(
+  'createUserInfo',
+  async (user) => {
+    const response = await userService.createUserInfo(user);
 
-  if (statusCode(response).ok) {
-    const user = await response.json();
+    if (statusCode(response).created) {
+      const userInfo = await response.json();
 
-    return { user };
-  }
-
-  return { users: null };
-});
-
-export const patchUser = createAsyncThunk(
-  'patchUser',
-  async ({ userId, data }) => {
-    const response = await userService.patchUser(userId, data);
-
-    if (statusCode(response).ok) {
-      const updatedUser = await response.json();
-
-      return { updatedUser, hasError: false };
+      return { userInfo, hasError: false };
     }
 
-    return { hasError: true };
+    return { userInfo: null, hasError: true };
   },
 );
 
-export const register = createAsyncThunk('register', async (credentials) => {
-  const response = await userService.register(credentials);
-
-  if (statusCode(response).created) {
-    navigateToLogin();
-  }
-});
-
-export const forgotPassword = createAsyncThunk(
-  'forgotPassword',
-  async (emailData) => {
-    const response = await userService.forgotPassword(emailData);
+export const fetchUserInfo = createAsyncThunk(
+  'fetchUserInfo',
+  // eslint-disable-next-line camelcase
+  async ({ sub, email, given_name }, thunkAPI) => {
+    const response = await userService.fetchUserInfo();
 
     if (statusCode(response).ok) {
-      const { email } = emailData;
-      navigateToForgotPasswordReset(email);
+      const userInfo = await response.json();
+
+      return { userInfo, hasError: false };
     }
+
+    if (statusCode(response).notFound) {
+      const [name, surname] = given_name.split(' ');
+      const newUser = {
+        id: sub,
+        email,
+        name,
+        surname,
+      };
+      thunkAPI.dispatch(createUserInfo(newUser));
+    }
+
+    return { userInfo: null, hasError: true };
   },
 );
 
-export const forgotPasswordReset = createAsyncThunk(
-  'forgotPasswordReset',
-  async (passwordData) => {
-    const response = await userService.forgotPasswordReset(passwordData);
+export const patchUserInfo = createAsyncThunk(
+  'patchUserInfo',
+  async (data) => {
+    const response = await userService.patchUserInfo(data);
 
     if (statusCode(response).ok) {
-      navigateToLogin();
+      const userInfo = await response.json();
+
+      return { userInfo, hasError: false };
     }
+
+    return { userInfo: null, hasError: true };
   },
+);
+
+export const clearUserInfo = createAction(
+  'clearUserInfo',
+  () => ({ payload: { } }),
 );
 
 export const fetchStatistics = createAsyncThunk(
@@ -86,10 +86,10 @@ export const fetchStatistics = createAsyncThunk(
     if (statusCode(response).ok) {
       const statistics = await response.json();
 
-      return { statistics };
+      return { statistics, hasError: false };
     }
 
-    return { statistics: [] };
+    return { statistics: [], hasError: true };
   },
 );
 
@@ -101,10 +101,10 @@ export const fetchUserStatistics = createAsyncThunk(
     if (statusCode(response).ok) {
       const statistics = await response.json();
 
-      return { statistics };
+      return { statistics, hasError: false };
     }
 
-    return { statistics: [] };
+    return { statistics: [], hasError: true };
   },
 );
 

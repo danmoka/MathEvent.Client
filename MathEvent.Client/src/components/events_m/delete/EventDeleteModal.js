@@ -5,15 +5,15 @@ import { deleteEvent } from '../../../store/actions/event';
 
 const EventDeleteModal = () => {
   const dispatch = useDispatch();
-  const { event } = useSelector((state) => state.modal.modalProps);
+  const { id, name } = useSelector((state) => state.modal.modalProps);
 
   const handleEventDelete = useCallback(() => {
-    dispatch(deleteEvent({ eventId: event.id }));
-  }, [dispatch, event]);
+    dispatch(deleteEvent({ eventId: id }));
+  }, [dispatch, id]);
 
   return (
     <DeleteModal
-      title={event.name}
+      title={name}
       deleteText="Вы действительно хотите удалить событие?"
       onDelete={handleEventDelete}
     />

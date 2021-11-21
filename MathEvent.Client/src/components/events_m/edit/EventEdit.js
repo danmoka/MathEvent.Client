@@ -64,7 +64,7 @@ const prepareManagers = (managers, onManagerDelete) => (managers
 
 const EventEdit = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.account);
+  const { userInfo } = useSelector((state) => state.user);
   const { eventInfo, isFetchingEvent } = useSelector((state) => state.event);
   const { organizations } = useSelector((state) => state.organization);
   const { isDarkTheme } = useSelector((state) => state.app);
@@ -240,7 +240,7 @@ const EventEdit = () => {
   );
 
   const handleEventDeleteClick = useCallback(() => {
-    dispatch(showDeleteEventModal({ event: eventInfo }));
+    dispatch(showDeleteEventModal({ id: eventInfo.id, name: eventInfo.name }));
   }, [dispatch, eventInfo]);
 
   const handleManagerAddClick = useCallback(() => {

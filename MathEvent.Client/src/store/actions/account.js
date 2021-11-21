@@ -1,5 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
+  navigateToForgotPasswordReset,
+  navigateToLogin,
+} from '../../utils/navigator';
+import {
   clearAccessToken,
   clearRefreshToken,
   getRefreshToken,
@@ -37,6 +41,7 @@ export const fetchTokens = createAsyncThunk(
     } else {
       return {
         hasToken: false,
+        hasError: false,
       };
     }
 
@@ -68,20 +73,51 @@ export const fetchTokens = createAsyncThunk(
   },
 );
 
-export const fetchUserInfo = createAsyncThunk('fetchUserInfo', async () => {
-  const response = await accountService.userInfo();
+export const fetchAccount = createAsyncThunk('fetchAccount', async () => {
+  const response = await accountService.account();
 
   if (statusCode(response).ok) {
-    const userInfo = await response.json();
+    const account = await response.json();
 
-    return { userInfo, isAuthenticated: true, hasError: false };
+    return { account, isAuthenticated: true, hasError: false };
   }
 
   clearAccessToken();
   clearRefreshToken();
 
-  return { userInfo: null, isAuthenticated: false, hasError: false };
+  return { account: null, isAuthenticated: false, hasError: false };
 });
+
+export const register = createAsyncThunk('register', async (credentials) => {
+  const response = await accountService.register(credentials);
+
+  if (statusCode(response).created) {
+    navigateToLogin();
+  }
+});
+
+export const forgotPassword = createAsyncThunk(
+  'forgotPassword',
+  async (emailData) => {
+    const response = await accountService.forgotPassword(emailData);
+
+    if (statusCode(response).ok) {
+      const { email } = emailData;
+      navigateToForgotPasswordReset(email);
+    }
+  },
+);
+
+export const forgotPasswordReset = createAsyncThunk(
+  'forgotPasswordReset',
+  async (passwordData) => {
+    const response = await accountService.forgotPasswordReset(passwordData);
+
+    if (statusCode(response).ok) {
+      navigateToLogin();
+    }
+  },
+);
 
 export const logout = createAsyncThunk('logout', (params, thunkAPI) => {
   thunkAPI.dispatch(hideModal());
@@ -113,3 +149,35 @@ export const revocation = createAsyncThunk('revocation', async () => {
 
   return { hasError: true };
 });
+
+export const fetchUserAccount = createAsyncThunk(
+  'fetchUserAccount',
+  async (id) => {
+    const response = await accountService.fetchUserAccount(id);
+
+    if (statusCode(response).ok) {
+      const userAccount = await response.json();
+
+      return { userAccount, hasError: false };
+    }
+
+    return { userAccount: null, hasError: true };
+  },
+);
+
+export const patchUserAccount = createAsyncThunk(
+  'patchUserAccount',
+  async ({ userId, data }, thunkAPI) => {
+    const response = await accountService.patchUserAccount(userId, data);
+
+    if (statusCode(response).ok) {
+      const userAccount = await response.json();
+      thunkAPI.dispatch(fetchTokens());
+      thunkAPI.dispatch(fetchAccount());
+
+      return { userAccount, hasError: false };
+    }
+
+    return { userAccount: null, hasError: true };
+  },
+);

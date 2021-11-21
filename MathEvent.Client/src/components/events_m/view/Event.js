@@ -41,7 +41,7 @@ const prepareUsers = (users) => (users
 const Event = () => {
   const dispatch = useDispatch();
   const { eventInfo, isFetchingEvent } = useSelector((state) => state.event);
-  const { userInfo } = useSelector((state) => state.account);
+  const { userInfo } = useSelector((state) => state.user);
   const { isDarkTheme } = useSelector((state) => state.app);
   const {
     positionResults,

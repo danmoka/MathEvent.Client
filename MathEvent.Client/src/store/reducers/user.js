@@ -1,32 +1,21 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import {
-  onPendingUsers,
-  onFulfilledUsers,
-  onRejectedUsers,
-  onPendingUser,
-  onFulfilledUser,
-  onRejectedUser,
-  onPendingUserStatistics,
-  onFulfilledUserStatistics,
-  onRejectedUserStatistics,
-  onPendingUsersStatistics,
-  onFulfilledUsersStatistics,
-  onRejectedUsersStatistics,
-} from './defaults';
-import {
-  fetchUser,
   fetchUsers,
-  patchUser,
+  fetchUserInfo,
+  patchUserInfo,
   fetchStatistics,
   fetchUserStatistics,
+  createUserInfo,
+  clearUserInfo,
 } from '../actions/user';
 
 const initialState = {
   users: [],
-  userInfo: null,
+  userInfo: undefined,
   statistics: [],
   userStatistics: [],
-  isFetchingUser: false,
+  isFetchingUserInfo: false,
   isFetchingUsers: false,
   isFetchingUserStatistics: false,
   isFetchingUsersStatistics: false,
@@ -37,84 +26,121 @@ const userSlice = createSlice({
   name: 'userSlice',
   initialState,
   extraReducers: {
-    [fetchUsers.pending]: (state) => {
-      onPendingUsers(state);
-    },
     [fetchUsers.fulfilled]: (state, { payload: { users, hasError } }) => {
-      onFulfilledUsers(state, hasError);
+      state.isFetchingUsers = false;
+      state.hasError = hasError;
 
       if (!hasError) {
         state.users = users;
       }
     },
+    [fetchUsers.pending]: (state) => {
+      state.isFetchingUsers = true;
+    },
     [fetchUsers.rejected]: (state) => {
-      onRejectedUsers(state);
+      state.isFetchingUsers = false;
+      state.hasError = true;
       state.users = [];
     },
 
-    [fetchUser.pending]: (state) => {
-      onPendingUser(state);
-    },
-    [fetchUser.fulfilled]: (state, { payload: { user, hasError } }) => {
-      onFulfilledUser(state, hasError);
+    [fetchUserInfo.fulfilled]: (state, { payload: { userInfo, hasError } }) => {
+      state.isFetchingUserInfo = false;
+      state.hasError = hasError;
 
       if (!hasError) {
-        state.userInfo = user;
+        state.userInfo = userInfo;
       }
     },
-    [fetchUser.rejected]: (state) => {
-      onRejectedUser(state);
+    [fetchUserInfo.pending]: (state) => {
+      state.isFetchingUserInfo = true;
+    },
+    [fetchUserInfo.rejected]: (state) => {
+      state.isFetchingUserInfo = false;
+      state.hasError = true;
       state.userInfo = null;
     },
 
-    [patchUser.pending]: (state) => {
-      onPendingUser(state);
-    },
-    [patchUser.fulfilled]: (state, { payload: { updatedUser, hasError } }) => {
-      onFulfilledUser(state, hasError);
+    [patchUserInfo.fulfilled]: (state, { payload: { userInfo, hasError } }) => {
+      state.isFetchingUserInfo = false;
+      state.hasError = hasError;
 
       if (!hasError) {
-        state.userInfo = updatedUser;
+        state.userInfo = userInfo;
       }
     },
-    [patchUser.rejected]: (state) => {
-      onRejectedUser(state);
+    [patchUserInfo.pending]: (state) => {
+      state.isFetchingUserInfo = true;
+    },
+    [patchUserInfo.rejected]: (state) => {
+      state.isFetchingUserInfo = false;
+      state.hasError = true;
       state.userInfo = null;
     },
 
-    [fetchStatistics.pending]: (state) => {
-      onPendingUsersStatistics(state);
+    [createUserInfo.fulfilled]: (state,
+      {
+        payload: {
+          userInfo,
+          hasError,
+        },
+      }) => {
+      state.isFetchingUserInfo = false;
+      state.hasError = hasError;
+
+      if (!hasError) {
+        state.userInfo = userInfo;
+      }
     },
+    [createUserInfo.pending]: (state) => {
+      state.isFetchingUserInfo = true;
+    },
+    [createUserInfo.rejected]: (state) => {
+      state.isFetchingUserInfo = false;
+      state.hasError = true;
+      state.userInfo = null;
+    },
+
+    [clearUserInfo]: (state) => {
+      state.userInfo = null;
+    },
+
     [fetchStatistics.fulfilled]: (
       state,
       { payload: { statistics, hasError } },
     ) => {
-      onFulfilledUsersStatistics(state, hasError);
+      state.isFetchingUsersStatistics = false;
+      state.hasError = hasError;
 
       if (!hasError) {
         state.statistics = statistics;
       }
     },
+    [fetchStatistics.pending]: (state) => {
+      state.isFetchingUsersStatistics = true;
+    },
     [fetchStatistics.rejected]: (state) => {
-      onRejectedUsersStatistics(state);
+      state.isFetchingUsersStatistics = false;
+      state.hasError = true;
       state.statistics = [];
     },
 
-    [fetchUserStatistics.pending]: (state) => {
-      onPendingUserStatistics(state);
-    },
     [fetchUserStatistics.fulfilled]: (
       state,
       { payload: { statistics, hasError } },
     ) => {
-      onFulfilledUserStatistics(state, hasError);
+      state.isFetchingUserStatistics = false;
+      state.hasError = hasError;
 
       if (!hasError) {
         state.userStatistics = statistics;
       }
     },
+    [fetchUserStatistics.pending]: (state) => {
+      state.isFetchingUserStatistics = true;
+    },
     [fetchUserStatistics.rejected]: (state) => {
-      onRejectedUserStatistics(state);
+      state.isFetchingUserStatistics = false;
+      state.hasError = true;
       state.statistics = [];
     },
   },

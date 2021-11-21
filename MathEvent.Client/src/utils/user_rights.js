@@ -1,8 +1,8 @@
 export const isAbleToEditEvent = (
   user, event,
 ) => {
-  if (event?.managers && user?.sub) {
-    return event.managers.filter((m) => m.id === user.sub).length > 0;
+  if (event?.managers && user?.id) {
+    return event.managers.filter((m) => m.id === user.id).length > 0;
   }
 
   return false;
