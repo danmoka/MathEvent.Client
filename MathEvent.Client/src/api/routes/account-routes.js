@@ -13,12 +13,6 @@ const accountRoutes = {
   forgotPasswordReset: () => getAccountRoute(
     'api/MathEventIdentityUsers/resetPassword/',
   ),
-  fetchUserAccount: (id) => getAccountRoute(
-    `api/MathEventIdentityUsers/${id}`,
-  ),
-  patchUserAccount: (id) => getAccountRoute(
-    `api/MathEventIdentityUsers/${id}`,
-  ),
 };
 
 export default accountRoutes;

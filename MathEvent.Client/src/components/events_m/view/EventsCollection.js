@@ -9,6 +9,7 @@ import EventsBreadcrumbs from './EventsBreadcrumbs';
 import { prepareImage } from '../../../utils/get-image-src';
 import { navigateToEvent } from '../../../utils/navigator';
 import './EventsView.scss';
+import colors from '../../../constants/colors';
 
 const prepareDateTime = (dateTime) => {
   moment.locale('ru');
@@ -61,8 +62,10 @@ const EventsCollection = () => {
         <>
           { preparedEvents.length < 1
             ? (
-              <NormalText>
-                {/* TODO: flex center */}
+              <NormalText
+                className="events-collection__collection-info"
+                color={colors.textSecondary}
+              >
                 Событий нет, попробуйте изменить фильтры или сортировку
               </NormalText>
             )

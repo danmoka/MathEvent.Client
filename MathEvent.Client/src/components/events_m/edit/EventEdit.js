@@ -25,6 +25,9 @@ import {
   showDeleteEventModal,
   showEventAddManagerModal,
 } from '../../../store/actions/event';
+import {
+  fetchOrCreateUserInfo,
+} from '../../../store/actions/user';
 import { fetchOrganizations } from '../../../store/actions/organization';
 import { useTitle } from '../../../hooks';
 import { prepareImage } from '../../../utils/get-image-src';
@@ -64,6 +67,7 @@ const prepareManagers = (managers, onManagerDelete) => (managers
 
 const EventEdit = () => {
   const dispatch = useDispatch();
+  const { account } = useSelector((state) => state.account);
   const { userInfo } = useSelector((state) => state.user);
   const { eventInfo, isFetchingEvent } = useSelector((state) => state.event);
   const { organizations } = useSelector((state) => state.organization);
@@ -83,16 +87,34 @@ const EventEdit = () => {
   useTitle('Редактирование события');
 
   useEffect(() => {
+    if (account) {
+      if (!userInfo || userInfo.identityUserId !== account.sub) {
+        const [username, surname] = account.given_name.split(' ');
+        const {
+          sub: identityUserId,
+          email,
+        } = account;
+        dispatch(fetchOrCreateUserInfo({
+          identityUserId,
+          email,
+          name: username,
+          surname,
+        }));
+      }
+    }
+  }, [dispatch, account, id, userInfo]);
+
+  useEffect(() => {
     if (isAbleToEdit && userInfo) {
       dispatch(fetchEvent(id));
     }
   }, [dispatch, id, isAbleToEdit, userInfo]);
 
   useEffect(() => {
-    if (eventInfo && userInfo) {
-      setIsAbleToEdit(isAbleToEditEvent(userInfo, eventInfo));
+    if (eventInfo && userInfo && account) {
+      setIsAbleToEdit(isAbleToEditEvent(userInfo, account, eventInfo));
     }
-  }, [eventInfo, userInfo]);
+  }, [account, eventInfo, userInfo]);
 
   useEffect(() => {
     if (!isAbleToEdit) {

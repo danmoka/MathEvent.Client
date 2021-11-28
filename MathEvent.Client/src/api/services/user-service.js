@@ -7,8 +7,8 @@ const userService = {
 
     return baseService.get(url);
   },
-  fetchUserInfo: async () => {
-    const url = api.users.fetchUserInfo();
+  fetchUserInfo: async (identityId) => {
+    const url = api.users.fetchUserInfo(identityId);
 
     return baseService.get(url);
   },
@@ -17,8 +17,18 @@ const userService = {
 
     return baseService.post(url, data);
   },
-  patchUserInfo: async (data) => {
-    const url = api.users.patchUserInfo();
+  patchUserInfo: async (identityId, data) => {
+    const url = api.users.patchUserInfo(identityId);
+
+    return baseService.patch(url, data);
+  },
+  fetchUserAccount: async (identityId) => {
+    const url = api.users.fetchUserAccount(identityId);
+
+    return baseService.get(url);
+  },
+  patchUserAccount: async (identityId, data) => {
+    const url = api.users.patchUserAccount(identityId);
 
     return baseService.patch(url, data);
   },
@@ -27,8 +37,8 @@ const userService = {
 
     return baseService.get(url);
   },
-  fetchUserStatistics: async (userId) => {
-    const url = api.users.fetchUserStatistics(userId);
+  fetchUserStatistics: async (identityId) => {
+    const url = api.users.fetchUserStatistics(identityId);
 
     return baseService.get(url);
   },

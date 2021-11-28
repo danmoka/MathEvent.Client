@@ -17,6 +17,9 @@ import {
   fetchEvent,
   showEventLocation,
 } from '../../../store/actions/event';
+import {
+  fetchOrCreateUserInfo,
+} from '../../../store/actions/user';
 import { fetchPosition } from '../../../store/actions/map';
 import { useTitle } from '../../../hooks';
 import { prepareImage } from '../../../utils/get-image-src';
@@ -40,6 +43,7 @@ const prepareUsers = (users) => (users
 
 const Event = () => {
   const dispatch = useDispatch();
+  const { account } = useSelector((state) => state.account);
   const { eventInfo, isFetchingEvent } = useSelector((state) => state.event);
   const { userInfo } = useSelector((state) => state.user);
   const { isDarkTheme } = useSelector((state) => state.app);
@@ -69,8 +73,26 @@ const Event = () => {
   );
 
   useEffect(() => {
-    setIsAbleToEdit(isAbleToEditEvent(userInfo, eventInfo));
-  }, [eventInfo, userInfo]);
+    if (account) {
+      if (!userInfo || userInfo.identityUserId !== account.sub) {
+        const [name, surname] = account.given_name.split(' ');
+        const {
+          sub: identityUserId,
+          email,
+        } = account;
+        dispatch(fetchOrCreateUserInfo({
+          identityUserId,
+          email,
+          name,
+          surname,
+        }));
+      }
+    }
+  }, [dispatch, account, id, userInfo]);
+
+  useEffect(() => {
+    setIsAbleToEdit(isAbleToEditEvent(userInfo, account, eventInfo));
+  }, [account, eventInfo, userInfo]);
 
   useEffect(() => {
     if (eventInfo?.location) {

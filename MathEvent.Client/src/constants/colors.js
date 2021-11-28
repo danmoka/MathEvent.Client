@@ -10,6 +10,8 @@ const colors = {
   success: 'success',
   action: 'action',
   disabled: 'disabled',
+  textPrimary: 'textPrimary',
+  textSecondary: 'textSecondary',
 };
 
 export default colors;

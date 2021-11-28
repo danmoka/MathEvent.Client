@@ -2,8 +2,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
   fetchUsers,
-  fetchUserInfo,
+  fetchOrCreateUserInfo,
   patchUserInfo,
+  fetchUserAccount,
+  patchUserAccount,
   fetchStatistics,
   fetchUserStatistics,
   createUserInfo,
@@ -12,9 +14,11 @@ import {
 
 const initialState = {
   users: [],
+  userAccount: undefined,
   userInfo: undefined,
   statistics: [],
   userStatistics: [],
+  isFetchingUserAccount: false,
   isFetchingUserInfo: false,
   isFetchingUsers: false,
   isFetchingUserStatistics: false,
@@ -43,7 +47,8 @@ const userSlice = createSlice({
       state.users = [];
     },
 
-    [fetchUserInfo.fulfilled]: (state, { payload: { userInfo, hasError } }) => {
+    [fetchOrCreateUserInfo.fulfilled]: (state,
+      { payload: { userInfo, hasError } }) => {
       state.isFetchingUserInfo = false;
       state.hasError = hasError;
 
@@ -51,10 +56,10 @@ const userSlice = createSlice({
         state.userInfo = userInfo;
       }
     },
-    [fetchUserInfo.pending]: (state) => {
+    [fetchOrCreateUserInfo.pending]: (state) => {
       state.isFetchingUserInfo = true;
     },
-    [fetchUserInfo.rejected]: (state) => {
+    [fetchOrCreateUserInfo.rejected]: (state) => {
       state.isFetchingUserInfo = false;
       state.hasError = true;
       state.userInfo = null;
@@ -142,6 +147,44 @@ const userSlice = createSlice({
       state.isFetchingUserStatistics = false;
       state.hasError = true;
       state.statistics = [];
+    },
+
+    [fetchUserAccount.fulfilled]: (state, {
+      payload: { userAccount, hasError },
+    }) => {
+      state.isFetchingUserAccount = false;
+      state.hasError = hasError;
+
+      if (!hasError) {
+        state.userAccount = userAccount;
+      }
+    },
+    [fetchUserAccount.pending]: (state) => {
+      state.isFetchingUserAccount = true;
+    },
+    [fetchUserAccount.rejected]: (state) => {
+      state.isFetchingUserAccount = false;
+      state.hasError = true;
+      state.userAccount = null;
+    },
+
+    [patchUserAccount.fulfilled]: (state, {
+      payload: { userAccount, hasError },
+    }) => {
+      state.isFetchingUserAccount = false;
+      state.hasError = hasError;
+
+      if (!hasError) {
+        state.userAccount = userAccount;
+      }
+    },
+    [patchUserAccount.pending]: (state) => {
+      state.isFetchingUserAccount = true;
+    },
+    [patchUserAccount.rejected]: (state) => {
+      state.isFetchingUserAccount = false;
+      state.hasError = true;
+      state.userAccount = null;
     },
   },
 });

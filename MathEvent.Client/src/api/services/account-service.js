@@ -32,16 +32,6 @@ const accountService = {
 
     return baseService.post(url, passwordData);
   },
-  fetchUserAccount: async (id) => {
-    const url = api.account.fetchUserAccount(id);
-
-    return baseService.get(url);
-  },
-  patchUserAccount: async (id, data) => {
-    const url = api.account.patchUserAccount(id);
-
-    return baseService.patch(url, data);
-  },
 };
 
 export default accountService;

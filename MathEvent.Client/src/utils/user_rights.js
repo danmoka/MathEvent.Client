@@ -1,18 +1,51 @@
+import roles from '../constants/roles';
+
+export const isMathEventExecutive = (
+  account,
+) => account.roles.includes(roles.mathEventAdmin)
+  || account.roles.includes(roles.mathEventModerator);
+
+export const isMathEventIdentityServerExecutive = (
+  account,
+) => account.roles.includes(roles.mathEventIdentityServerAdmin);
+
 export const isAbleToEditEvent = (
-  user, event,
+  userInfo, account, event,
 ) => {
-  if (event?.managers && user?.id) {
-    return event.managers.filter((m) => m.id === user.id).length > 0;
+  if (isMathEventExecutive(account)) {
+    return true;
+  }
+
+  if (event?.managers && userInfo?.id) {
+    return event.managers.filter((m) => m.id === userInfo.id).length > 0;
   }
 
   return false;
 };
 
-export const isAbleToEditUser = (
-  user, userInfo,
+export const isAbleToEditUserAccount = (
+  account, userAccount,
 ) => {
-  if (userInfo?.id && user?.sub) {
-    return userInfo.id === user.sub;
+  if (isMathEventIdentityServerExecutive(account)) {
+    return true;
+  }
+
+  if (userAccount?.id && account?.sub) {
+    return userAccount.id === account.sub;
+  }
+
+  return false;
+};
+
+export const isAbleToEditUserInfo = (
+  account, user,
+) => {
+  if (isMathEventExecutive(account)) {
+    return true;
+  }
+
+  if (user?.id && account?.sub) {
+    return user.identityUserId === account.sub;
   }
 
   return false;

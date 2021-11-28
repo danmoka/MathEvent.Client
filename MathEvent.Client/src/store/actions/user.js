@@ -2,6 +2,7 @@ import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { showModal } from './modal';
 import modalTypes from '../../constants/modal-types';
 import userService from '../../api/services/user-service';
+import { fetchAccount } from './account';
 import statusCode from '../../utils/status-code-reader';
 
 export const fetchUsers = createAsyncThunk('fecthUsers', async () => {
@@ -18,8 +19,8 @@ export const fetchUsers = createAsyncThunk('fecthUsers', async () => {
 
 export const createUserInfo = createAsyncThunk(
   'createUserInfo',
-  async (user) => {
-    const response = await userService.createUserInfo(user);
+  async (newUser) => {
+    const response = await userService.createUserInfo(newUser);
 
     if (statusCode(response).created) {
       const userInfo = await response.json();
@@ -31,11 +32,12 @@ export const createUserInfo = createAsyncThunk(
   },
 );
 
-export const fetchUserInfo = createAsyncThunk(
-  'fetchUserInfo',
-  // eslint-disable-next-line camelcase
-  async ({ sub, email, given_name }, thunkAPI) => {
-    const response = await userService.fetchUserInfo();
+export const fetchOrCreateUserInfo = createAsyncThunk(
+  'fetchOrCreateUserInfo',
+  async ({
+    identityUserId, email, name, surname,
+  }, thunkAPI) => {
+    const response = await userService.fetchUserInfo(identityUserId);
 
     if (statusCode(response).ok) {
       const userInfo = await response.json();
@@ -44,9 +46,8 @@ export const fetchUserInfo = createAsyncThunk(
     }
 
     if (statusCode(response).notFound) {
-      const [name, surname] = given_name.split(' ');
       const newUser = {
-        id: sub,
+        identityUserId,
         email,
         name,
         surname,
@@ -60,8 +61,8 @@ export const fetchUserInfo = createAsyncThunk(
 
 export const patchUserInfo = createAsyncThunk(
   'patchUserInfo',
-  async (data) => {
-    const response = await userService.patchUserInfo(data);
+  async ({ identityUserId, data }) => {
+    const response = await userService.patchUserInfo(identityUserId, data);
 
     if (statusCode(response).ok) {
       const userInfo = await response.json();
@@ -95,8 +96,8 @@ export const fetchStatistics = createAsyncThunk(
 
 export const fetchUserStatistics = createAsyncThunk(
   'fetchUserStatistics',
-  async (userId) => {
-    const response = await userService.fetchUserStatistics(userId);
+  async (identityUserId) => {
+    const response = await userService.fetchUserStatistics(identityUserId);
 
     if (statusCode(response).ok) {
       const statistics = await response.json();
@@ -112,5 +113,36 @@ export const showUserStatistics = createAsyncThunk(
   'showUserStatistics',
   async ({ user }, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.userStatistics, { user }));
+  },
+);
+
+export const fetchUserAccount = createAsyncThunk(
+  'fetchUserAccount',
+  async (identityUserId) => {
+    const response = await userService.fetchUserAccount(identityUserId);
+
+    if (statusCode(response).ok) {
+      const userAccount = await response.json();
+
+      return { userAccount, hasError: false };
+    }
+
+    return { userAccount: null, hasError: true };
+  },
+);
+
+export const patchUserAccount = createAsyncThunk(
+  'patchUserAccount',
+  async ({ identityUserId, data }, thunkAPI) => {
+    const response = await userService.patchUserAccount(identityUserId, data);
+
+    if (statusCode(response).ok) {
+      const userAccount = await response.json();
+      thunkAPI.dispatch(fetchAccount());
+
+      return { userAccount, hasError: false };
+    }
+
+    return { userAccount: null, hasError: true };
   },
 );

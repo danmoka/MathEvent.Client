@@ -1,14 +1,22 @@
-import { getRoute } from '../../utils/get-route';
+import { getRoute, getAccountRoute } from '../../utils/get-route';
 
 const userRoutes = {
   fetchUsers: () => getRoute('users/'),
-  fetchUserInfo: () => getRoute('users/me/'),
-  patchUserInfo: () => getRoute('users/me/'),
+  fetchUserInfo: (identityId) => getRoute(`users/${identityId}`),
+  patchUserInfo: (identityId) => getRoute(`users/${identityId}`),
   createUserInfo: () => getRoute('users/'),
+  fetchUserAccount: (identityId) => getAccountRoute(
+    `api/MathEventIdentityUsers/${identityId}`,
+  ),
+  patchUserAccount: (identityId) => getAccountRoute(
+    `api/MathEventIdentityUsers/${identityId}`,
+  ),
   fetchStatistics: (
     activeUsersTop,
   ) => getRoute(`users/statistics/?activeUsersTop=${activeUsersTop}`),
-  fetchUserStatistics: (userId) => getRoute(`users/statistics/${userId}`),
+  fetchUserStatistics: (
+    identityId,
+  ) => getRoute(`users/statistics/${identityId}`),
 };
 
 export default userRoutes;

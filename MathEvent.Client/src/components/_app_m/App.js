@@ -33,7 +33,6 @@ import {
   fetchAccount,
   showLogoutModal,
 } from '../../store/actions/account';
-import { clearUserInfo, fetchUserInfo } from '../../store/actions/user';
 import { palette2, paletteDark2 } from '../../styles/palette';
 import colors from '../../constants/colors';
 import images from '../../constants/images';
@@ -91,14 +90,6 @@ const App = () => {
       dispatch(fetchAccount());
     }
   }, [dispatch, hasToken]);
-
-  useEffect(() => {
-    if (account) {
-      dispatch(fetchUserInfo(account));
-    } else {
-      dispatch(clearUserInfo());
-    }
-  }, [dispatch, account]);
 
   useInterval(() => {
     dispatch(fetchTokens({ userName: null, password: null }));

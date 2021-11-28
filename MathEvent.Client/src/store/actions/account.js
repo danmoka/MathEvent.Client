@@ -16,9 +16,24 @@ import statusCode from '../../utils/status-code-reader';
 import config from '../../config';
 import modalTypes from '../../constants/modal-types';
 
+export const fetchAccount = createAsyncThunk('fetchAccount', async () => {
+  const response = await accountService.account();
+
+  if (statusCode(response).ok) {
+    const account = await response.json();
+
+    return { account, isAuthenticated: true, hasError: false };
+  }
+
+  clearAccessToken();
+  clearRefreshToken();
+
+  return { account: null, isAuthenticated: false, hasError: false };
+});
+
 export const fetchTokens = createAsyncThunk(
   'fetchTokens',
-  async ({ userName, password, successAction }) => {
+  async ({ userName, password, successAction }, thunkAPI) => {
     const refreshToken = getRefreshToken();
     let data = {
       client_id: config.clientId,
@@ -53,6 +68,8 @@ export const fetchTokens = createAsyncThunk(
       setAccessToken(access_token);
       setRefreshToken(refresh_token);
 
+      thunkAPI.dispatch(fetchAccount());
+
       if (successAction) {
         successAction();
       }
@@ -72,21 +89,6 @@ export const fetchTokens = createAsyncThunk(
     };
   },
 );
-
-export const fetchAccount = createAsyncThunk('fetchAccount', async () => {
-  const response = await accountService.account();
-
-  if (statusCode(response).ok) {
-    const account = await response.json();
-
-    return { account, isAuthenticated: true, hasError: false };
-  }
-
-  clearAccessToken();
-  clearRefreshToken();
-
-  return { account: null, isAuthenticated: false, hasError: false };
-});
 
 export const register = createAsyncThunk('register', async (credentials) => {
   const response = await accountService.register(credentials);
@@ -149,35 +151,3 @@ export const revocation = createAsyncThunk('revocation', async () => {
 
   return { hasError: true };
 });
-
-export const fetchUserAccount = createAsyncThunk(
-  'fetchUserAccount',
-  async (id) => {
-    const response = await accountService.fetchUserAccount(id);
-
-    if (statusCode(response).ok) {
-      const userAccount = await response.json();
-
-      return { userAccount, hasError: false };
-    }
-
-    return { userAccount: null, hasError: true };
-  },
-);
-
-export const patchUserAccount = createAsyncThunk(
-  'patchUserAccount',
-  async ({ userId, data }, thunkAPI) => {
-    const response = await accountService.patchUserAccount(userId, data);
-
-    if (statusCode(response).ok) {
-      const userAccount = await response.json();
-      thunkAPI.dispatch(fetchTokens());
-      thunkAPI.dispatch(fetchAccount());
-
-      return { userAccount, hasError: false };
-    }
-
-    return { userAccount: null, hasError: true };
-  },
-);
