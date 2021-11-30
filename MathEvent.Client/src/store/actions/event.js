@@ -117,11 +117,11 @@ export const fetchEventStatistics = createAsyncThunk(
 export const createEvent = createAsyncThunk(
   'createEvent',
   async ({ event }, thunkAPI) => {
-    thunkAPI.dispatch(hideModal());
     const response = await eventService.createEvent(event);
 
     if (statusCode(response).created) {
       const createdEvent = await response.json();
+      thunkAPI.dispatch(hideModal());
       thunkAPI.dispatch(fetchEvents({
         parentId: createdEvent.parentId,
       }));

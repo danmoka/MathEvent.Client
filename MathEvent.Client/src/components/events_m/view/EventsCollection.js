@@ -8,8 +8,8 @@ import { NormalText } from '../../_common/Text/Text';
 import EventsBreadcrumbs from './EventsBreadcrumbs';
 import { prepareImage } from '../../../utils/get-image-src';
 import { navigateToEvent } from '../../../utils/navigator';
-import './EventsView.scss';
 import colors from '../../../constants/colors';
+import './EventsView.scss';
 
 const prepareDateTime = (dateTime) => {
   moment.locale('ru');

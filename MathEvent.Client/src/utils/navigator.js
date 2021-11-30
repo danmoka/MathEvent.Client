@@ -3,6 +3,9 @@ import history from './history';
 
 export const navigateToHome = () => history.push(routes.home);
 
+export const navigateToUsers = () => history.push(
+  routes.users.main,
+);
 export const navigateToLogin = () => history.push(routes.account.login);
 export const navigateToRegister = () => history.push(routes.account.register);
 export const navigateToForgotPassword = () => history.push(
@@ -19,7 +22,6 @@ export const navigateToUserEdit = (userId) => history.push(
 );
 
 export const navigateToEvents = () => history.push(routes.events.main);
-
 export const navigateToEvent = (eventId) => history.push(
   `${routes.events.event(eventId)}`,
 );
@@ -30,15 +32,16 @@ export const navigateToEventEdit = (eventId) => history.push(
 export const navigateToOrganizations = () => history.push(
   routes.organizations.main,
 );
-
-export const navigateToUsers = () => history.push(
-  routes.users.main,
+export const navigateToOrganization = (organizationId) => history.push(
+  `${routes.organizations.organization(organizationId)}`,
+);
+export const navigateToOrganizationEdit = (organizationId) => history.push(
+  `${routes.organizations.edit(organizationId)}`,
 );
 
 export const navigateToStatistics = () => history.push(
   routes.statistics.main,
 );
-
 export const navigateToEventsStatistics = () => history.push(
   routes.statistics.events,
 );

@@ -1,56 +1,117 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 import {
-    onPendingOrganizations,
-    onFulfilledOrganizations,
-    onRejectedOrganizations,
-    onPendingOrganizationStatistics,
-    onFulfilledOrganizationStatistics,
-    onRejectedOrganizationStatistics
-} from "./defaults";
-import { fetchOrganizations, fetchStatistics } from "../actions/organization";
+  createOrganization,
+  fetchOrganization,
+  fetchOrganizations,
+  fetchStatistics,
+  patchOrganization,
+} from '../actions/organization';
 
 const initialState = {
-    organizations: [],
-    statistics: [],
-    isFetchingOrganizations: false,
-    isFetchingOrganizationStatistics: false,
-    hasError: false
+  organizations: [],
+  organization: undefined,
+  statistics: [],
+  isFetchingOrganizations: false,
+  isFetchingOrganization: false,
+  isFetchingOrganizationStatistics: false,
+  hasError: false,
 };
 
 const organizationSlice = createSlice({
-    name: "organizationSlice",
-    initialState: initialState,
-    extraReducers: {
-        [fetchOrganizations.pending]: (state) => {
-            onPendingOrganizations(state);
-        },
-        [fetchOrganizations.fulfilled]: (state, { payload: { organizations, hasError } }) => {
-            onFulfilledOrganizations(state, hasError);
+  name: 'organizationSlice',
+  initialState,
+  extraReducers: {
+    [fetchOrganizations.fulfilled]: (state, {
+      payload: { organizations, hasError },
+    }) => {
+      state.isFetchingOrganizations = false;
+      state.hasError = hasError;
 
-            if (!hasError) {
-                state.organizations = organizations;
-            }
-        },
-        [fetchOrganizations.rejected]: (state) => {
-            onRejectedOrganizations(state);
-            state.organizations = [];
-        },
+      if (!hasError) {
+        state.organizations = organizations;
+      }
+    },
+    [fetchOrganizations.pending]: (state) => {
+      state.isFetchingOrganizations = true;
+    },
+    [fetchOrganizations.rejected]: (state) => {
+      state.isFetchingOrganizations = false;
+      state.hasError = true;
+      state.organizations = [];
+    },
 
-        [fetchStatistics.pending]: (state) => {
-            onPendingOrganizationStatistics(state);
-        },
-        [fetchStatistics.fulfilled]: (state, { payload: { statistics, hasError } }) => {
-            onFulfilledOrganizationStatistics(state, hasError);
+    [fetchOrganization.fulfilled]: (state, {
+      payload: { organization, hasError },
+    }) => {
+      state.isFetchingOrganization = false;
+      state.hasError = hasError;
 
-            if (!hasError) {
-                state.statistics = statistics;
-            }
-        },
-        [fetchStatistics.rejected]: (state) => {
-            onRejectedOrganizationStatistics(state);
-            state.statistics = [];
-        },
-    }
+      if (!hasError) {
+        state.organization = organization;
+      }
+    },
+    [fetchOrganization.pending]: (state) => {
+      state.isFetchingOrganization = true;
+    },
+    [fetchOrganization.rejected]: (state) => {
+      state.isFetchingOrganization = false;
+      state.hasError = true;
+      state.organization = null;
+    },
+
+    [patchOrganization.fulfilled]: (state, {
+      payload: { updatedOrganization, hasError },
+    }) => {
+      state.isFetchingOrganization = false;
+      state.hasError = hasError;
+
+      if (!hasError) {
+        state.organization = updatedOrganization;
+      }
+    },
+    [patchOrganization.pending]: (state) => {
+      state.isFetchingOrganization = true;
+    },
+    [patchOrganization.rejected]: (state) => {
+      state.isFetchingOrganization = false;
+      state.hasError = true;
+      state.organization = null;
+    },
+
+    [createOrganization.fulfilled]: (state, {
+      payload: { hasError },
+    }) => {
+      state.isFetchingOrganization = false;
+      state.hasError = hasError;
+    },
+    [createOrganization.pending]: (state) => {
+      state.isFetchingOrganization = true;
+    },
+    [createOrganization.rejected]: (state) => {
+      state.isFetchingOrganization = false;
+      state.hasError = true;
+    },
+
+    [fetchStatistics.pending]: (state) => {
+      state.isFetchingOrganizationStatistics = true;
+    },
+    [fetchStatistics.fulfilled]: (state, {
+      payload: { statistics, hasError },
+    }) => {
+      state.isFetchingOrganizationStatistics = false;
+      state.hasError = hasError;
+
+      if (!hasError) {
+        state.statistics = statistics;
+      }
+    },
+    [fetchStatistics.rejected]: (state) => {
+      state.isFetchingOrganizationStatistics = false;
+      state.hasError = true;
+      state.statistics = [];
+    },
+  },
 });
 
 export default organizationSlice.reducer;

@@ -2,12 +2,12 @@ import roles from '../constants/roles';
 
 export const isMathEventExecutive = (
   account,
-) => account.roles.includes(roles.mathEventAdmin)
-  || account.roles.includes(roles.mathEventModerator);
+) => account && (account.roles.includes(roles.mathEventAdmin)
+  || account.roles.includes(roles.mathEventModerator));
 
 export const isMathEventIdentityServerExecutive = (
   account,
-) => account.roles.includes(roles.mathEventIdentityServerAdmin);
+) => account && account.roles.includes(roles.mathEventIdentityServerAdmin);
 
 export const isAbleToEditEvent = (
   userInfo, account, event,
@@ -46,6 +46,16 @@ export const isAbleToEditUserInfo = (
 
   if (user?.id && account?.sub) {
     return user.identityUserId === account.sub;
+  }
+
+  return false;
+};
+
+export const isAbleToAddOrEditEvent = (
+  account,
+) => {
+  if (isMathEventExecutive(account)) {
+    return true;
   }
 
   return false;

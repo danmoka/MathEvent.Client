@@ -1,0 +1,31 @@
+.organization-edit {
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+
+    &__main-section {
+        margin-top: 0px;
+    }
+
+    &__delete-section {
+        margin-top: 24px;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+        gap: 24px;
+
+        &__control {
+            width: 100%;
+        }
+    }
+
+    &__loader-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

@@ -13,6 +13,8 @@ const routes = {
   },
   organizations: {
     main: '/organizations',
+    organization: (organizationId) => `/organizations/${organizationId}`,
+    edit: (organizationId) => `/organizations/${organizationId}/edit`,
   },
   statistics: {
     main: '/statistics',

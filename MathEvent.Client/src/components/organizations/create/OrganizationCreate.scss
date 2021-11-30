@@ -1,0 +1,12 @@
+.organization-create {
+    &__body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+
+        &__control {
+            width: 100%;
+        }
+    }
+}

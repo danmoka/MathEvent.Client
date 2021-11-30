@@ -10,6 +10,8 @@ const modalTypes = {
   uploadFiles: 'uploadFiles',
   userStatistics: 'userStatistics',
   logout: 'logout',
+  createOrganization: 'createOrganization',
+  deleteOrganization: 'deleteOrganization',
   zoomImage: 'zoomImage',
 };
 

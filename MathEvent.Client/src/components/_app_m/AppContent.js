@@ -6,6 +6,7 @@ import Register from '../account_m/Register';
 import ForgotPassword from '../account_m/ForgotPassword';
 import ForgotPasswordReset from '../account_m/ForgotPasswordReset';
 import Users from '../users_m';
+import Organizations from '../organizations';
 import ModalRoot from '../_common/Modal/ModalRoot';
 import routes from '../../utils/routes';
 
@@ -23,6 +24,7 @@ const AppContent = () => (
         render={() => <ForgotPasswordReset />}
       />
       <Route path={routes.users.main} component={Users} />
+      <Route path={routes.organizations.main} component={Organizations} />
     </Switch>
     <ModalRoot />
   </div>
