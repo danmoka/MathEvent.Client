@@ -1,0 +1,17 @@
+.organizations-statistics-collection {
+    &__loader-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__collection-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    &__item {
+        margin-top: 12px;
+    }
+}

@@ -3,6 +3,8 @@ const images = {
   bpm: '/public/svg/bmp.svg',
   doc: '/public/svg/doc.svg',
   docx: '/public/svg/docx.svg',
+  emptyChartDefault: '/public/svg/empty-chart-default.svg',
+  emptyChartDark: '/public/svg/empty-chart-dark.svg',
   eventDefault: '/public/svg/event-default.svg',
   eventDefaultDark: '/public/svg/event-default-dark.svg',
   favicon: '/public/svg/favicon.svg',

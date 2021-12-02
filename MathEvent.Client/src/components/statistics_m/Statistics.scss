@@ -1,0 +1,12 @@
+.statistics {
+    display: flex;
+    flex-direction: column;
+
+    &__tabs {
+        margin-top: 12px;
+    }
+
+    &__content {
+        margin-top: 12px;
+    }
+}
