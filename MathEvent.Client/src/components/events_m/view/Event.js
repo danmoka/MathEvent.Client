@@ -15,6 +15,7 @@ import ZoomImage from '../../_common/ZoomImage';
 import EventFiles from './EventFiles';
 import {
   fetchEvent,
+  patchEvent,
   showEventLocation,
 } from '../../../store/actions/event';
 import {
@@ -112,6 +113,39 @@ const Event = () => {
     dispatch(showEventLocation({ position }));
   }, [dispatch, position]);
 
+  const handlePatchEvent = useCallback(
+    (data) => {
+      dispatch(
+        patchEvent({
+          eventId: id,
+          data,
+        }),
+      );
+    },
+    [dispatch, id],
+  );
+
+  const handleSubcribersChange = useCallback(() => {
+    // TODO: патч не подходит из-за особенностей авторизации
+    if (userInfo && eventInfo) {
+      let subscribersIds = eventInfo.applicationUsers.map((user) => user.id);
+
+      if (subscribersIds.includes(userInfo.id)) {
+        subscribersIds.splice(subscribersIds.indexOf(userInfo.id), 1);
+      } else {
+        subscribersIds = [...subscribersIds, userInfo.id];
+      }
+
+      handlePatchEvent([
+        {
+          value: subscribersIds,
+          path: '/ApplicationUsers',
+          op: 'replace',
+        },
+      ]);
+    }
+  }, [handlePatchEvent, userInfo, eventInfo]);
+
   return (
     <div className="event">
       {isFetchingEvent
@@ -149,7 +183,8 @@ const Event = () => {
                 ? iconTypes.personAddDisabled
                 : iconTypes.personAdd
               }
-                    onClick={() => {}}
+                    disabled={!userInfo}
+                    onClick={handleSubcribersChange}
                   >
                     {eventInfo.subscribed ? 'Отписаться' : 'Записаться'}
                   </Button>
