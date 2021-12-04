@@ -20,7 +20,7 @@ const shiftDate = (date, numDays) => {
 
 const prepareEvents = (events) => {
   const preparedEvents = [];
-  // console.log(events);
+
   try {
     Object.entries(events)
       .forEach(([key, value]) => preparedEvents.push({
@@ -61,6 +61,8 @@ const EventsCalendar = ({ startDate, endDate }) => {
     }));
   }, [dispatch, endDate, startDate]);
 
+  // TODO: календарь работает только с событиями, parentId которых равен null.
+  // это проблема и сервера тоже
   return (
     <div className="events-calendar">
       {isFetchingEventsCountByDate ? (
@@ -75,7 +77,7 @@ const EventsCalendar = ({ startDate, endDate }) => {
               variant="body1"
               color="textSecondary"
             >
-              Календарь событий
+              Календарь основных событий
             </Typography>
             <Divider className="events-calendar__title__divider" />
           </div>

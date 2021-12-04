@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { IconButton, iconTypes } from '../Icon';
 import Breadcrumb from './Breadcrumb';
+import './Breadcrumbs.scss';
 
 const CommonBreadcrumbs = ({ className, items, backButtonOnClick }) => (
   <Breadcrumbs
@@ -18,7 +19,6 @@ const CommonBreadcrumbs = ({ className, items, backButtonOnClick }) => (
         key={item.id}
         primaryText={item.primaryText}
         isLast={item.isLast}
-        index={item.index}
         onClick={item.onClick}
       />
     ))}
@@ -38,7 +38,7 @@ CommonBreadcrumbs.propTypes = {
 };
 
 CommonBreadcrumbs.defaultProps = {
-  className: null,
+  className: 'breadcrumbs',
   items: [],
   backButtonOnClick: () => {},
 };

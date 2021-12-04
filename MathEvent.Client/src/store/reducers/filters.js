@@ -11,15 +11,17 @@ import {
   setIsFilterOpened,
   setIsSortOpened,
   setOrganizationFilter,
+  setParentId,
   setStartDateFromFilter,
   setStartDateToFilter,
 } from '../actions/filters';
 
 const initialState = {
+  parentId: null,
   isFilterOpened: false,
   isSortOpened: false,
   isCalendarOpened: false,
-  organizationId: '',
+  organizationId: null,
   startDateFrom: null,
   startDateTo: null,
   sortByValues: [],
@@ -31,6 +33,10 @@ const filtersSlice = createSlice({
   name: 'filtersSlice',
   initialState,
   extraReducers: {
+    [setParentId]: (state, { payload: { parentId } }) => {
+      const st = state;
+      st.parentId = parentId;
+    },
     [setIsFilterOpened]: (state, { payload: { isFilterOpened } }) => {
       const st = state;
       st.isFilterOpened = isFilterOpened;

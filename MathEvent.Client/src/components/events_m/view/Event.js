@@ -22,11 +22,15 @@ import {
   fetchOrCreateUserInfo,
 } from '../../../store/actions/user';
 import { fetchPosition } from '../../../store/actions/map';
+import { setParentId } from '../../../store/actions/filters';
 import { useTitle } from '../../../hooks';
 import { prepareImage } from '../../../utils/get-image-src';
 import { getInitials } from '../../../utils/get_initials';
 import { isAbleToEditEvent } from '../../../utils/user_rights';
-import { navigateToEventEdit } from '../../../utils/navigator';
+import {
+  navigateToEvents,
+  navigateToEventEdit,
+} from '../../../utils/navigator';
 import { getLocaleDateTimeFromUTC } from '../../../utils/time';
 import colors from '../../../constants/colors';
 import './EventsView.scss';
@@ -54,6 +58,7 @@ const Event = () => {
   } = useSelector((state) => state.map);
 
   const [isAbleToEdit, setIsAbleToEdit] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
 
   const { id } = useParams();
   useTitle('Событие');
@@ -102,6 +107,18 @@ const Event = () => {
   }, [dispatch, eventInfo]);
 
   useEffect(() => {
+    if (eventInfo && userInfo) {
+      setSubscribed(
+        eventInfo
+          ? eventInfo.applicationUsers.filter(
+            (user) => user.id === userInfo.id,
+          ).length > 0
+          : false,
+      );
+    }
+  }, [dispatch, eventInfo, userInfo]);
+
+  useEffect(() => {
     dispatch(fetchEvent(id));
   }, [dispatch, id]);
 
@@ -112,6 +129,13 @@ const Event = () => {
   const handleShowLocation = useCallback(() => {
     dispatch(showEventLocation({ position }));
   }, [dispatch, position]);
+
+  const handleNavigateToChildrenClick = useCallback(() => {
+    if (eventInfo) {
+      dispatch(setParentId(eventInfo.id));
+      navigateToEvents();
+    }
+  }, [dispatch, eventInfo]);
 
   const handlePatchEvent = useCallback(
     (data) => {
@@ -179,19 +203,19 @@ const Event = () => {
                 <div className="event__buttons-section">
                   <Button
                     startIcon={
-              eventInfo.subscribed
+              subscribed
                 ? iconTypes.personAddDisabled
                 : iconTypes.personAdd
               }
                     disabled={!userInfo}
                     onClick={handleSubcribersChange}
                   >
-                    {eventInfo.subscribed ? 'Отписаться' : 'Записаться'}
+                    {subscribed ? 'Отписаться' : 'Записаться'}
                   </Button>
                   {eventInfo.hierarchy && (
                   <Button
                     startIcon={iconTypes.events}
-                    onClick={() => {}}
+                    onClick={handleNavigateToChildrenClick}
                   >
                     Дочерние события
                   </Button>

@@ -1,9 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  fetchEvents,
-  fetchEventBreadcrumbs,
-} from '../../../store/actions/event';
+import { setParentId } from '../../../store/actions/filters';
 import CommonBreadcrumbs from '../../_common/Breadcrumbs';
 import Loader from '../../_common/Loader';
 import './EventsView.scss';
@@ -18,19 +15,17 @@ const prepareCrumbs = (crumbs, onClick) => crumbs.map((crumb, index) => ({
 
 const EventsBreadcrumbs = () => {
   const dispatch = useDispatch();
-  let { crumbs } = useSelector((state) => state.event);
   const { isFetchingEventBreadcrumbs } = useSelector((state) => state.event);
-  crumbs = crumbs.length > 0 ? [{ id: null, name: '' }, ...crumbs] : [];
+  let { crumbs } = useSelector((state) => state.event);
+  crumbs = crumbs.length > 0 ? [{ id: null, name: 'Корень' }, ...crumbs] : [];
 
   const handleCrumbClick = useCallback((crumb) => {
-    dispatch(fetchEvents(crumb.id));
-    dispatch(fetchEventBreadcrumbs(crumb.id));
+    dispatch(setParentId(crumb.id));
   }, [dispatch]);
 
   const handleBackButtonClick = useCallback(() => {
     const lastCrumb = crumbs[crumbs.length - 2];
-    dispatch(fetchEvents(lastCrumb ? lastCrumb.id : null));
-    dispatch(fetchEventBreadcrumbs(lastCrumb ? lastCrumb.id : null));
+    dispatch(setParentId(lastCrumb ? lastCrumb.id : null));
   }, [crumbs, dispatch]);
 
   const preparedCrumbs = prepareCrumbs(

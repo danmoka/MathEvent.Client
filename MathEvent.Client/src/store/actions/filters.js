@@ -2,6 +2,11 @@ import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import eventService from '../../api/services/event-service';
 import statusCode from '../../utils/status-code-reader';
 
+export const setParentId = createAction(
+  'setParentId',
+  (parentId) => ({ payload: { parentId } }),
+);
+
 export const setIsFilterOpened = createAction(
   'setIsFilterOpened',
   (isFilterOpened) => ({ payload: { isFilterOpened } }),

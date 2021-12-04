@@ -286,13 +286,12 @@
 //     }
 // }
 
-// @media (max-width: 480px) {
-//     .event {
-//         &__image-section {
-//             height: 170px;
-//         }
-//     }
-// }
+@media (max-width: 480px) {
+    .event__buttons-section {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
 
 // @media (max-width: 320px) {
 //     .event {

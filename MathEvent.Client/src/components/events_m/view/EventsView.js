@@ -12,6 +12,7 @@ import {
   setIsCalendarOpened,
 } from '../../../store/actions/filters';
 import {
+  fetchEventBreadcrumbs,
   fetchEvents,
   showCreateEventModal,
 } from '../../../store/actions/event';
@@ -23,6 +24,7 @@ const EventView = () => {
 
   const dispatch = useDispatch();
   const {
+    parentId,
     isFilterOpened,
     isSortOpened,
     isCalendarOpened,
@@ -37,7 +39,7 @@ const EventView = () => {
 
   useEffect(() => {
     dispatch(fetchEvents({
-      parentId: null,
+      parentId,
       organizationId,
       startDateFrom: startDateFrom
         ? new Date(startDateFrom).toISOString()
@@ -49,11 +51,16 @@ const EventView = () => {
     }));
   }, [
     dispatch,
+    parentId,
     organizationId,
     selectedSortByValue,
     startDateFrom,
     startDateTo,
   ]);
+
+  useEffect(() => {
+    dispatch(fetchEventBreadcrumbs(parentId));
+  }, [dispatch, parentId]);
 
   const handleFiltersButtonClick = useCallback(() => {
     dispatch(setIsFilterOpened(!isFilterOpened));
