@@ -1,0 +1,154 @@
+.users-view {
+    &__search-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 12px;
+    }
+
+    &__collection-section {
+        margin-top: 24px;
+    }
+}
+
+.users-search {
+    padding: 3px 4px;
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    height: 48px;
+    width: 45%;
+
+    &__input {
+        flex: 1;
+        margin-left: 15px;
+    }
+}
+
+.users-collection {
+    &__loader-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__collection-info {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.user {
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+        gap: 12px;
+    }
+
+    &__header-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 100%;
+
+        &__name {
+            display: flex;
+            justify-content:space-between;
+        }
+    }
+
+    &__info-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 100%;
+        gap: 10px;
+
+        &__horizontal_icon_text {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        &__info {
+            padding-left: 34px;
+            width: 100%;
+        }
+    }
+
+    &__events {
+        margin-top: 24px;
+
+        &__header {
+            display: flex;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        &__title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+
+            &__name {
+                padding-right: 10px;
+            }
+
+            &__divider {
+                flex: 1;
+            }
+        }
+
+        &__card-info {
+            display: flex;
+            justify-content: center;
+        }
+
+        &__card-collection {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 5px;
+
+            &__card {
+                width: 49%;
+            
+                &__media {
+                    height: 0;
+                    padding-top: 56.25%;
+                }
+
+                &__actions {
+                    display: flex;
+                    justify-content:flex-start;
+                    align-items: center;
+                }
+            }
+        }
+    }
+
+    &__loader-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media (max-width: 801px) {
+    .users-search {
+        width: 70%;
+    }
+}
+
+@media (max-width: 480px) {
+    .user__events__card-collection__card {
+        width: 100%;
+    }
+}

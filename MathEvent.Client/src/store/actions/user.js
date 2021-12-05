@@ -59,6 +59,21 @@ export const fetchOrCreateUserInfo = createAsyncThunk(
   },
 );
 
+export const fetchUserInfo = createAsyncThunk(
+  'fetchUserInfo',
+  async (identityUserId) => {
+    const response = await userService.fetchUserInfo(identityUserId);
+
+    if (statusCode(response).ok) {
+      const userInfo = await response.json();
+
+      return { userInfo, hasError: false };
+    }
+
+    return { userInfo: null, hasError: true };
+  },
+);
+
 export const patchUserInfo = createAsyncThunk(
   'patchUserInfo',
   async ({ identityUserId, data }) => {
@@ -113,6 +128,13 @@ export const showUserStatistics = createAsyncThunk(
   'showUserStatistics',
   async ({ user }, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.userStatistics, { user }));
+  },
+);
+
+export const showNotAuthenticated = createAsyncThunk(
+  'showNotAuthenticated',
+  async (params, thunkAPI) => {
+    thunkAPI.dispatch(showModal(modalTypes.notAuthenticated));
   },
 );
 

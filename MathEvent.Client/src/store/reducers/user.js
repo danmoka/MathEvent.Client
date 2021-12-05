@@ -10,6 +10,7 @@ import {
   fetchUserStatistics,
   createUserInfo,
   clearUserInfo,
+  fetchUserInfo,
 } from '../actions/user';
 
 const initialState = {
@@ -60,6 +61,24 @@ const userSlice = createSlice({
       state.isFetchingUserInfo = true;
     },
     [fetchOrCreateUserInfo.rejected]: (state) => {
+      state.isFetchingUserInfo = false;
+      state.hasError = true;
+      state.userInfo = null;
+    },
+
+    [fetchUserInfo.fulfilled]: (state,
+      { payload: { userInfo, hasError } }) => {
+      state.isFetchingUserInfo = false;
+      state.hasError = hasError;
+
+      if (!hasError) {
+        state.userInfo = userInfo;
+      }
+    },
+    [fetchUserInfo.pending]: (state) => {
+      state.isFetchingUserInfo = true;
+    },
+    [fetchUserInfo.rejected]: (state) => {
       state.isFetchingUserInfo = false;
       state.hasError = true;
       state.userInfo = null;

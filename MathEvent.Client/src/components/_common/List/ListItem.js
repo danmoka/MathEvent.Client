@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import MuiMenuItem from '@material-ui/core/MenuItem';
 import MuiListItem from '@material-ui/core/ListItem';
 import MuiListItemText from '@material-ui/core/ListItemText';
-import MuiListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import MuiListItemSecondaryAction
+  from '@material-ui/core/ListItemSecondaryAction';
 import MuiListItemIcon from '@material-ui/core/ListItemIcon';
 import Popover from '@material-ui/core/Popover';
-import Typography from '@material-ui/core/Typography';
 import { Icon, IconButton, iconTypes } from '../Icon';
 import Checkbox from '../Checkbox';
 import './List.scss';
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   notSelected: {
     width: '100%',
     listStyleType: 'none',
-    borderLeft: `6px !important`,
+    borderLeft: '6px !important',
   },
   selected: {
     width: '100%',
@@ -42,7 +43,6 @@ const ListItem = ({
   avatarText,
   isSelected,
   checked,
-  index,
   actions,
   onClick,
   onCheck,
@@ -58,10 +58,10 @@ const ListItem = ({
     setIsHovered(false);
   };
 
-  const handleMenuClose = (e) => {
+  const handleMenuClose = useCallback((e) => {
     e.stopPropagation();
     setAnchorEl(null);
-  };
+  }, []);
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
@@ -76,14 +76,14 @@ const ListItem = ({
       handleMenuClose(e);
       action();
     },
-    [handleMenuClose]
+    [handleMenuClose],
   );
 
   const handleCheck = useCallback(
     (newValue) => {
       onCheck(id, newValue);
     },
-    [id, onCheck]
+    [id, onCheck],
   );
 
   return (
@@ -109,11 +109,7 @@ const ListItem = ({
 
       <MuiListItemText
         classes={listItemTextClasses}
-        primary={
-          <Typography noWrap variant="body1">
-            {primaryText}
-          </Typography>
-        }
+        primary={primaryText}
         secondary={secondaryText}
       />
 
@@ -155,6 +151,34 @@ const ListItem = ({
       )}
     </MuiListItem>
   );
+};
+
+ListItem.propTypes = {
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  primaryText: PropTypes.string,
+  secondaryText: PropTypes.string,
+  avatarText: PropTypes.string,
+  isSelected: PropTypes.bool,
+  checked: PropTypes.bool,
+  actions: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    label: PropTypes.string,
+    onClick: PropTypes.func,
+  })),
+  onClick: PropTypes.func,
+  onCheck: PropTypes.func,
+};
+
+ListItem.defaultProps = {
+  id: 0,
+  primaryText: '',
+  secondaryText: '',
+  avatarText: '',
+  isSelected: false,
+  checked: false,
+  actions: undefined,
+  onClick: () => {},
+  onCheck: () => {},
 };
 
 export default ListItem;

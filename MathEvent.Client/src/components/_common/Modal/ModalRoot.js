@@ -18,6 +18,7 @@ OrganizationCreateModal
 import
 OrganizationDeleteModal
   from '../../organizations/delete/OrganizationDeleteModal';
+import NotAuthenticatedModal from '../../account_m/NotAuthenticatedModal';
 import modalTypes from '../../../constants/modal-types';
 
 const modals = {
@@ -32,6 +33,7 @@ const modals = {
   [modalTypes.uploadFiles]: UploadFilesModal,
   [modalTypes.userStatistics]: UserStatisticsModal,
   [modalTypes.logout]: LogoutModal,
+  [modalTypes.notAuthenticated]: NotAuthenticatedModal,
   [modalTypes.createOrganization]: OrganizationCreateModal,
   [modalTypes.deleteOrganization]: OrganizationDeleteModal,
   [modalTypes.zoomImage]: ZoomImageModal,
