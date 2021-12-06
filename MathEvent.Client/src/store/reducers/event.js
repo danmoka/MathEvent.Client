@@ -33,6 +33,8 @@ import {
   deleteEvent,
   uploadEventAvatar,
   fetchEventsCountByDate,
+  subscribe,
+  unsubscribe,
 } from '../actions/event';
 
 const initialState = {
@@ -222,6 +224,46 @@ const eventSlice = createSlice({
       }
     },
     [patchEvent.rejected]: (state) => {
+      const st = state;
+      onRejectedEvent(st);
+      st.eventInfo = null;
+    },
+
+    [subscribe.pending]: (state) => {
+      onPendingEvent(state);
+    },
+    [subscribe.fulfilled]: (
+      state,
+      { payload: { updatedEvent, hasError } },
+    ) => {
+      const st = state;
+      onFulfilledEvent(st, hasError);
+
+      if (!hasError) {
+        st.eventInfo = updatedEvent;
+      }
+    },
+    [subscribe.rejected]: (state) => {
+      const st = state;
+      onRejectedEvent(st);
+      st.eventInfo = null;
+    },
+
+    [unsubscribe.pending]: (state) => {
+      onPendingEvent(state);
+    },
+    [unsubscribe.fulfilled]: (
+      state,
+      { payload: { updatedEvent, hasError } },
+    ) => {
+      const st = state;
+      onFulfilledEvent(st, hasError);
+
+      if (!hasError) {
+        st.eventInfo = updatedEvent;
+      }
+    },
+    [unsubscribe.rejected]: (state) => {
       const st = state;
       onRejectedEvent(st);
       st.eventInfo = null;

@@ -15,11 +15,12 @@ import ZoomImage from '../../_common/ZoomImage';
 import EventFiles from './EventFiles';
 import {
   fetchEvent,
-  patchEvent,
   showEventLocation,
+  subscribe,
+  unsubscribe,
 } from '../../../store/actions/event';
 import {
-  fetchOrCreateUserInfo,
+  fetchOrCreateUserInfo, showNotAuthenticated,
 } from '../../../store/actions/user';
 import { fetchPosition } from '../../../store/actions/map';
 import { setParentId } from '../../../store/actions/filters';
@@ -30,25 +31,26 @@ import { isAbleToEditEvent } from '../../../utils/user_rights';
 import {
   navigateToEvents,
   navigateToEventEdit,
+  navigateToUser,
 } from '../../../utils/navigator';
 import { getLocaleDateTimeFromUTC } from '../../../utils/time';
 import colors from '../../../constants/colors';
 import './EventsView.scss';
 
-const prepareUsers = (users) => (users
+const prepareUsers = (users, onClick) => (users
   ? users.map((user, index) => ({
     id: user.id,
     primaryText: `${user.name} ${user.surname}`,
     secondaryText: user.userName,
     avatarText: getInitials(user.name, user.surname),
     index: index + 1,
-    onClick: () => {},
+    onClick: () => onClick(user),
   }))
   : []);
 
 const Event = () => {
   const dispatch = useDispatch();
-  const { account } = useSelector((state) => state.account);
+  const { isAuthenticated, account } = useSelector((state) => state.account);
   const { eventInfo, isFetchingEvent } = useSelector((state) => state.event);
   const { userInfo } = useSelector((state) => state.user);
   const { isDarkTheme } = useSelector((state) => state.app);
@@ -68,14 +70,25 @@ const Event = () => {
     : null;
   const position = positionResults.length > 0 ? positionResults[0] : null;
 
+  const handleUserClick = useCallback((user) => {
+    if (isAuthenticated) {
+      navigateToUser(user.identityUserId);
+    } else {
+      dispatch(showNotAuthenticated());
+    }
+  }, [dispatch, isAuthenticated]);
+
   const preparedManagers = useMemo(
-    () => (eventInfo ? prepareUsers(eventInfo.managers) : []),
-    [eventInfo],
+    () => (eventInfo ? prepareUsers(eventInfo.managers, handleUserClick) : []),
+    [eventInfo, handleUserClick],
   );
 
   const preparedSubscribers = useMemo(
-    () => (eventInfo ? prepareUsers(eventInfo.applicationUsers) : []),
-    [eventInfo],
+    () => (eventInfo ? prepareUsers(
+      eventInfo.applicationUsers,
+      handleUserClick,
+    ) : []),
+    [eventInfo, handleUserClick],
   );
 
   useEffect(() => {
@@ -137,38 +150,17 @@ const Event = () => {
     }
   }, [dispatch, eventInfo]);
 
-  const handlePatchEvent = useCallback(
-    (data) => {
-      dispatch(
-        patchEvent({
-          eventId: id,
-          data,
-        }),
-      );
-    },
-    [dispatch, id],
-  );
-
   const handleSubcribersChange = useCallback(() => {
-    // TODO: патч не подходит из-за особенностей авторизации
     if (userInfo && eventInfo) {
-      let subscribersIds = eventInfo.applicationUsers.map((user) => user.id);
+      const subscribersIds = eventInfo.applicationUsers.map((user) => user.id);
 
       if (subscribersIds.includes(userInfo.id)) {
-        subscribersIds.splice(subscribersIds.indexOf(userInfo.id), 1);
+        dispatch(unsubscribe({ eventId: eventInfo.id }));
       } else {
-        subscribersIds = [...subscribersIds, userInfo.id];
+        dispatch(subscribe({ eventId: eventInfo.id }));
       }
-
-      handlePatchEvent([
-        {
-          value: subscribersIds,
-          path: '/ApplicationUsers',
-          op: 'replace',
-        },
-      ]);
     }
-  }, [handlePatchEvent, userInfo, eventInfo]);
+  }, [dispatch, userInfo, eventInfo]);
 
   return (
     <div className="event">

@@ -27,6 +27,8 @@ const eventRoutes = {
   createEvent: () => getRoute('events/'),
   updateEvent: (eventId) => getRoute(`events/${eventId}/`),
   patchEvent: (eventId) => getRoute(`events/${eventId}/`),
+  subscribe: (eventId) => getRoute(`events/subscribe/${eventId}/`),
+  unsubscribe: (eventId) => getRoute(`events/unsubscribe/${eventId}/`),
   deleteEvent: (eventId) => getRoute(`events/${eventId}/`),
   fetchEventBreadcrumbs: (eventId) => getRoute(`events/breadcrumbs/${eventId}`),
   fetchStatistics: (

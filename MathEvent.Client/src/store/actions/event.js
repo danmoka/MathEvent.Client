@@ -167,6 +167,36 @@ export const patchEvent = createAsyncThunk(
   },
 );
 
+export const subscribe = createAsyncThunk(
+  'subscribe',
+  async ({ eventId }) => {
+    const response = await eventService.subscribe(eventId);
+
+    if (statusCode(response).ok) {
+      const updatedEvent = await response.json();
+
+      return { updatedEvent, hasError: false };
+    }
+
+    return { hasError: true };
+  },
+);
+
+export const unsubscribe = createAsyncThunk(
+  'unsubscribe',
+  async ({ eventId }) => {
+    const response = await eventService.unsubscribe(eventId);
+
+    if (statusCode(response).ok) {
+      const updatedEvent = await response.json();
+
+      return { updatedEvent, hasError: false };
+    }
+
+    return { hasError: true };
+  },
+);
+
 export const deleteEvent = createAsyncThunk(
   'deleteEvent',
   async ({ eventId }, thunkAPI) => {

@@ -83,6 +83,18 @@ const eventService = {
 
     return response;
   },
+  subscribe: async (eventId) => {
+    const url = api.events.subscribe(eventId);
+    const response = await baseService.post(url);
+
+    return response;
+  },
+  unsubscribe: async (eventId) => {
+    const url = api.events.unsubscribe(eventId);
+    const response = await baseService.post(url);
+
+    return response;
+  },
   deleteEvent: async (eventId) => {
     const url = api.events.deleteEvent(eventId);
     const response = await baseService.delete(url);
