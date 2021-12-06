@@ -1,7 +1,7 @@
 import { getRoute, getAccountRoute } from '../../utils/get-route';
 
 const userRoutes = {
-  fetchUsers: () => getRoute('users/'),
+  fetchUsers: (userSearch) => getRoute(`users/?search=${userSearch}`),
   fetchUserInfo: (identityId) => getRoute(`users/${identityId}`),
   patchUserInfo: (identityId) => getRoute(`users/${identityId}`),
   createUserInfo: () => getRoute('users/'),

@@ -2,13 +2,15 @@ import { getRoute } from '../../utils/get-route';
 
 const eventRoutes = {
   fetchEvents: (
+    eventSearch,
     parentId,
     organizationId,
     startDateFrom,
     startDateTo,
     sortByValue,
   ) => getRoute(
-    `events/?parent=${parentId}`
+    `events/?search=${eventSearch}`
+    + `?parent=${parentId}`
     + `&organization=${organizationId}`
     + `&startDateFrom=${startDateFrom}`
     + `&startDateTo=${startDateTo}`

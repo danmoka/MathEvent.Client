@@ -1,22 +1,51 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
 import { IconButton, iconTypes } from '../../_common/Icon';
+import { setUserSearch } from '../../../store/actions/filters';
 import './UsersView.scss';
 
-const UsersSearch = () => (
-  <Paper
-    className="users-search"
-    component="form"
-  >
-    <InputBase
-      className="users-search__input"
-      placeholder="Поиск"
-    />
-    <IconButton
-      type={iconTypes.search}
-    />
-  </Paper>
-);
+const UsersSearch = () => {
+  const dispatch = useDispatch();
+  const { userSearch } = useSelector((state) => state.filters);
+  const [searchString, setSearchString] = useState('');
+
+  useEffect(() => {
+    if (userSearch) {
+      setSearchString(userSearch);
+    }
+  }, [userSearch]);
+
+  const handleSearchStringChange = useCallback((event) => {
+    const { value } = event.target;
+    setSearchString(value);
+
+    if (!value) {
+      dispatch(setUserSearch(value));
+    }
+  }, [dispatch]);
+
+  const handleSearchButtonClick = useCallback(() => {
+    dispatch(setUserSearch(searchString));
+  }, [dispatch, searchString]);
+
+  return (
+    <Paper
+      className="users-search"
+      component="form"
+    >
+      <InputBase
+        className="users-search__input"
+        placeholder="Введите фамилию"
+        onChange={handleSearchStringChange}
+      />
+      <IconButton
+        type={iconTypes.search}
+        onClick={handleSearchButtonClick}
+      />
+    </Paper>
+  );
+};
 
 export default UsersSearch;

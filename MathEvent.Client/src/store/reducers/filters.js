@@ -7,16 +7,22 @@ import {
 import {
   fetchSortByValues,
   selectSortByValue,
+  setEventSearch,
   setIsCalendarOpened,
   setIsFilterOpened,
   setIsSortOpened,
   setOrganizationFilter,
+  setOrganizationSearch,
   setParentId,
   setStartDateFromFilter,
   setStartDateToFilter,
+  setUserSearch,
 } from '../actions/filters';
 
 const initialState = {
+  eventSearch: '',
+  organizationSearch: '',
+  userSearch: '',
   parentId: null,
   isFilterOpened: false,
   isSortOpened: false,
@@ -33,6 +39,18 @@ const filtersSlice = createSlice({
   name: 'filtersSlice',
   initialState,
   extraReducers: {
+    [setUserSearch]: (state, { payload: { searchString } }) => {
+      const st = state;
+      st.userSearch = searchString;
+    },
+    [setOrganizationSearch]: (state, { payload: { searchString } }) => {
+      const st = state;
+      st.organizationSearch = searchString;
+    },
+    [setEventSearch]: (state, { payload: { searchString } }) => {
+      const st = state;
+      st.eventSearch = searchString;
+    },
     [setParentId]: (state, { payload: { parentId } }) => {
       const st = state;
       st.parentId = parentId;

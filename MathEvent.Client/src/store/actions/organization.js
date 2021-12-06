@@ -7,8 +7,10 @@ import { navigateToOrganizations } from '../../utils/navigator';
 
 export const fetchOrganizations = createAsyncThunk(
   'fetchOrganizations',
-  async () => {
-    const response = await organizationService.fetchOrganizations();
+  async ({ organizationSearch }) => {
+    const response = await organizationService.fetchOrganizations(
+      organizationSearch,
+    );
 
     if (statusCode(response).ok) {
       const organizations = await response.json();

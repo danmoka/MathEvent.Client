@@ -4,6 +4,7 @@ import { getAccessToken } from '../../utils/local-storage-manager';
 
 const eventService = {
   fetchEvents: async (
+    eventSearch,
     parentId,
     organizationId,
     startDateFrom,
@@ -11,6 +12,7 @@ const eventService = {
     sortByValue,
   ) => {
     const url = api.events.fetchEvents(
+      eventSearch,
       parentId,
       organizationId,
       startDateFrom,

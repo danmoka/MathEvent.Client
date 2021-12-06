@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTitle } from '../../../hooks';
 import { fetchUsers } from '../../../store/actions/user';
 import UsersCollection from './UsersCollection';
@@ -8,12 +8,15 @@ import './UsersView.scss';
 
 const UsersView = () => {
   const dispatch = useDispatch();
+  const { userSearch } = useSelector((state) => state.filters);
 
   useTitle('Пользователи');
 
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    dispatch(fetchUsers({
+      userSearch,
+    }));
+  }, [dispatch, userSearch]);
 
   return (
     <div>

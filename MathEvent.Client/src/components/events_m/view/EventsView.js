@@ -24,6 +24,7 @@ const EventView = () => {
 
   const dispatch = useDispatch();
   const {
+    eventSearch,
     parentId,
     isFilterOpened,
     isSortOpened,
@@ -39,6 +40,7 @@ const EventView = () => {
 
   useEffect(() => {
     dispatch(fetchEvents({
+      eventSearch,
       parentId,
       organizationId,
       startDateFrom: startDateFrom
@@ -51,6 +53,7 @@ const EventView = () => {
     }));
   }, [
     dispatch,
+    eventSearch,
     parentId,
     organizationId,
     selectedSortByValue,

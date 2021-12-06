@@ -2,6 +2,21 @@ import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import eventService from '../../api/services/event-service';
 import statusCode from '../../utils/status-code-reader';
 
+export const setUserSearch = createAction(
+  'setUserSearch',
+  (searchString) => ({ payload: { searchString } }),
+);
+
+export const setOrganizationSearch = createAction(
+  'setOrganizationSearch',
+  (searchString) => ({ payload: { searchString } }),
+);
+
+export const setEventSearch = createAction(
+  'setEventSearch',
+  (searchString) => ({ payload: { searchString } }),
+);
+
 export const setParentId = createAction(
   'setParentId',
   (parentId) => ({ payload: { parentId } }),

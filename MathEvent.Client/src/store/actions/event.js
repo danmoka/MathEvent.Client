@@ -7,6 +7,7 @@ import { navigateToEvents } from '../../utils/navigator';
 
 export const fetchEvents = createAsyncThunk('fetchEvents', async (
   {
+    eventSearch,
     parentId,
     organizationId,
     startDateFrom,
@@ -15,6 +16,7 @@ export const fetchEvents = createAsyncThunk('fetchEvents', async (
   },
 ) => {
   const response = await eventService.fetchEvents(
+    eventSearch,
     parentId,
     organizationId,
     startDateFrom,

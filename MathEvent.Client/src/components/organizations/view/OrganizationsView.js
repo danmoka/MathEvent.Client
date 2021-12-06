@@ -17,12 +17,15 @@ const OrganizationsView = () => {
   const dispatch = useDispatch();
 
   const { account } = useSelector((state) => state.account);
+  const { organizationSearch } = useSelector((state) => state.filters);
 
   const [isAbleToAdd, setIsAbleToAdd] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchOrganizations());
-  }, [dispatch]);
+    dispatch(fetchOrganizations({
+      organizationSearch,
+    }));
+  }, [dispatch, organizationSearch]);
 
   useEffect(() => {
     if (account) {

@@ -2,8 +2,8 @@ import api from '../api';
 import { baseService } from './base-service';
 
 const userService = {
-  fetchUsers: async () => {
-    const url = api.users.fetchUsers();
+  fetchUsers: async (userSearch) => {
+    const url = api.users.fetchUsers(userSearch);
 
     return baseService.get(url);
   },

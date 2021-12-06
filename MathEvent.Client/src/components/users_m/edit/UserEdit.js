@@ -16,9 +16,7 @@ import {
   patchUserInfo,
 } from '../../../store/actions/user';
 import { setIsDarkTheme } from '../../../store/actions/app';
-import {
-  navigateToUser, navigateToUsers,
-} from '../../../utils/navigator';
+import { navigateToUser } from '../../../utils/navigator';
 import {
   isAbleToEditUserInfo,
   isAbleToEditUserAccount,
@@ -28,7 +26,7 @@ import './UserEdit.scss';
 
 const UserEdit = () => {
   const dispatch = useDispatch();
-  const { isAuthenticated, account } = useSelector((state) => state.account);
+  const { account } = useSelector((state) => state.account);
   const {
     userInfo,
     isFetchingUserInfo,
@@ -42,12 +40,6 @@ const UserEdit = () => {
 
   const { id } = useParams();
   useTitle('Редактирование пользователя');
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigateToUsers();
-    }
-  }, [isAuthenticated]);
 
   useEffect(() => {
     dispatch(fetchUserAccount(id));

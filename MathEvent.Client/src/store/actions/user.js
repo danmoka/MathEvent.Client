@@ -5,17 +5,20 @@ import userService from '../../api/services/user-service';
 import { fetchAccount } from './account';
 import statusCode from '../../utils/status-code-reader';
 
-export const fetchUsers = createAsyncThunk('fecthUsers', async () => {
-  const response = await userService.fetchUsers();
+export const fetchUsers = createAsyncThunk(
+  'fecthUsers',
+  async ({ userSearch }) => {
+    const response = await userService.fetchUsers(userSearch);
 
-  if (statusCode(response).ok) {
-    const users = await response.json();
+    if (statusCode(response).ok) {
+      const users = await response.json();
 
-    return { users, hasError: false };
-  }
+      return { users, hasError: false };
+    }
 
-  return { users: [], hasError: true };
-});
+    return { users: [], hasError: true };
+  },
+);
 
 export const createUserInfo = createAsyncThunk(
   'createUserInfo',
