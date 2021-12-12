@@ -15,3 +15,15 @@
         margin-top: 12px;
     }
 }
+
+.event-statistics {
+    &__loader-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__item {
+        margin-top: 12px;
+    }
+}

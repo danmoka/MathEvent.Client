@@ -6,7 +6,6 @@ import {
   Chart,
   PieSeries,
   Legend,
-  Title as ChartTitle,
 } from '@devexpress/dx-react-chart-material-ui';
 import { Palette } from '@devexpress/dx-react-chart';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -64,9 +63,9 @@ const PieChart = ({
               innerRadius={0.6}
             />
             <Legend labelComponent={Label} position="bottom" />
-            <ChartTitle
+            <Title
+              className="chart__title"
               text={title}
-              textComponent={Title}
             />
           </Chart>
         </Paper>
@@ -74,7 +73,7 @@ const PieChart = ({
       : (
         <Paper className={className}>
           <Title
-            className="chart__no-data-title"
+            className="chart__title"
             text={title}
           />
           <div className="chart__image-section">

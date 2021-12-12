@@ -1,7 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import EventLocationModal from '../../events_m/view/EventLocationModal';
-import EventStatisticsModal from '../../statistics/event/EventStatisticsModal';
+import
+EventStatisticsModal
+  from '../../statistics_m/events/EventStatisticsModal';
 import EventCreateModal from '../../events_m/create/EventCreateModal';
 import EventAddManagerModal from '../../events_m/edit/EventAddManagerModal';
 import CreateFolderModal from '../File/CreateFolderModal';
@@ -10,7 +12,7 @@ import DeleteFileModal from '../File/DeleteFileModal';
 import LogoutModal from '../../account_m/LogoutModal';
 import UploadEventAvatarModal from '../../events/edit/UploadEventAvatar';
 import UploadFilesModal from '../File/UploadFilesModal';
-import UserStatisticsModal from '../../statistics/user/UserStatisticsModal';
+import UserStatisticsModal from '../../statistics_m/users/UserStatisticsModal';
 import { ZoomImageModal } from '../ZoomImage';
 import
 OrganizationCreateModal

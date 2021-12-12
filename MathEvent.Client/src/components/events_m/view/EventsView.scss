@@ -210,6 +210,12 @@
         &__name {
             display: flex;
             justify-content:space-between;
+
+            &__buttons {
+                display: flex;
+                align-items: flex-end;
+                gap: 5px;
+            }
         }
     }
 

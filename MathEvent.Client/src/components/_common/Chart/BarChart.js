@@ -6,7 +6,6 @@ import {
   ArgumentAxis,
   BarSeries,
   Chart,
-  Title as ChartTitle,
   ValueAxis,
 } from '@devexpress/dx-react-chart-material-ui';
 import { Palette } from '@devexpress/dx-react-chart';
@@ -48,9 +47,9 @@ const BarChart = ({
               valueField={valueField}
               argumentField={argumentField}
             />
-            <ChartTitle
+            <Title
+              className="chart__title"
               text={title}
-              textComponent={Title}
             />
           </Chart>
         </Paper>
@@ -58,7 +57,7 @@ const BarChart = ({
       : (
         <Paper className={className}>
           <Title
-            className="chart__no-data-title"
+            className="chart__title"
             text={title}
           />
           <div className="chart__image-section">

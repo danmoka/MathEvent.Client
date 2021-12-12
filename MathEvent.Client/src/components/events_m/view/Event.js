@@ -16,6 +16,7 @@ import EventFiles from './EventFiles';
 import {
   fetchEvent,
   showEventLocation,
+  showEventStatistics,
   subscribe,
   unsubscribe,
 } from '../../../store/actions/event';
@@ -23,7 +24,11 @@ import {
   fetchOrCreateUserInfo, showNotAuthenticated,
 } from '../../../store/actions/user';
 import { fetchPosition } from '../../../store/actions/map';
-import { setParentId } from '../../../store/actions/filters';
+import {
+  setParentId,
+  setStartDateFromFilter,
+  setStartDateToFilter,
+} from '../../../store/actions/filters';
 import { useTitle } from '../../../hooks';
 import { prepareImage } from '../../../utils/get-image-src';
 import { getInitials } from '../../../utils/get_initials';
@@ -139,12 +144,20 @@ const Event = () => {
     navigateToEventEdit(id);
   }, [id]);
 
+  const handleShowEventStatistics = useCallback(() => {
+    if (eventInfo) {
+      dispatch(showEventStatistics({ event: eventInfo }));
+    }
+  }, [dispatch, eventInfo]);
+
   const handleShowLocation = useCallback(() => {
     dispatch(showEventLocation({ position }));
   }, [dispatch, position]);
 
   const handleNavigateToChildrenClick = useCallback(() => {
     if (eventInfo) {
+      dispatch(setStartDateFromFilter(null));
+      dispatch(setStartDateToFilter(null));
       dispatch(setParentId(eventInfo.id));
       navigateToEvents();
     }
@@ -181,14 +194,22 @@ const Event = () => {
                     <HugeText>
                       {eventInfo.name}
                     </HugeText>
-                    {isAbleToEdit && (
-                    <IconButton
-                      type={iconTypes.edit}
-                      size="small"
-                      title="Редактировать"
-                      onClick={handleEditButtonClick}
-                    />
-                    )}
+                    <div className="event__header-section__name__buttons">
+                      <IconButton
+                        type={iconTypes.stats}
+                        size="small"
+                        title="Статистика"
+                        onClick={handleShowEventStatistics}
+                      />
+                      {isAbleToEdit && (
+                      <IconButton
+                        type={iconTypes.edit}
+                        size="small"
+                        title="Редактировать"
+                        onClick={handleEditButtonClick}
+                      />
+                      )}
+                    </div>
                   </div>
                   <Date date={getLocaleDateTimeFromUTC(eventInfo.startDate)} />
                 </div>

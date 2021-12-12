@@ -11,7 +11,7 @@ import { HugeText, NormalText, SmallText } from '../../_common/Text/Text';
 import { Icon, IconButton, iconTypes } from '../../_common/Icon';
 import CardCollection from '../../_common/CardCollection';
 import { useTitle } from '../../../hooks';
-import { fetchUserInfo } from '../../../store/actions/user';
+import { showUserStatistics, fetchUserInfo } from '../../../store/actions/user';
 import {
   navigateToUsers,
   navigateToUserEdit,
@@ -66,6 +66,12 @@ const User = () => {
     }
   }, [account, userInfo]);
 
+  const handleShowUserStatistics = useCallback(() => {
+    if (userInfo) {
+      dispatch(showUserStatistics({ user: userInfo }));
+    }
+  }, [dispatch, userInfo]);
+
   const handleEditButtonClick = useCallback(() => {
     navigateToUserEdit(id);
   }, [id]);
@@ -117,14 +123,22 @@ const User = () => {
                     <HugeText>
                       {`${userInfo.name} ${userInfo.surname}`}
                     </HugeText>
-                    {isAbleToEdit && (
-                    <IconButton
-                      type={iconTypes.edit}
-                      size="small"
-                      title="Редактировать"
-                      onClick={handleEditButtonClick}
-                    />
-                    )}
+                    <div className="user__header-section__name__buttons">
+                      <IconButton
+                        type={iconTypes.stats}
+                        size="small"
+                        title="Статистика"
+                        onClick={handleShowUserStatistics}
+                      />
+                      {isAbleToEdit && (
+                      <IconButton
+                        type={iconTypes.edit}
+                        size="small"
+                        title="Редактировать"
+                        onClick={handleEditButtonClick}
+                      />
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="user__info-section">

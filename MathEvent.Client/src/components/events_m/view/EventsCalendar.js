@@ -6,6 +6,7 @@ import Divider from '@material-ui/core/Divider';
 import Calendar from '../../_common/Calendar';
 import Loader from '../../_common/Loader';
 import {
+  setParentId,
   setStartDateFromFilter,
   setStartDateToFilter,
 } from '../../../store/actions/filters';
@@ -45,6 +46,7 @@ const EventsCalendar = ({ startDate, endDate }) => {
   const handleStartDateFromToFilterChange = useCallback((data) => {
     if (data) {
       const { date } = data;
+      dispatch(setParentId(null));
       dispatch(setStartDateFromFilter(date));
       dispatch(setStartDateToFilter(shiftDate(date, 1)));
     }
