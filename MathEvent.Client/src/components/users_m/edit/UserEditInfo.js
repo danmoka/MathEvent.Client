@@ -31,7 +31,9 @@ const UserEditInfo = ({ identityUserId, userOrganization }) => {
   const [organization, setOrganization] = useState('');
 
   useEffect(() => {
-    dispatch(fetchOrganizations());
+    dispatch(fetchOrganizations({
+      organizationSearch: '',
+    }));
   }, [dispatch]);
 
   useEffect(() => {

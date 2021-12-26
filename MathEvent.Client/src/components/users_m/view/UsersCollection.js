@@ -1,5 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Paper } from '@material-ui/core';
 import List from '../../_common/List';
 import Loader from '../../_common/Loader';
 import { NormalText } from '../../_common/Text/Text';
@@ -58,7 +59,9 @@ const UsersCollection = () => {
               </NormalText>
             )
             : (
-              <List items={preparedUsers} />
+              <Paper>
+                <List items={preparedUsers} />
+              </Paper>
             )}
         </>
       )}

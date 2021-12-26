@@ -20,6 +20,7 @@ import {
 import { isAbleToEditUserInfo } from '../../../utils/user_rights';
 import { prepareImage } from '../../../utils/get-image-src';
 import colors from '../../../constants/colors';
+import './UsersView.scss';
 
 const prepareEvents = (
   events,
@@ -28,7 +29,6 @@ const prepareEvents = (
 ) => events.map((event, index) => ({
   id: event.id,
   primaryText: event.name,
-  additionalInfo: event.description,
   image: prepareImage(event.avatarPath, isDarkTheme),
   index: index + 1,
   onClick: () => onClick(event),

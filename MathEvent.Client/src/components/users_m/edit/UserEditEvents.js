@@ -24,7 +24,6 @@ const prepareEvents = (
 ) => events.map((event, index) => ({
   id: event.id,
   primaryText: event.name,
-  additionalInfo: event.description,
   image: prepareImage(event.avatarPath, isDarkTheme),
   actions: prepareActions(event),
   index: index + 1,

@@ -27,7 +27,9 @@ const EventsFilters = () => {
   const preparedOrganizations = prepareOrganizations(organizations);
 
   useEffect(() => {
-    dispatch(fetchOrganizations());
+    dispatch(fetchOrganizations({
+      organizationSearch: '',
+    }));
   }, [dispatch]);
 
   const handleOrganizationFilterChange = useCallback((organizationId) => {

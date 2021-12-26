@@ -116,8 +116,17 @@ const eventSlice = createSlice({
     [createEvent.pending]: (state) => {
       onPendingEvents(state);
     },
-    [createEvent.fulfilled]: (state, { payload: { hasError } }) => {
-      onFulfilledEvents(state, hasError);
+    [createEvent.fulfilled]: (state, {
+      payload: {
+        createdEvent, hasError,
+      },
+    }) => {
+      const st = state;
+      onFulfilledEvents(st, hasError);
+
+      if (!hasError) {
+        st.events = [createdEvent, ...st.events];
+      }
     },
     [createEvent.rejected]: (state) => {
       onRejectedEvents(state);

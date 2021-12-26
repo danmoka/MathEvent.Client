@@ -27,12 +27,13 @@ import {
 } from '../../../store/actions/event';
 import {
   fetchOrCreateUserInfo,
+  showNotAuthenticated,
 } from '../../../store/actions/user';
 import { fetchOrganizations } from '../../../store/actions/organization';
 import { useTitle } from '../../../hooks';
 import { prepareImage } from '../../../utils/get-image-src';
 import { isAbleToEditEvent } from '../../../utils/user_rights';
-import { navigateToEvent } from '../../../utils/navigator';
+import { navigateToUser, navigateToEvent } from '../../../utils/navigator';
 import { getInitials } from '../../../utils/get_initials';
 import { getLocaleDateTimeFromUTC } from '../../../utils/time';
 import './EventEdit.scss';
@@ -46,14 +47,14 @@ const prepareOrganizations = (organizations) => (organizations
   ]
   : []);
 
-const prepareManagers = (managers, onManagerDelete) => (managers
+const prepareManagers = (managers, onClick, onManagerDelete) => (managers
   ? managers.map((manager, index) => ({
     id: manager.id,
     primaryText: `${manager.name} ${manager.surname}`,
     secondaryText: manager.userName,
     avatarText: getInitials(manager.name, manager.surname),
     index: index + 1,
-    onClick: () => {},
+    onClick: () => onClick(manager),
     actions: [
       {
         id: 'delete',
@@ -67,7 +68,7 @@ const prepareManagers = (managers, onManagerDelete) => (managers
 
 const EventEdit = () => {
   const dispatch = useDispatch();
-  const { account } = useSelector((state) => state.account);
+  const { isAuthenticated, account } = useSelector((state) => state.account);
   const { userInfo } = useSelector((state) => state.user);
   const { eventInfo, isFetchingEvent } = useSelector((state) => state.event);
   const { organizations } = useSelector((state) => state.organization);
@@ -113,6 +114,8 @@ const EventEdit = () => {
   useEffect(() => {
     if (eventInfo && userInfo && account) {
       setIsAbleToEdit(isAbleToEditEvent(userInfo, account, eventInfo));
+    } else {
+      setIsAbleToEdit(false);
     }
   }, [account, eventInfo, userInfo]);
 
@@ -123,7 +126,9 @@ const EventEdit = () => {
   }, [dispatch, id, isAbleToEdit]);
 
   useEffect(() => {
-    dispatch(fetchOrganizations());
+    dispatch(fetchOrganizations({
+      organizationSearch: '',
+    }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -176,11 +181,23 @@ const EventEdit = () => {
     [eventInfo, handlePatchEvent],
   );
 
+  const handleUserClick = useCallback((user) => {
+    if (isAuthenticated) {
+      navigateToUser(user.identityUserId);
+    } else {
+      dispatch(showNotAuthenticated());
+    }
+  }, [dispatch, isAuthenticated]);
+
   const preparedManagers = useMemo(
     () => (eventInfo
-      ? prepareManagers(eventInfo.managers, handleManagerDeleteClick)
+      ? prepareManagers(
+        eventInfo.managers,
+        handleUserClick,
+        handleManagerDeleteClick,
+      )
       : []),
-    [eventInfo, handleManagerDeleteClick],
+    [eventInfo, handleManagerDeleteClick, handleUserClick],
   );
 
   const handleNameValueChange = useDebouncedCallback((newName) => {
@@ -338,6 +355,7 @@ const EventEdit = () => {
                     className="event-edit__body__control"
                     label="Является множеством других событий"
                     value={hierarchy}
+                    disabled
                     onChange={handleHierarchyValueChange}
                   />
                 </Paper>

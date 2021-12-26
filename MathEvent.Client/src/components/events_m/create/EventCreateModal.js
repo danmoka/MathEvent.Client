@@ -34,7 +34,9 @@ const EventCreateModal = () => {
   const [hierarchy, setHierarchy] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchOrganizations());
+    dispatch(fetchOrganizations({
+      organizationSearch: '',
+    }));
   }, [dispatch]);
 
   const preparedOrganizations = useMemo(

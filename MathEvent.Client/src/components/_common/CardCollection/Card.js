@@ -7,15 +7,15 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import { IconButton } from '../Icon';
+import { SmallText } from '../Text/Text';
 import './CardCollection.scss';
 
 const Card = ({
   className,
   primaryText,
   secondaryText,
-  additionalText,
+  additionalInfo,
   image,
   actions,
   onClick,
@@ -36,26 +36,26 @@ const Card = ({
         image={image}
       />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {additionalText}
-        </Typography>
+        <SmallText color="textSecondary">
+          {additionalInfo}
+        </SmallText>
       </CardContent>
     </CardActionArea>
     { actions.length > 0 && (
-    <>
-      <Divider />
-      <CardActions className={`${className}__actions`}>
-        {actions.map((action) => (
-          <IconButton
-            key={action.id}
-            type={action.icon}
-            title={action.label}
-            size="small"
-            onClick={action.onClick}
-          />
-        ))}
-      </CardActions>
-    </>
+      <>
+        <Divider />
+        <CardActions className={`${className}__actions`}>
+          {actions.map((action) => (
+            <IconButton
+              key={action.id}
+              type={action.icon}
+              title={action.label}
+              size="small"
+              onClick={action.onClick}
+            />
+          ))}
+        </CardActions>
+      </>
     )}
   </MuiCard>
 );
@@ -64,7 +64,7 @@ Card.propTypes = {
   className: PropTypes.string,
   primaryText: PropTypes.string,
   secondaryText: PropTypes.string,
-  additionalText: PropTypes.string,
+  additionalInfo: PropTypes.string,
   image: PropTypes.string,
   actions: PropTypes.arrayOf(PropTypes.object),
   onClick: PropTypes.func,
@@ -74,7 +74,7 @@ Card.defaultProps = {
   className: 'card',
   primaryText: '',
   secondaryText: '',
-  additionalText: '',
+  additionalInfo: '',
   image: '',
   actions: [],
   onClick: () => {},

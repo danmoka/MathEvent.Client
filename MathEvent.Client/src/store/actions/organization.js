@@ -59,13 +59,13 @@ export const createOrganization = createAsyncThunk(
       .createOrganization(organization);
 
     if (statusCode(response).created) {
+      const createdOrganization = await response.json();
       thunkAPI.dispatch(hideModal());
-      thunkAPI.dispatch(fetchOrganizations());
 
-      return { hasError: false };
+      return { createdOrganization, hasError: false };
     }
 
-    return { hasError: true };
+    return { createdOrganization: null, hasError: true };
   },
 );
 

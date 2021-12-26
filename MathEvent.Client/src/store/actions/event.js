@@ -124,14 +124,11 @@ export const createEvent = createAsyncThunk(
     if (statusCode(response).created) {
       const createdEvent = await response.json();
       thunkAPI.dispatch(hideModal());
-      thunkAPI.dispatch(fetchEvents({
-        parentId: createdEvent.parentId,
-      }));
 
-      return { hasError: false };
+      return { createdEvent, hasError: false };
     }
 
-    return { hasError: true };
+    return { createdEvent: null, hasError: true };
   },
 );
 

@@ -80,10 +80,14 @@ const organizationSlice = createSlice({
     },
 
     [createOrganization.fulfilled]: (state, {
-      payload: { hasError },
+      payload: { createdOrganization, hasError },
     }) => {
       state.isFetchingOrganization = false;
       state.hasError = hasError;
+
+      if (!hasError) {
+        state.organizations = [createdOrganization, ...state.organizations];
+      }
     },
     [createOrganization.pending]: (state) => {
       state.isFetchingOrganization = true;

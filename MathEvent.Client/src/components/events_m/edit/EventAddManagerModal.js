@@ -28,7 +28,9 @@ const EventAddManagerModal = () => {
   const { users } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    dispatch(fetchUsers({
+      userSearch: '',
+    }));
   }, [dispatch]);
 
   const handlePatchEvent = useCallback(

@@ -1,5 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import { Paper } from '@material-ui/core';
 import Loader from '../../_common/Loader';
 import List from '../../_common/List';
 import { NormalText } from '../../_common/Text/Text';
@@ -49,7 +50,9 @@ const OrganizationsCollection = () => {
               </NormalText>
             )
             : (
-              <List items={preparedOrganizations} />
+              <Paper>
+                <List items={preparedOrganizations} />
+              </Paper>
             )}
         </>
       )}
