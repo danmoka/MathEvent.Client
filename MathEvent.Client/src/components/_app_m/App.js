@@ -33,6 +33,9 @@ import {
   fetchAccount,
   showLogoutModal,
 } from '../../store/actions/account';
+import {
+  fetchOrCreateUserInfo,
+} from '../../store/actions/user';
 import { palette2, paletteDark2 } from '../../styles/palette';
 import colors from '../../constants/colors';
 import images from '../../constants/images';
@@ -82,14 +85,28 @@ const App = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchTokens({ userName: null, password: null }));
-  }, [dispatch]);
-
-  useEffect(() => {
     if (hasToken) {
       dispatch(fetchAccount());
     }
   }, [dispatch, hasToken]);
+
+  useEffect(() => {
+    if (account) {
+      const {
+        sub: identityUserId,
+        // eslint-disable-next-line camelcase
+        given_name,
+        email,
+      } = account;
+      const [name, surname] = given_name.split(' ');
+      dispatch(fetchOrCreateUserInfo({
+        identityUserId,
+        email,
+        name,
+        surname,
+      }));
+    }
+  }, [dispatch, account]);
 
   useInterval(() => {
     dispatch(fetchTokens({ userName: null, password: null }));

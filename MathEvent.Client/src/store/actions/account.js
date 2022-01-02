@@ -33,7 +33,7 @@ export const fetchAccount = createAsyncThunk('fetchAccount', async () => {
 
 export const fetchTokens = createAsyncThunk(
   'fetchTokens',
-  async ({ userName, password, successAction }, thunkAPI) => {
+  async ({ userName, password, successAction }) => {
     const refreshToken = getRefreshToken();
     let data = {
       client_id: config.clientId,
@@ -67,8 +67,6 @@ export const fetchTokens = createAsyncThunk(
       const { access_token, refresh_token } = await response.json();
       setAccessToken(access_token);
       setRefreshToken(refresh_token);
-
-      thunkAPI.dispatch(fetchAccount());
 
       if (successAction) {
         successAction();

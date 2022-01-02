@@ -126,6 +126,7 @@ const userSlice = createSlice({
 
     [clearUserInfo]: (state) => {
       state.userInfo = null;
+      state.userAccount = null;
     },
 
     [fetchStatistics.fulfilled]: (

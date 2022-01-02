@@ -62,7 +62,6 @@ const accountSlice = createSlice({
       state.isFetchingAccount = false;
       state.hasError = false;
       state.account = null;
-      state.userAccount = null;
       state.hasToken = false;
       state.isAuthenticated = false;
     },
