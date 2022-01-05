@@ -171,3 +171,35 @@ export const patchUserAccount = createAsyncThunk(
     return { userAccount: null, hasError: true };
   },
 );
+
+export const addUserAccountToRole = createAsyncThunk(
+  'addUserAccountToRole',
+  async (data, thunkAPI) => {
+    const response = await userService.addToRole(data);
+
+    if (statusCode(response).ok) {
+      const userAccount = await response.json();
+      thunkAPI.dispatch(fetchAccount());
+
+      return { userAccount, hasError: false };
+    }
+
+    return { userAccount: null, hasError: true };
+  },
+);
+
+export const removeUserAccountFromRole = createAsyncThunk(
+  'removeUserAccountFromRole',
+  async (data, thunkAPI) => {
+    const response = await userService.removeFromRole(data);
+
+    if (statusCode(response).ok) {
+      const userAccount = await response.json();
+      thunkAPI.dispatch(fetchAccount());
+
+      return { userAccount, hasError: false };
+    }
+
+    return { userAccount: null, hasError: true };
+  },
+);

@@ -11,6 +11,9 @@ const userRoutes = {
   patchUserAccount: (identityId) => getAccountRoute(
     `api/MathEventIdentityUsers/${identityId}`,
   ),
+  addToRole: () => getAccountRoute('api/MathEventIdentityUsers/addToRole'),
+  removeFromRole: (
+  ) => getAccountRoute('api/MathEventIdentityUsers/removeFromRole'),
   fetchStatistics: (
     activeUsersTop,
   ) => getRoute(`users/statistics/?activeUsersTop=${activeUsersTop}`),

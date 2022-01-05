@@ -42,6 +42,16 @@ const userService = {
 
     return baseService.get(url);
   },
+  addToRole: async (data) => {
+    const url = api.users.addToRole();
+
+    return baseService.post(url, data);
+  },
+  removeFromRole: async (data) => {
+    const url = api.users.removeFromRole();
+
+    return baseService.post(url, data);
+  },
 };
 
 export default userService;

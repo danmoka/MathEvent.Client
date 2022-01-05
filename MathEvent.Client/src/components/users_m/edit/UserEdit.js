@@ -10,6 +10,7 @@ import { HugeText } from '../../_common/Text/Text';
 import UserEditAccount from './UserEditAccount';
 import UserEditInfo from './UserEditInfo';
 import UserEditEvents from './UserEditEvents';
+import UserEditRoles from './UserEditRoles';
 import {
   fetchOrCreateUserInfo,
   fetchUserAccount,
@@ -20,6 +21,7 @@ import { navigateToUser } from '../../../utils/navigator';
 import {
   isAbleToEditUserInfo,
   isAbleToEditUserAccount,
+  isMathEventIdentityServerExecutive,
 } from '../../../utils/user_rights';
 import { useTitle } from '../../../hooks';
 import './UserEdit.scss';
@@ -37,6 +39,7 @@ const UserEdit = () => {
 
   const [canEditUserAccount, setCanEditUserAccount] = useState(true);
   const [canEditUserInfo, setCanEditUserInfo] = useState(true);
+  const [canEditUserRoles, setCanEditUserRoles] = useState(false);
 
   const { id } = useParams();
   useTitle('Редактирование пользователя');
@@ -44,6 +47,10 @@ const UserEdit = () => {
   useEffect(() => {
     dispatch(fetchUserAccount(id));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    setCanEditUserRoles(isMathEventIdentityServerExecutive(account));
+  }, [account]);
 
   useEffect(() => {
     if (userAccount && account) {
@@ -154,13 +161,16 @@ const UserEdit = () => {
           <>
             { userAccount && canEditUserAccount
             && (
-              <UserEditAccount
-                accountId={userAccount.id}
-                accountName={userAccount.name}
-                accountSurname={userAccount.surname}
-                email={userAccount.email}
-                username={userAccount.userName}
-              />
+            <UserEditAccount
+              accountId={userAccount.id}
+              accountName={userAccount.name}
+              accountSurname={userAccount.surname}
+              email={userAccount.email}
+              username={userAccount.userName}
+            />
+            )}
+            { canEditUserRoles && (
+              <UserEditRoles />
             )}
           </>
         )}

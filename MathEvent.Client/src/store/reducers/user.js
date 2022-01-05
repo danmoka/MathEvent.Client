@@ -11,6 +11,8 @@ import {
   createUserInfo,
   clearUserInfo,
   fetchUserInfo,
+  addUserAccountToRole,
+  removeUserAccountFromRole,
 } from '../actions/user';
 
 const initialState = {
@@ -202,6 +204,44 @@ const userSlice = createSlice({
       state.isFetchingUserAccount = true;
     },
     [patchUserAccount.rejected]: (state) => {
+      state.isFetchingUserAccount = false;
+      state.hasError = true;
+      state.userAccount = null;
+    },
+
+    [addUserAccountToRole.fulfilled]: (state, {
+      payload: { userAccount, hasError },
+    }) => {
+      state.isFetchingUserAccount = false;
+      state.hasError = hasError;
+
+      if (!hasError) {
+        state.userAccount = userAccount;
+      }
+    },
+    [addUserAccountToRole.pending]: (state) => {
+      state.isFetchingUserAccount = true;
+    },
+    [addUserAccountToRole.rejected]: (state) => {
+      state.isFetchingUserAccount = false;
+      state.hasError = true;
+      state.userAccount = null;
+    },
+
+    [removeUserAccountFromRole.fulfilled]: (state, {
+      payload: { userAccount, hasError },
+    }) => {
+      state.isFetchingUserAccount = false;
+      state.hasError = hasError;
+
+      if (!hasError) {
+        state.userAccount = userAccount;
+      }
+    },
+    [removeUserAccountFromRole.pending]: (state) => {
+      state.isFetchingUserAccount = true;
+    },
+    [removeUserAccountFromRole.rejected]: (state) => {
       state.isFetchingUserAccount = false;
       state.hasError = true;
       state.userAccount = null;
