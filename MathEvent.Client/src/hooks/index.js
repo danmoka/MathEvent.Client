@@ -1,4 +1,4 @@
-import useCurrentUser from "./useCurrentUser";
-import useTitle from "./useTitle";
+import useCurrentUser from './useCurrentUser';
+import useTitle from './useTitle';
 
 export { useCurrentUser, useTitle };

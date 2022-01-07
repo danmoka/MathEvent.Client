@@ -230,9 +230,6 @@ export const uploadEventAvatar = createAsyncThunk(
 export const selectEvent = createAction('selectEvent', (event) => ({
   payload: { event },
 }));
-export const setGridView = createAction('setGridView', (isGridView) => ({
-  payload: { isGridView },
-}));
 
 export const showCreateEventModal = createAsyncThunk(
   'showCreateEventModal',

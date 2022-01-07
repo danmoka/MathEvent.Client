@@ -24,7 +24,6 @@ import {
   fetchEvent,
   createEvent,
   selectEvent,
-  setGridView,
   fetchEventBreadcrumbs,
   fetchEventStatistics,
   fetchStatistics,
@@ -45,7 +44,6 @@ const initialState = {
   eventStatistics: [],
   statistics: [],
   eventsCountByDate: {},
-  isGridView: true,
   isFetchingEvents: false,
   isFetchingEvent: false,
   isFetchingEventBreadcrumbs: false,
@@ -135,10 +133,6 @@ const eventSlice = createSlice({
     [selectEvent]: (state, { payload: { event } }) => {
       const st = state;
       st.selectedEvent = event;
-    },
-    [setGridView]: (state, { payload: { isGridView } }) => {
-      const st = state;
-      st.isGridView = isGridView;
     },
 
     [fetchEventBreadcrumbs.pending]: (state) => {

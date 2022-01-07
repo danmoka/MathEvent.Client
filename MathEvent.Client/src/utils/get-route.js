@@ -1,5 +1,7 @@
-import urlJoin from "url-join";
-import config from "../config";
+import urlJoin from 'url-join';
 
-export const getRoute = (route) => urlJoin(config.baseUrl, "api", route);
-export const getAccountRoute = (route) => urlJoin(config.accountUrl, route);
+const serverUrl = process.env.REACT_APP_SERVER;
+const identityServerUrl = process.env.REACT_APP_IDENTITY_SERVER;
+
+export const getRoute = (route) => urlJoin(serverUrl, 'api', route);
+export const getAccountRoute = (route) => urlJoin(identityServerUrl, route);

@@ -6,7 +6,7 @@ import MuiMenuItem from '@material-ui/core/MenuItem';
 import MuiListItem from '@material-ui/core/ListItem';
 import MuiListItemText from '@material-ui/core/ListItemText';
 import MuiListItemSecondaryAction
-  from '@material-ui/core/ListItemSecondaryAction';
+from '@material-ui/core/ListItemSecondaryAction';
 import MuiListItemIcon from '@material-ui/core/ListItemIcon';
 import Popover from '@material-ui/core/Popover';
 import { Icon, IconButton, iconTypes } from '../Icon';
@@ -178,7 +178,7 @@ ListItem.defaultProps = {
   checked: false,
   actions: undefined,
   onClick: () => {},
-  onCheck: () => {},
+  onCheck: undefined,
 };
 
 export default ListItem;

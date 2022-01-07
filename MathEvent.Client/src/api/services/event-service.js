@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import api from '../api';
 import { baseService } from './base-service';
 import { getAccessToken } from '../../utils/local-storage-manager';
@@ -19,9 +20,7 @@ const eventService = {
       startDateTo,
       sortByValue,
     );
-    const response = await baseService.get(url);
-
-    return response;
+    return baseService.get(url);
   },
   fetchEventsCountByDate: async (
     startDateFrom,
@@ -31,75 +30,62 @@ const eventService = {
       startDateFrom,
       startDateTo,
     );
-    const response = await baseService.get(url);
-
-    return response;
+    return baseService.get(url);
   },
   fetchEvent: async (eventId) => {
     const url = api.events.fetchEvent(eventId);
-    const response = await baseService.get(url);
 
-    return response;
+    return baseService.get(url);
   },
   fetchEventBreadcrumbs: async (eventId) => {
     const url = api.events.fetchEventBreadcrumbs(eventId);
-    const response = await baseService.get(url);
 
-    return response;
+    return baseService.get(url);
   },
   fetchStatistics: async (eventSubsStatisticsTop) => {
     const url = api.events.fetchStatistics(eventSubsStatisticsTop);
-    const response = await baseService.get(url);
 
-    return response;
+    return baseService.get(url);
   },
   fetchEventStatistics: async (eventId) => {
     const url = api.events.fetchEventStatistics(eventId);
-    const response = await baseService.get(url);
 
-    return response;
+    return baseService.get(url);
   },
   fetchSortByValues: async () => {
     const url = api.events.fetchSortByValues();
-    const response = await baseService.get(url);
 
-    return response;
+    return baseService.get(url);
   },
   createEvent: async (createdEvent) => {
     const url = api.events.createEvent();
-    const response = await baseService.post(url, createdEvent);
 
-    return response;
+    return baseService.post(url, createdEvent);
   },
   updateEvent: async (eventId, updatedEvent) => {
     const url = api.events.updateEvent(eventId);
-    const response = await baseService.put(url, updatedEvent);
 
-    return response;
+    return baseService.put(url, updatedEvent);
   },
   patchEvent: async (eventId, data) => {
     const url = api.events.patchEvent(eventId);
-    const response = await baseService.patch(url, data);
 
-    return response;
+    return baseService.patch(url, data);
   },
   subscribe: async (eventId) => {
     const url = api.events.subscribe(eventId);
-    const response = await baseService.post(url);
 
-    return response;
+    return baseService.post(url);
   },
   unsubscribe: async (eventId) => {
     const url = api.events.unsubscribe(eventId);
-    const response = await baseService.post(url);
 
-    return response;
+    return baseService.post(url);
   },
   deleteEvent: async (eventId) => {
     const url = api.events.deleteEvent(eventId);
-    const response = await baseService.delete(url);
 
-    return response;
+    return baseService.delete(url);
   },
   uploadAvatar: async (eventId, file) => {
     const url = api.events.uploadAvatar(eventId);

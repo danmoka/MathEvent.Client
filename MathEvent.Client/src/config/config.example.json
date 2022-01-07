@@ -1,8 +1,0 @@
-{
-    "baseUrl": "<api_uri>",
-    "accountUrl": "<account_server_uri>",
-    "clientId": "<client_id>",
-    "clientSecret": "<client_secret>",
-    "passwordGrantType": "password",
-    "refreshGrantType": "refresh_token"
-}

@@ -3,23 +3,23 @@ import { useSelector } from 'react-redux';
 import EventLocationModal from '../../events_m/view/EventLocationModal';
 import
 EventStatisticsModal
-  from '../../statistics_m/events/EventStatisticsModal';
+from '../../statistics_m/events/EventStatisticsModal';
 import EventCreateModal from '../../events_m/create/EventCreateModal';
 import EventAddManagerModal from '../../events_m/edit/EventAddManagerModal';
 import CreateFolderModal from '../File/CreateFolderModal';
 import EventDeleteModal from '../../events_m/delete/EventDeleteModal';
 import DeleteFileModal from '../File/DeleteFileModal';
 import LogoutModal from '../../account_m/LogoutModal';
-import UploadEventAvatarModal from '../../events/edit/UploadEventAvatar';
+import UploadEventAvatarModal from '../../events_m/edit/UploadEventAvatar';
 import UploadFilesModal from '../File/UploadFilesModal';
 import UserStatisticsModal from '../../statistics_m/users/UserStatisticsModal';
 import { ZoomImageModal } from '../ZoomImage';
 import
 OrganizationCreateModal
-  from '../../organizations/create/OrganizationCreateModal';
+from '../../organizations/create/OrganizationCreateModal';
 import
 OrganizationDeleteModal
-  from '../../organizations/delete/OrganizationDeleteModal';
+from '../../organizations/delete/OrganizationDeleteModal';
 import NotAuthenticatedModal from '../../account_m/NotAuthenticatedModal';
 import modalTypes from '../../../constants/modal-types';
 

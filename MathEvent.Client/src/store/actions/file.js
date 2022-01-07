@@ -16,7 +16,7 @@ export const fetchFiles = createAsyncThunk(
     }
 
     return { files: [] };
-  }
+  },
 );
 
 export const fetchFile = createAsyncThunk('fetchFile', async (fileId) => {
@@ -47,7 +47,7 @@ export const fetchFileBreadcrumbs = createAsyncThunk(
     }
 
     return { crumbs: [] };
-  }
+  },
 );
 
 export const createFile = createAsyncThunk(
@@ -62,14 +62,14 @@ export const createFile = createAsyncThunk(
         fetchFiles({
           fileId: createdFile.parentId,
           ownerId: createdFile.ownerId,
-        })
+        }),
       );
 
       return { createdFile, hasError: false };
     }
 
     return { hasError: true };
-  }
+  },
 );
 
 export const deleteFile = createAsyncThunk(
@@ -83,7 +83,7 @@ export const deleteFile = createAsyncThunk(
     }
 
     return { hasError: true };
-  }
+  },
 );
 
 export const uploadFiles = createAsyncThunk(
@@ -99,7 +99,7 @@ export const uploadFiles = createAsyncThunk(
     }
 
     return { hasError: true };
-  }
+  },
 );
 
 export const downloadFile = createAsyncThunk('downloadFile', async (fileId) => {
@@ -127,17 +127,17 @@ export const showCreateFolderModal = createAsyncThunk(
   'showCreateFolderModal',
   async ({ owner, crumbs }, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.createFolder, { owner, crumbs }));
-  }
+  },
 );
 export const showDeleteFileModal = createAsyncThunk(
   'showDeleteFileModal',
   async ({ file }, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.deleteFile, { file }));
-  }
+  },
 );
 export const showUploadFilesModal = createAsyncThunk(
   'showUploadFilesModal',
   ({ owner, crumbs }, thunkAPI) => {
     thunkAPI.dispatch(showModal(modalTypes.uploadFiles, { owner, crumbs }));
-  }
+  },
 );

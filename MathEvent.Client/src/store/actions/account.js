@@ -13,8 +13,10 @@ import {
 import { hideModal, showModal } from './modal';
 import accountService from '../../api/services/account-service';
 import statusCode from '../../utils/status-code-reader';
-import config from '../../config';
 import modalTypes from '../../constants/modal-types';
+
+const clientId = process.env.REACT_APP_CLIENT_ID;
+const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
 
 export const fetchAccount = createAsyncThunk('fetchAccount', async () => {
   const response = await accountService.account();
@@ -36,21 +38,21 @@ export const fetchTokens = createAsyncThunk(
   async ({ userName, password, successAction }) => {
     const refreshToken = getRefreshToken();
     let data = {
-      client_id: config.clientId,
-      client_secret: config.clientSecret,
+      client_id: clientId,
+      client_secret: clientSecret,
     };
 
     if (userName && password) {
       data = {
         ...data,
-        grant_type: config.passwordGrantType,
+        grant_type: 'password',
         userName,
         password,
       };
     } else if (refreshToken) {
       data = {
         ...data,
-        grant_type: config.refreshGrantType,
+        grant_type: 'refresh_token',
         refresh_token: refreshToken,
       };
     } else {
@@ -137,8 +139,8 @@ export const revocation = createAsyncThunk('revocation', async () => {
 
   const data = {
     token: refreshToken,
-    client_id: config.clientId,
-    client_secret: config.clientSecret,
+    client_id: clientId,
+    client_secret: clientSecret,
   };
 
   const response = await accountService.revocation(data);

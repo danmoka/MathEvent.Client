@@ -1,4 +1,4 @@
-import PieChart from "./PieChart";
-import BarChart from "./BarChart";
+import PieChart from './PieChart';
+import BarChart from './BarChart';
 
 export { PieChart, BarChart };
