@@ -8,12 +8,14 @@ import { NormalText } from '../../_common/Text/Text';
 import EventsBreadcrumbs from './EventsBreadcrumbs';
 import { prepareImage } from '../../../utils/get-image-src';
 import { navigateToEvent } from '../../../utils/navigator';
+import { getLocaleDateTimeFromUTC } from '../../../utils/time';
 import colors from '../../../constants/colors';
 import './EventsView.scss';
 
 const prepareDateTime = (dateTime) => {
+  const localDateTime = getLocaleDateTimeFromUTC(dateTime);
   moment.locale('ru');
-  const preparedDateTime = moment(dateTime).format('LL');
+  const preparedDateTime = moment(localDateTime).format('LL');
 
   return preparedDateTime;
 };

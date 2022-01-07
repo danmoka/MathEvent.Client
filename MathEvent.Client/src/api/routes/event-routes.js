@@ -19,9 +19,11 @@ const eventRoutes = {
   fetchEventsCountByDate: (
     startDateFrom,
     startDateTo,
+    offset,
   ) => getRoute(
     `events/eventsCountByDate/?startDateFrom=${startDateFrom}`
-    + `&startDateTo=${startDateTo}`,
+    + `&startDateTo=${startDateTo}`
+    + `&offset=${offset}`,
   ),
   fetchEvent: (eventId) => getRoute(`events/${eventId}`),
   createEvent: () => getRoute('events/'),

@@ -38,11 +38,13 @@ export const fetchEventsCountByDate = createAsyncThunk(
     {
       startDateFrom,
       startDateTo,
+      offset,
     },
   ) => {
     const response = await eventService.fetchEventsCountByDate(
       startDateFrom,
       startDateTo,
+      offset,
     );
 
     if (statusCode(response).ok) {

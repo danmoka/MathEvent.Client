@@ -25,10 +25,12 @@ const eventService = {
   fetchEventsCountByDate: async (
     startDateFrom,
     startDateTo,
+    offset,
   ) => {
     const url = api.events.fetchEventsCountByDate(
       startDateFrom,
       startDateTo,
+      offset,
     );
     return baseService.get(url);
   },

@@ -60,6 +60,7 @@ const EventsCalendar = ({ startDate, endDate }) => {
       startDateTo: endDate
         ? new Date(endDate).toISOString()
         : null,
+      offset: new Date().getTimezoneOffset() / 60,
     }));
   }, [dispatch, endDate, startDate]);
 
