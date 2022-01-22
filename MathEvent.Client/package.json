@@ -42,8 +42,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack-dev-server --mode development --open --hot",
-    "start": "node server.js",
-    "postinstall": "npm run build"
+    "start": "node server.js"
   },
   "browserslist": [
     ">0.2%",
