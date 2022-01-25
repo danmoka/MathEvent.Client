@@ -14,6 +14,9 @@ import { hideModal, showModal } from './modal';
 import accountService from '../../api/services/account-service';
 import statusCode from '../../utils/status-code-reader';
 import modalTypes from '../../constants/modal-types';
+import { errorsToMessage } from '../../utils/validation/errorsToMessage';
+import { setAlertMessage, setAlertSeverity } from './app';
+import alertTypes from '../../constants/alert-types';
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
@@ -30,7 +33,7 @@ export const fetchAccount = createAsyncThunk('fetchAccount', async () => {
   clearAccessToken();
   clearRefreshToken();
 
-  return { account: null, isAuthenticated: false, hasError: false };
+  return { account: null, isAuthenticated: false, hasError: true };
 });
 
 export const fetchTokens = createAsyncThunk(
@@ -90,33 +93,57 @@ export const fetchTokens = createAsyncThunk(
   },
 );
 
-export const register = createAsyncThunk('register', async (credentials) => {
-  const response = await accountService.register(credentials);
+export const register = createAsyncThunk(
+  'register',
+  async (credentials, thunkAPI) => {
+    const response = await accountService.register(credentials);
 
-  if (statusCode(response).created) {
-    navigateToLogin();
-  }
-});
+    if (statusCode(response).created) {
+      navigateToLogin();
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+  },
+);
 
 export const forgotPassword = createAsyncThunk(
   'forgotPassword',
-  async (emailData) => {
+  async (emailData, thunkAPI) => {
     const response = await accountService.forgotPassword(emailData);
 
     if (statusCode(response).ok) {
       const { email } = emailData;
       navigateToForgotPasswordReset(email);
     }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
   },
 );
 
 export const forgotPasswordReset = createAsyncThunk(
   'forgotPasswordReset',
-  async (passwordData) => {
+  async (passwordData, thunkAPI) => {
     const response = await accountService.forgotPasswordReset(passwordData);
 
     if (statusCode(response).ok) {
       navigateToLogin();
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
   },
 );

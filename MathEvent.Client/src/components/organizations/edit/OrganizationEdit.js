@@ -16,6 +16,11 @@ import {
 } from '../../../store/actions/organization';
 import { navigateToOrganization } from '../../../utils/navigator';
 import { isMathEventExecutive } from '../../../utils/user_rights';
+import {
+  validateOrganizationDescription,
+  validateOrganizationITN,
+  validateOrganizationName,
+} from '../../../utils/validation/organizationValidation';
 import './OrganizationEdit.scss';
 
 const OrganizationEdit = () => {
@@ -31,6 +36,10 @@ const OrganizationEdit = () => {
   const [name, setName] = useState('');
   const [description, setDesctiption] = useState('');
   const [itn, setItn] = useState('');
+
+  const [nameError, setNameError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+  const [itnError, setITNError] = useState('');
 
   const { id } = useParams();
   useTitle('Редактирование организации');
@@ -74,38 +83,54 @@ const OrganizationEdit = () => {
 
   const handleNameValueChange = useDebouncedCallback((newName) => {
     setName(newName);
-    handlePatchOrganization([
-      {
-        value: newName,
-        path: '/Name',
-        op: 'replace',
-      },
-    ]);
+    const error = validateOrganizationName(newName);
+    setNameError(error);
+
+    if (!error) {
+      handlePatchOrganization([
+        {
+          value: newName,
+          path: '/Name',
+          op: 'replace',
+        },
+      ]);
+    }
   }, 1000);
 
   const handleDescriptionValueChange = useDebouncedCallback(
     (newDescription) => {
       setDesctiption(newDescription);
-      handlePatchOrganization([
-        {
-          value: newDescription,
-          path: '/Description',
-          op: 'replace',
-        },
-      ]);
+      const error = validateOrganizationDescription(newDescription);
+      setDescriptionError(error);
+
+      if (!error) {
+        handlePatchOrganization([
+          {
+            value: newDescription,
+            path: '/Description',
+            op: 'replace',
+          },
+        ]);
+      }
     }, 1000,
   );
 
   const handleITNValueChange = useDebouncedCallback(
     (newItn) => {
       setItn(newItn);
-      handlePatchOrganization([
-        {
-          value: newItn,
-          path: '/ITN',
-          op: 'replace',
-        },
-      ]);
+
+      const error = validateOrganizationITN(newItn);
+      setITNError(error);
+
+      if (!error) {
+        handlePatchOrganization([
+          {
+            value: newItn,
+            path: '/ITN',
+            op: 'replace',
+          },
+        ]);
+      }
     }, 1000,
   );
 
@@ -134,6 +159,8 @@ const OrganizationEdit = () => {
                     className="organization-edit__body__control"
                     label="Название"
                     value={name}
+                    error={!!nameError}
+                    helperText={nameError}
                     onChange={handleNameValueChange}
                   />
                   <TextField
@@ -142,12 +169,16 @@ const OrganizationEdit = () => {
                     multiline
                     rows={10}
                     value={description}
+                    error={!!descriptionError}
+                    helperText={descriptionError}
                     onChange={handleDescriptionValueChange}
                   />
                   <TextField
                     className="organization-edit__body__control"
                     label="ИНН"
                     value={itn}
+                    error={!!itnError}
+                    helperText={itnError}
                     onChange={handleITNValueChange}
                   />
                 </Paper>

@@ -53,9 +53,14 @@ const EventAddManagerModal = () => {
           path: '/Managers',
           op: 'replace',
         },
+        {
+          value: new Date(eventInfo.startDate).toISOString(),
+          path: '/StartDate',
+          op: 'replace',
+        },
       ]);
     },
-    [handlePatchEvent],
+    [eventInfo, handlePatchEvent],
   );
 
   const handleUserClick = useCallback((user) => {

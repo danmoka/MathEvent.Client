@@ -2,6 +2,7 @@ import React, {
   useCallback, useEffect, useState, useMemo,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import { CreateModal, modalSizes } from '../../_common/Modal';
 import { DateField } from '../../_common/Date';
 import Checkbox from '../../_common/Checkbox';
@@ -11,6 +12,12 @@ import { createEvent } from '../../../store/actions/event';
 import { fetchOrganizations } from '../../../store/actions/organization';
 import colors from '../../../constants/colors';
 import { NormalText } from '../../_common/Text/Text';
+import {
+  validateEventDate,
+  validateEventDescription,
+  validateEventLocation,
+  validateEventName,
+} from '../../../utils/validation/eventValidation';
 import './EventCreate.scss';
 
 const prepareOrganizations = (organizations) => [
@@ -27,11 +34,20 @@ const EventCreateModal = () => {
   const { crumbs } = useSelector((state) => state.event);
 
   const [name, setName] = useState('');
-  const [startDate, setStartDate] = useState(null);
+  const [startDate, setStartDate] = useState(
+    moment(Date.now())
+      .add(15, 'm')
+      .toDate(),
+  );
   const [location, setLocation] = useState('');
   const [description, setDesctiption] = useState('');
   const [organization, setOrganization] = useState('');
   const [hierarchy, setHierarchy] = useState(false);
+
+  const [nameError, setNameError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+  const [dateError, setDateError] = useState('');
+  const [locationError, setLocationError] = useState('');
 
   useEffect(() => {
     dispatch(fetchOrganizations({
@@ -45,13 +61,25 @@ const EventCreateModal = () => {
   );
   const parent = crumbs.length > 0 ? crumbs[crumbs.length - 1] : null;
 
-  const handleNameValueChange = (value) => setName(value);
+  const handleNameValueChange = (value) => {
+    setName(value);
+    setNameError(validateEventName(value));
+  };
 
-  const handleDateValueChange = (value) => setStartDate(value);
+  const handleDateValueChange = (value) => {
+    setStartDate(value);
+    setDateError(validateEventDate(value));
+  };
 
-  const handleLocationValueChange = (value) => setLocation(value);
+  const handleLocationValueChange = (value) => {
+    setLocation(value);
+    setLocationError(validateEventLocation(value));
+  };
 
-  const handleDescriptionValueChange = (value) => setDesctiption(value);
+  const handleDescriptionValueChange = (value) => {
+    setDesctiption(value);
+    setDescriptionError(validateEventDescription(value));
+  };
 
   const handleOrganizationChange = (value) => setOrganization(value);
 
@@ -83,6 +111,12 @@ const EventCreateModal = () => {
     <CreateModal
       title="Новое событие"
       size={modalSizes.small}
+      disabledOk={
+        !!nameError
+        || !!descriptionError
+        || !!dateError
+        || !!locationError
+      }
       onCreate={handleCreate}
     >
       <div className="event-create__body">
@@ -95,6 +129,8 @@ const EventCreateModal = () => {
           className="event-create__body__control"
           label="Название"
           value={name}
+          error={!!nameError}
+          helperText={nameError}
           onChange={handleNameValueChange}
         />
         <TextField
@@ -103,6 +139,8 @@ const EventCreateModal = () => {
           multiline
           rows={10}
           value={description}
+          error={!!descriptionError}
+          helperText={descriptionError}
           onChange={handleDescriptionValueChange}
         />
         <DateField
@@ -110,6 +148,8 @@ const EventCreateModal = () => {
           inputVariant="outlined"
           value={startDate}
           minDate={new Date(Date.now())}
+          error={!!dateError}
+          helperText={dateError}
           onChange={handleDateValueChange}
           label="Дата и время начала"
         />
@@ -117,6 +157,8 @@ const EventCreateModal = () => {
           className="event-create__body__control"
           label="Адрес"
           value={location}
+          error={!!locationError}
+          helperText={locationError}
           onChange={handleLocationValueChange}
         />
         <Dropdown

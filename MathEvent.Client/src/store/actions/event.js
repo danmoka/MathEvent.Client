@@ -1,9 +1,12 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { showModal, hideModal } from './modal';
 import eventService from '../../api/services/event-service';
+import { setAlertMessage, setAlertSeverity } from './app';
 import statusCode from '../../utils/status-code-reader';
 import modalTypes from '../../constants/modal-types';
 import { navigateToEvents } from '../../utils/navigator';
+import { errorsToMessage } from '../../utils/validation/errorsToMessage';
+import alertTypes from '../../constants/alert-types';
 
 export const fetchEvents = createAsyncThunk('fetchEvents', async (
   {
@@ -130,6 +133,13 @@ export const createEvent = createAsyncThunk(
       return { createdEvent, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     return { createdEvent: null, hasError: true };
   },
 );
@@ -144,6 +154,13 @@ export const updateEvent = createAsyncThunk(
       thunkAPI.dispatch(fetchEvents(updatedEvent.parentId));
 
       return { updatedEvent, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { hasError: true };
@@ -162,13 +179,20 @@ export const patchEvent = createAsyncThunk(
       return { updatedEvent, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     return { hasError: true };
   },
 );
 
 export const subscribe = createAsyncThunk(
   'subscribe',
-  async ({ eventId }) => {
+  async ({ eventId }, thunkAPI) => {
     const response = await eventService.subscribe(eventId);
 
     if (statusCode(response).ok) {
@@ -177,19 +201,33 @@ export const subscribe = createAsyncThunk(
       return { updatedEvent, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     return { hasError: true };
   },
 );
 
 export const unsubscribe = createAsyncThunk(
   'unsubscribe',
-  async ({ eventId }) => {
+  async ({ eventId }, thunkAPI) => {
     const response = await eventService.unsubscribe(eventId);
 
     if (statusCode(response).ok) {
       const updatedEvent = await response.json();
 
       return { updatedEvent, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { hasError: true };
@@ -208,6 +246,13 @@ export const deleteEvent = createAsyncThunk(
       return { eventId, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     return { hasError: true };
   },
 );
@@ -223,6 +268,13 @@ export const uploadEventAvatar = createAsyncThunk(
       thunkAPI.dispatch(fetchEvents(updatedEvent.parentId));
 
       return { updatedEvent, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { hasError: true };

@@ -3,6 +3,9 @@ import { showModal, hideModal } from './modal';
 import fileService from '../../api/services/file-service';
 import modalTypes from '../../constants/modal-types';
 import statusCode from '../../utils/status-code-reader';
+import { errorsToMessage } from '../../utils/validation/errorsToMessage';
+import { setAlertMessage, setAlertSeverity } from './app';
+import alertTypes from '../../constants/alert-types';
 
 export const fetchFiles = createAsyncThunk(
   'fetchFiles',
@@ -68,6 +71,13 @@ export const createFile = createAsyncThunk(
       return { createdFile, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     return { hasError: true };
   },
 );
@@ -80,6 +90,13 @@ export const deleteFile = createAsyncThunk(
 
     if (statusCode(response).noContent) {
       return { fileId, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { hasError: true };
@@ -96,6 +113,13 @@ export const uploadFiles = createAsyncThunk(
       thunkAPI.dispatch(fetchFiles({ fileId, ownerId }));
 
       return { hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { hasError: true };

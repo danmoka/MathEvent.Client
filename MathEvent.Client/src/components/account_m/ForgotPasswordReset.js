@@ -7,6 +7,10 @@ import TextField from '../_common/TextField';
 import { NormalText } from '../_common/Text/Text';
 import { forgotPasswordReset } from '../../store/actions/account';
 import { useTitle } from '../../hooks';
+import {
+  validateUserPassword,
+  validateUserPasswordConfirm,
+} from '../../utils/validation/userValidation';
 import './Account.scss';
 
 const ForgotPasswordReset = () => {
@@ -14,17 +18,23 @@ const ForgotPasswordReset = () => {
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmError, setConfirmError] = useState('');
 
   const { email } = useParams();
   useTitle('Восстановление пароля');
 
   const handleCodeChange = (newCode) => setCode(newCode);
 
-  const handlePasswordChange = (newPassword) => setPassword(newPassword);
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+    setPasswordError(validateUserPassword(value));
+  };
 
-  const handlePasswordConfirmChange = (
-    newPasswordConfirm,
-  ) => setPasswordConfirm(newPasswordConfirm);
+  const handlePasswordConfirmChange = useCallback((value) => {
+    setPasswordConfirm(value);
+    setConfirmError(validateUserPasswordConfirm(password, value));
+  }, [password]);
 
   const handleSubmit = useCallback(() => {
     dispatch(forgotPasswordReset({
@@ -52,6 +62,8 @@ const ForgotPasswordReset = () => {
           label="Введите новый пароль"
           type="password"
           value={password}
+          error={!!passwordError}
+          helperText={passwordError}
           onChange={handlePasswordChange}
         />
         <TextField
@@ -59,10 +71,13 @@ const ForgotPasswordReset = () => {
           label="Подтвердите новый пароль"
           type="password"
           value={passwordConfirm}
+          error={!!confirmError}
+          helperText={confirmError}
           onChange={handlePasswordConfirmChange}
         />
         <Button
           className="account__body__control"
+          disabled={!!passwordError || !!confirmError}
           onClick={handleSubmit}
         >
           Сменить пароль

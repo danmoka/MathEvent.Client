@@ -7,6 +7,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import Scrollbars from 'react-custom-scrollbars-2';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
+import moment from 'moment';
 import Loader from '../../_common/Loader';
 import TextField from '../../_common/TextField';
 import { DateField } from '../../_common/Date';
@@ -36,6 +37,12 @@ import { isAbleToEditEvent } from '../../../utils/user_rights';
 import { navigateToUser, navigateToEvent } from '../../../utils/navigator';
 import { getInitials } from '../../../utils/get_initials';
 import { getLocaleDateTimeFromUTC } from '../../../utils/time';
+import {
+  validateEventDate,
+  validateEventDescription,
+  validateEventLocation,
+  validateEventName,
+} from '../../../utils/validation/eventValidation';
 import './EventEdit.scss';
 
 const prepareOrganizations = (organizations) => (organizations
@@ -79,10 +86,19 @@ const EventEdit = () => {
   const [name, setName] = useState('');
   const [avatarPath, setAvatarPath] = useState('');
   const [description, setDesctiption] = useState('');
-  const [startDate, setStartDate] = useState(null);
+  const [startDate, setStartDate] = useState(
+    moment(Date.now())
+      .add(15, 'm')
+      .toDate(),
+  );
   const [location, setLocation] = useState('');
   const [organization, setOrganization] = useState('');
   const [hierarchy, setHierarchy] = useState(false);
+
+  const [nameError, setNameError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+  const [dateError, setDateError] = useState('');
+  const [locationError, setLocationError] = useState('');
 
   const { id } = useParams();
   useTitle('Редактирование события');
@@ -137,7 +153,11 @@ const EventEdit = () => {
       setName(eventInfo.name);
       setAvatarPath(eventInfo.avatarPath);
       setDesctiption(eventInfo.description);
-      setStartDate(new Date(getLocaleDateTimeFromUTC(eventInfo.startDate)));
+
+      const date = new Date(getLocaleDateTimeFromUTC(eventInfo.startDate));
+      setStartDate(date);
+      setDateError(validateEventDate(date));
+
       setLocation(eventInfo.location);
       setOrganization(eventInfo.organization?.id.toString());
       setHierarchy(eventInfo.hierarchy !== null);
@@ -176,9 +196,14 @@ const EventEdit = () => {
           path: '/Managers',
           op: 'replace',
         },
+        {
+          value: new Date(startDate).toISOString(),
+          path: '/StartDate',
+          op: 'replace',
+        },
       ]);
     },
-    [eventInfo, handlePatchEvent],
+    [eventInfo, handlePatchEvent, startDate],
   );
 
   const handleUserClick = useCallback((user) => {
@@ -202,48 +227,83 @@ const EventEdit = () => {
 
   const handleNameValueChange = useDebouncedCallback((newName) => {
     setName(newName);
-    handlePatchEvent([
-      {
-        value: newName,
-        path: '/Name',
-        op: 'replace',
-      },
-    ]);
+    const error = validateEventName(newName);
+    setNameError(error);
+
+    if (!error) {
+      handlePatchEvent([
+        {
+          value: newName,
+          path: '/Name',
+          op: 'replace',
+        },
+        {
+          value: new Date(startDate).toISOString(),
+          path: '/StartDate',
+          op: 'replace',
+        },
+      ]);
+    }
   }, 1000);
 
   const handleDescriptionValueChange = useDebouncedCallback(
     (newDescription) => {
       setDesctiption(newDescription);
-      handlePatchEvent([
-        {
-          value: newDescription,
-          path: '/Description',
-          op: 'replace',
-        },
-      ]);
+      const error = validateEventDescription(newDescription);
+      setDescriptionError(error);
+
+      if (!error) {
+        handlePatchEvent([
+          {
+            value: newDescription,
+            path: '/Description',
+            op: 'replace',
+          },
+          {
+            value: new Date(startDate).toISOString(),
+            path: '/StartDate',
+            op: 'replace',
+          },
+        ]);
+      }
     }, 1000,
   );
 
   const handleDateValueChange = useCallback((newStartDate) => {
     setStartDate(newStartDate);
-    handlePatchEvent([
-      {
-        value: new Date(newStartDate).toISOString(),
-        path: '/StartDate',
-        op: 'replace',
-      },
-    ]);
+    const error = validateEventDate(newStartDate);
+    setDateError(error);
+
+    if (!error) {
+      handlePatchEvent([
+        {
+          value: new Date(newStartDate).toISOString(),
+          path: '/StartDate',
+          op: 'replace',
+        },
+      ]);
+    }
   }, [handlePatchEvent]);
 
   const handleLocationValueChange = useDebouncedCallback((newLocation) => {
     setLocation(newLocation);
-    handlePatchEvent([
-      {
-        value: newLocation,
-        path: '/Location',
-        op: 'replace',
-      },
-    ]);
+    const error = validateEventLocation(newLocation);
+    setLocationError(error);
+
+    if (!error) {
+      handlePatchEvent([
+        {
+          value: newLocation,
+          path: '/Location',
+          op: 'replace',
+        },
+        {
+          value: new Date(startDate).toISOString(),
+          path: '/StartDate',
+          op: 'replace',
+        },
+      ]);
+    }
   }, 1000);
 
   const handleOrganizationChange = useCallback(
@@ -255,9 +315,14 @@ const EventEdit = () => {
           path: '/OrganizationId',
           op: 'replace',
         },
+        {
+          value: new Date(startDate).toISOString(),
+          path: '/StartDate',
+          op: 'replace',
+        },
       ]);
     },
-    [handlePatchEvent],
+    [handlePatchEvent, startDate],
   );
 
   const handleEventAvatarUpload = useCallback(() => {
@@ -273,9 +338,14 @@ const EventEdit = () => {
           path: '/Hierarchy',
           op: 'replace',
         },
+        {
+          value: new Date(startDate).toISOString(),
+          path: '/StartDate',
+          op: 'replace',
+        },
       ]);
     },
-    [handlePatchEvent],
+    [handlePatchEvent, startDate],
   );
 
   const handleEventDeleteClick = useCallback(() => {
@@ -305,6 +375,8 @@ const EventEdit = () => {
                     className="event-edit__body__control"
                     label="Название"
                     value={name}
+                    error={!!nameError}
+                    helperText={nameError}
                     onChange={handleNameValueChange}
                   />
                   <div className="event-edit__body__image-section">
@@ -327,6 +399,8 @@ const EventEdit = () => {
                     multiline
                     rows={10}
                     value={description}
+                    error={!!descriptionError}
+                    helperText={descriptionError}
                     onChange={handleDescriptionValueChange}
                   />
                   <DateField
@@ -335,12 +409,16 @@ const EventEdit = () => {
                     inputVariant="outlined"
                     value={startDate}
                     minDate={new Date(Date.now())}
+                    error={!!dateError}
+                    helperText={dateError}
                     onChange={handleDateValueChange}
                   />
                   <TextField
                     className="event-edit__body__control"
                     label="Адрес"
                     value={location}
+                    error={!!locationError}
+                    helperText={locationError}
                     onChange={handleLocationValueChange}
                   />
                   <Dropdown

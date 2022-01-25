@@ -9,6 +9,10 @@ import TextField from '../../_common/TextField';
 import {
   patchUserAccount,
 } from '../../../store/actions/user';
+import {
+  validateUserName,
+  validateUserSurname,
+} from '../../../utils/validation/userValidation';
 import './UserEdit.scss';
 
 const UserEditAccount = ({
@@ -22,6 +26,9 @@ const UserEditAccount = ({
 
   const [name, setName] = useState(accountName);
   const [surname, setSurname] = useState(accountSurname);
+
+  const [nameError, setNameError] = useState('');
+  const [surnameError, setSurnameError] = useState('');
 
   const handlePatchUserAccount = useCallback(
     (data) => {
@@ -37,6 +44,9 @@ const UserEditAccount = ({
 
   const handleNameValueChange = useDebouncedCallback((newName) => {
     setName(newName);
+    const error = validateUserName(newName);
+    setNameError(error);
+
     const patchDocument = [
       {
         value: newName,
@@ -44,11 +54,17 @@ const UserEditAccount = ({
         op: 'replace',
       },
     ];
-    handlePatchUserAccount(patchDocument);
+
+    if (!error) {
+      handlePatchUserAccount(patchDocument);
+    }
   }, 1000);
 
   const handleSurnameValueChange = useDebouncedCallback((newSurname) => {
     setSurname(newSurname);
+    const error = validateUserSurname(newSurname);
+    setSurnameError(error);
+
     const patchDocument = [
       {
         value: newSurname,
@@ -56,7 +72,10 @@ const UserEditAccount = ({
         op: 'replace',
       },
     ];
-    handlePatchUserAccount(patchDocument);
+
+    if (!error) {
+      handlePatchUserAccount(patchDocument);
+    }
   }, 1000);
 
   return (
@@ -77,12 +96,16 @@ const UserEditAccount = ({
         className="user-edit__body__control"
         label="Фамилия"
         value={surname}
+        error={!!surnameError}
+        helperText={surnameError}
         onChange={handleSurnameValueChange}
       />
       <TextField
         className="user-edit__body__control"
         label="Имя"
         value={name}
+        error={!!nameError}
+        helperText={nameError}
         onChange={handleNameValueChange}
       />
     </Paper>

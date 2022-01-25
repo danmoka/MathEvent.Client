@@ -4,6 +4,9 @@ import modalTypes from '../../constants/modal-types';
 import userService from '../../api/services/user-service';
 import { fetchAccount } from './account';
 import statusCode from '../../utils/status-code-reader';
+import { errorsToMessage } from '../../utils/validation/errorsToMessage';
+import { setAlertMessage, setAlertSeverity } from './app';
+import alertTypes from '../../constants/alert-types';
 
 export const fetchUsers = createAsyncThunk(
   'fecthUsers',
@@ -22,13 +25,20 @@ export const fetchUsers = createAsyncThunk(
 
 export const createUserInfo = createAsyncThunk(
   'createUserInfo',
-  async (newUser) => {
+  async (newUser, thunkAPI) => {
     const response = await userService.createUserInfo(newUser);
 
     if (statusCode(response).created) {
       const userInfo = await response.json();
 
       return { userInfo, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { userInfo: null, hasError: true };
@@ -48,6 +58,13 @@ export const fetchOrCreateUserInfo = createAsyncThunk(
       return { userInfo, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     if (statusCode(response).notFound) {
       const newUser = {
         identityUserId,
@@ -64,7 +81,7 @@ export const fetchOrCreateUserInfo = createAsyncThunk(
 
 export const fetchUserInfo = createAsyncThunk(
   'fetchUserInfo',
-  async (identityUserId) => {
+  async (identityUserId, thunkAPI) => {
     const response = await userService.fetchUserInfo(identityUserId);
 
     if (statusCode(response).ok) {
@@ -73,19 +90,33 @@ export const fetchUserInfo = createAsyncThunk(
       return { userInfo, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     return { userInfo: null, hasError: true };
   },
 );
 
 export const patchUserInfo = createAsyncThunk(
   'patchUserInfo',
-  async ({ identityUserId, data }) => {
+  async ({ identityUserId, data }, thunkAPI) => {
     const response = await userService.patchUserInfo(identityUserId, data);
 
     if (statusCode(response).ok) {
       const userInfo = await response.json();
 
       return { userInfo, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { userInfo: null, hasError: true };
@@ -114,13 +145,20 @@ export const fetchStatistics = createAsyncThunk(
 
 export const fetchUserStatistics = createAsyncThunk(
   'fetchUserStatistics',
-  async (identityUserId) => {
+  async (identityUserId, thunkAPI) => {
     const response = await userService.fetchUserStatistics(identityUserId);
 
     if (statusCode(response).ok) {
       const statistics = await response.json();
 
       return { statistics, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { statistics: [], hasError: true };
@@ -143,13 +181,20 @@ export const showNotAuthenticated = createAsyncThunk(
 
 export const fetchUserAccount = createAsyncThunk(
   'fetchUserAccount',
-  async (identityUserId) => {
+  async (identityUserId, thunkAPI) => {
     const response = await userService.fetchUserAccount(identityUserId);
 
     if (statusCode(response).ok) {
       const userAccount = await response.json();
 
       return { userAccount, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { userAccount: null, hasError: true };
@@ -168,6 +213,13 @@ export const patchUserAccount = createAsyncThunk(
       return { userAccount, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     return { userAccount: null, hasError: true };
   },
 );
@@ -184,6 +236,13 @@ export const addUserAccountToRole = createAsyncThunk(
       return { userAccount, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     return { userAccount: null, hasError: true };
   },
 );
@@ -198,6 +257,13 @@ export const removeUserAccountFromRole = createAsyncThunk(
       thunkAPI.dispatch(fetchAccount());
 
       return { userAccount, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { userAccount: null, hasError: true };

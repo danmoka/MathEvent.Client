@@ -18,6 +18,7 @@ import {
 } from '@material-ui/core/styles';
 import AppContent from './AppContent';
 import AppMenu from './AppMenu';
+import Alert from './Alert';
 import Button, { buttonTypes } from '../_common/Button';
 import { HugeText } from '../_common/Text/Text';
 import { Icon, IconButton, iconTypes } from '../_common/Icon';
@@ -112,6 +113,10 @@ const App = () => {
     dispatch(fetchTokens({ userName: null, password: null }));
   }, tokenInterval);
 
+  useEffect(() => {
+    dispatch(fetchTokens({ userName: null, password: null }));
+  }, [dispatch]);
+
   const onTopHandler = useCallback(() => {
     if (scrollbar?.current) {
       setScrollPosition(0);
@@ -143,6 +148,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Alert />
       <AppBar
         className="app-header"
         position="fixed"

@@ -16,6 +16,8 @@ const DateField = ({
   value,
   minDate,
   minDateMessage,
+  error,
+  helperText,
   onChange,
 }) => {
   const [fieldValue, setFieldValue] = useState(value);
@@ -51,6 +53,8 @@ const DateField = ({
         label={label}
         minDateMessage={minDateMessage}
         minDate={minDate}
+        error={error}
+        helperText={helperText}
         InputProps={{
           endAdornment: (
             showCloseButton && (
@@ -77,6 +81,8 @@ DateField.propTypes = {
   value: PropTypes.instanceOf(Date),
   minDate: PropTypes.instanceOf(Date),
   minDateMessage: PropTypes.string,
+  error: PropTypes.bool,
+  helperText: PropTypes.string,
   onChange: PropTypes.func,
 };
 
@@ -90,6 +96,8 @@ DateField.defaultProps = {
   value: new Date(),
   minDate: null,
   minDateMessage: 'Выход за пределы минимальной даты',
+  error: false,
+  helperText: '',
   onChange: () => {},
 };
 

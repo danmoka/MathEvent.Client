@@ -8,6 +8,10 @@ import {
   navigateToEvents,
   navigateToForgotPassword,
 } from '../../utils/navigator';
+import {
+  validateUserUsername,
+  validateUserPassword,
+} from '../../utils/validation/userValidation';
 import { useTitle } from '../../hooks';
 import './Account.scss';
 
@@ -15,6 +19,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [userNameError, setUserNameError] = useState('');
+  const [userPasswordError, setUserPasswordError] = useState('');
 
   useTitle('Вход');
 
@@ -37,8 +43,14 @@ const Login = () => {
     navigateToForgotPassword();
   }, []);
 
-  const handleUserNameChange = (value) => setUserName(value);
-  const handlePasswordChange = (value) => setPassword(value);
+  const handleUserNameChange = (value) => {
+    setUserName(value);
+    setUserNameError(validateUserUsername(value));
+  };
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+    setUserPasswordError(validateUserPassword(value));
+  };
 
   return (
     <div className="account">
@@ -47,6 +59,8 @@ const Login = () => {
           className="account__body__control"
           label="Логин"
           value={userName}
+          error={!!userNameError}
+          helperText={userNameError}
           onChange={handleUserNameChange}
         />
         <TextField
@@ -54,10 +68,13 @@ const Login = () => {
           label="Пароль"
           type="password"
           value={password}
+          error={!!userPasswordError}
+          helperText={userPasswordError}
           onChange={handlePasswordChange}
         />
         <Button
           className="account__body__control"
+          disabled={!!userNameError || !!userPasswordError}
           onClick={handleSubmit}
         >
           Войти

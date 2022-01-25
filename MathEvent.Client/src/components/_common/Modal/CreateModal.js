@@ -14,7 +14,7 @@ import modalSizes from '../../../constants/modal-sizes';
 import './Modal.scss';
 
 const CreateModal = ({
-  children, createButtonText, size, title, onCreate,
+  children, createButtonText, size, title, disabledOk, onCreate,
 }) => {
   const dispatch = useDispatch();
   const handleClose = () => dispatch(hideModal());
@@ -33,7 +33,12 @@ const CreateModal = ({
       </DialogContent>
       <DialogActions>
         <Button type={buttonTypes.text} onClick={handleClose}>Отмена</Button>
-        <Button onClick={onCreate}>{createButtonText}</Button>
+        <Button
+          onClick={onCreate}
+          disabled={disabledOk}
+        >
+          {createButtonText}
+        </Button>
       </DialogActions>
     </Dialog>
   );
@@ -44,6 +49,7 @@ CreateModal.propTypes = {
   createButtonText: PropTypes.string,
   size: PropTypes.string,
   title: PropTypes.string,
+  disabledOk: PropTypes.bool,
   onCreate: PropTypes.func,
 };
 
@@ -52,6 +58,7 @@ CreateModal.defaultProps = {
   createButtonText: 'Создать',
   size: modalSizes.small,
   title: 'Создание',
+  disabledOk: false,
   onCreate: () => {},
 };
 

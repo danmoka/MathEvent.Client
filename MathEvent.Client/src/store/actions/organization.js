@@ -4,6 +4,9 @@ import organizationService from '../../api/services/organization-service';
 import statusCode from '../../utils/status-code-reader';
 import modalTypes from '../../constants/modal-types';
 import { navigateToOrganizations } from '../../utils/navigator';
+import { errorsToMessage } from '../../utils/validation/errorsToMessage';
+import { setAlertMessage, setAlertSeverity } from './app';
+import alertTypes from '../../constants/alert-types';
 
 export const fetchOrganizations = createAsyncThunk(
   'fetchOrganizations',
@@ -24,7 +27,7 @@ export const fetchOrganizations = createAsyncThunk(
 
 export const fetchOrganization = createAsyncThunk(
   'fetchOrganization',
-  async (id) => {
+  async (id, thunkAPI) => {
     const response = await organizationService.fetchOrganization(id);
 
     if (statusCode(response).ok) {
@@ -33,19 +36,33 @@ export const fetchOrganization = createAsyncThunk(
       return { organization, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     return { organization: null, hasError: true };
   },
 );
 
 export const patchOrganization = createAsyncThunk(
   'patchOrganization',
-  async ({ id, data }) => {
+  async ({ id, data }, thunkAPI) => {
     const response = await organizationService.patchOrganization(id, data);
 
     if (statusCode(response).ok) {
       const updatedOrganization = await response.json();
 
       return { updatedOrganization, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { updatedOrganization: null, hasError: true };
@@ -65,6 +82,13 @@ export const createOrganization = createAsyncThunk(
       return { createdOrganization, hasError: false };
     }
 
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
+    }
+
     return { createdOrganization: null, hasError: true };
   },
 );
@@ -79,6 +103,13 @@ export const deleteOrganization = createAsyncThunk(
       thunkAPI.dispatch(navigateToOrganizations());
 
       return { id, hasError: false };
+    }
+
+    if (statusCode(response).badRequest) {
+      const errors = await response.json();
+      const message = errorsToMessage(errors);
+      thunkAPI.dispatch(setAlertMessage(message));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.error));
     }
 
     return { id: null, hasError: true };
