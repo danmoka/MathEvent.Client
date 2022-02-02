@@ -15,6 +15,7 @@ import ZoomImage from '../../_common/ZoomImage';
 import EventFiles from './EventFiles';
 import {
   fetchEvent,
+  showDeleteEventModal,
   showEventLocation,
   showEventStatistics,
   subscribe,
@@ -144,6 +145,10 @@ const Event = () => {
     navigateToEventEdit(id);
   }, [id]);
 
+  const handleEventDeleteClick = useCallback(() => {
+    dispatch(showDeleteEventModal({ id: eventInfo.id, name: eventInfo.name }));
+  }, [dispatch, eventInfo]);
+
   const handleShowEventStatistics = useCallback(() => {
     if (eventInfo) {
       dispatch(showEventStatistics({ event: eventInfo }));
@@ -202,12 +207,20 @@ const Event = () => {
                         onClick={handleShowEventStatistics}
                       />
                       {isAbleToEdit && (
-                      <IconButton
-                        type={iconTypes.edit}
-                        size="small"
-                        title="Редактировать"
-                        onClick={handleEditButtonClick}
-                      />
+                      <>
+                        <IconButton
+                          type={iconTypes.edit}
+                          size="small"
+                          title="Редактировать"
+                          onClick={handleEditButtonClick}
+                        />
+                        <IconButton
+                          type={iconTypes.delete}
+                          size="small"
+                          title="Удалить"
+                          onClick={handleEventDeleteClick}
+                        />
+                      </>
                       )}
                     </div>
                   </div>

@@ -6,7 +6,6 @@ import { useParams } from 'react-router';
 import { useDebouncedCallback } from 'use-debounce';
 import Scrollbars from 'react-custom-scrollbars-2';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import moment from 'moment';
 import Loader from '../../_common/Loader';
 import TextField from '../../_common/TextField';
@@ -14,7 +13,7 @@ import { DateField } from '../../_common/Date';
 import Dropdown from '../../_common/Dropdown';
 import Image from '../../_common/Image';
 import { IconButton, iconTypes } from '../../_common/Icon';
-import Button, { colors } from '../../_common/Button';
+import Button from '../../_common/Button';
 import Checkbox from '../../_common/Checkbox';
 import { HugeText, SmallText } from '../../_common/Text/Text';
 import List from '../../_common/List';
@@ -23,7 +22,6 @@ import {
   fetchEvent,
   patchEvent,
   showUploadEventAvatarModal,
-  showDeleteEventModal,
   showEventAddManagerModal,
 } from '../../../store/actions/event';
 import {
@@ -348,10 +346,6 @@ const EventEdit = () => {
     [handlePatchEvent, startDate],
   );
 
-  const handleEventDeleteClick = useCallback(() => {
-    dispatch(showDeleteEventModal({ id: eventInfo.id, name: eventInfo.name }));
-  }, [dispatch, eventInfo]);
-
   const handleManagerAddClick = useCallback(() => {
     dispatch(showEventAddManagerModal());
   }, [dispatch]);
@@ -467,22 +461,6 @@ const EventEdit = () => {
                 </Paper>
               </div>
               <EventEditFiles className="event-edit-files" />
-              <div className="event-edit__delete-section">
-                <Box
-                  className="event-edit__body"
-                  bgcolor="error.dark"
-                  borderRadius={4}
-                >
-                  <Button
-                    className="event-edit__body__control"
-                    color={colors.default}
-                    startIcon={iconTypes.delete}
-                    onClick={handleEventDeleteClick}
-                  >
-                    Удалить событие
-                  </Button>
-                </Box>
-              </div>
             </>
             )}
           </>

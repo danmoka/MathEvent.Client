@@ -5,7 +5,10 @@ import Paper from '@material-ui/core/Paper';
 import Loader from '../../_common/Loader';
 import { HugeText, NormalText, SmallText } from '../../_common/Text/Text';
 import { Icon, IconButton, iconTypes } from '../../_common/Icon';
-import { fetchOrganization } from '../../../store/actions/organization';
+import {
+  fetchOrganization,
+  showDeleteOrganizationModal,
+} from '../../../store/actions/organization';
 import { useTitle } from '../../../hooks';
 import { navigateToOrganizationEdit } from '../../../utils/navigator';
 import colors from '../../../constants/colors';
@@ -36,6 +39,12 @@ const Organization = () => {
     navigateToOrganizationEdit(id);
   }, [id]);
 
+  const handleOrganizationDeleteClick = useCallback(() => {
+    dispatch(showDeleteOrganizationModal({
+      id: organization.id, name: organization.name,
+    }));
+  }, [dispatch, organization]);
+
   return (
     <div className="organization">
       {isFetchingOrganization
@@ -56,12 +65,22 @@ const Organization = () => {
                       {organization.name}
                     </HugeText>
                     {isAbleToEdit && (
-                    <IconButton
-                      type={iconTypes.edit}
-                      size="small"
-                      title="Редактировать"
-                      onClick={handleEditButtonClick}
-                    />
+                    <div
+                      className="organization__header-section__name__buttons"
+                    >
+                      <IconButton
+                        type={iconTypes.edit}
+                        size="small"
+                        title="Редактировать"
+                        onClick={handleEditButtonClick}
+                      />
+                      <IconButton
+                        type={iconTypes.delete}
+                        size="small"
+                        title="Удалить"
+                        onClick={handleOrganizationDeleteClick}
+                      />
+                    </div>
                     )}
                   </div>
                 </div>

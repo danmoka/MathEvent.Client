@@ -3,16 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useDebouncedCallback } from 'use-debounce';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Loader from '../../_common/Loader';
 import TextField from '../../_common/TextField';
-import Button, { colors } from '../../_common/Button';
-import { iconTypes } from '../../_common/Icon';
 import { useTitle } from '../../../hooks';
 import {
   fetchOrganization,
   patchOrganization,
-  showDeleteOrganizationModal,
 } from '../../../store/actions/organization';
 import { navigateToOrganization } from '../../../utils/navigator';
 import { isMathEventExecutive } from '../../../utils/user_rights';
@@ -134,12 +130,6 @@ const OrganizationEdit = () => {
     }, 1000,
   );
 
-  const handleOrganizationDeleteClick = useCallback(() => {
-    dispatch(showDeleteOrganizationModal({
-      id: organization.id, name: organization.name,
-    }));
-  }, [dispatch, organization]);
-
   return (
     <div className="organization-edit">
       {isFetchingOrganizations
@@ -182,22 +172,6 @@ const OrganizationEdit = () => {
                     onChange={handleITNValueChange}
                   />
                 </Paper>
-              </div>
-              <div className="organization-edit__delete-section">
-                <Box
-                  className="organization-edit__body"
-                  bgcolor="error.dark"
-                  borderRadius={4}
-                >
-                  <Button
-                    className="organization-edit__body__control"
-                    color={colors.default}
-                    startIcon={iconTypes.delete}
-                    onClick={handleOrganizationDeleteClick}
-                  >
-                    Удалить организацию
-                  </Button>
-                </Box>
               </div>
             </>
             )}
