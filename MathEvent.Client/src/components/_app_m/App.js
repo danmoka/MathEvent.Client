@@ -167,15 +167,15 @@ const App = () => {
               athEvent
             </HugeText>
           </div>
-          {isAuthenticated ? (
-            <>
-              {isFetchingAccount
-                ? (
-                  <div className="app-header__loader-section">
-                    <Loader />
-                  </div>
-                )
-                : (
+          {isFetchingAccount
+            ? (
+              <div className="app-header__loader-section">
+                <Loader />
+              </div>
+            )
+            : (
+              <>
+                {isAuthenticated ? (
                   <div>
                     <Button
                       color={colors.default}
@@ -205,26 +205,26 @@ const App = () => {
                       </MenuItem>
                     </Popover>
                   </div>
+                ) : (
+                  <div>
+                    <Button
+                      color={colors.default}
+                      type={buttonTypes.text}
+                      onClick={handleRegisterClick}
+                    >
+                      Регистрация
+                    </Button>
+                    <Button
+                      color={colors.default}
+                      type={buttonTypes.text}
+                      onClick={handleLoginClick}
+                    >
+                      Войти
+                    </Button>
+                  </div>
                 )}
-            </>
-          ) : (
-            <div>
-              <Button
-                color={colors.default}
-                type={buttonTypes.text}
-                onClick={handleRegisterClick}
-              >
-                Регистрация
-              </Button>
-              <Button
-                color={colors.default}
-                type={buttonTypes.text}
-                onClick={handleLoginClick}
-              >
-                Войти
-              </Button>
-            </div>
-          )}
+              </>
+            )}
         </Toolbar>
       </AppBar>
       <Toolbar id="back-to-top-anchor" />

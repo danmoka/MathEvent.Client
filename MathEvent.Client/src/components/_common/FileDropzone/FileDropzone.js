@@ -8,7 +8,7 @@ import './FileDropzone.scss';
 import { HugeText, NormalText, SmallText } from '../Text/Text';
 
 const fileValidator = (file) => {
-  const maxNameLength = 20;
+  const maxNameLength = 250;
   const maxSize = 2097152;
 
   if (file.name.length > maxNameLength) {
