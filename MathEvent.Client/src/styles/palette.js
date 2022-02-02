@@ -33,9 +33,9 @@ const paletteDark2 = {
     dark: '#CF6679',
   },
   success: {
-    light: '#e6fdcb',
-    main: '#d6fda9',
-    dark: '#c7fc86',
+    light: '#41c300',
+    main: '#09af00',
+    dark: '#008b00',
   },
   warning: {
     light: '#fed6b4',
@@ -86,9 +86,9 @@ const palette2 = {
     dark: '#b00020',
   },
   success: {
-    light: '#a6f254',
-    main: '#8bee00',
-    dark: '#6fe900',
+    light: '#41c300',
+    main: '#09af00',
+    dark: '#008b00',
   },
   warning: {
     light: '#f47400',
