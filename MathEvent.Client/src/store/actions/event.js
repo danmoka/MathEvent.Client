@@ -152,6 +152,8 @@ export const updateEvent = createAsyncThunk(
     if (statusCode(response).ok) {
       const updatedEvent = await response.json();
       thunkAPI.dispatch(fetchEvents(updatedEvent.parentId));
+      thunkAPI.dispatch(setAlertMessage('Событие обновлено'));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.success));
 
       return { updatedEvent, hasError: false };
     }
@@ -175,6 +177,8 @@ export const patchEvent = createAsyncThunk(
     if (statusCode(response).ok) {
       const updatedEvent = await response.json();
       thunkAPI.dispatch(fetchEvents(updatedEvent.parentId));
+      thunkAPI.dispatch(setAlertMessage('Событие обновлено'));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.success));
 
       return { updatedEvent, hasError: false };
     }

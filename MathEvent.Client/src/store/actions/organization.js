@@ -54,6 +54,8 @@ export const patchOrganization = createAsyncThunk(
 
     if (statusCode(response).ok) {
       const updatedOrganization = await response.json();
+      thunkAPI.dispatch(setAlertMessage('Организация обновлена'));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.success));
 
       return { updatedOrganization, hasError: false };
     }

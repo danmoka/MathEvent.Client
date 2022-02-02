@@ -100,6 +100,8 @@ export const register = createAsyncThunk(
 
     if (statusCode(response).created) {
       navigateToLogin();
+      thunkAPI.dispatch(setAlertMessage('Добро пожаловать!'));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.success));
     }
 
     if (statusCode(response).badRequest) {

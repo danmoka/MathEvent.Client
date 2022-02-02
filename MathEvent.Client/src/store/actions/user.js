@@ -108,6 +108,8 @@ export const patchUserInfo = createAsyncThunk(
 
     if (statusCode(response).ok) {
       const userInfo = await response.json();
+      thunkAPI.dispatch(setAlertMessage('Пользователь изменен'));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.success));
 
       return { userInfo, hasError: false };
     }
@@ -209,6 +211,8 @@ export const patchUserAccount = createAsyncThunk(
     if (statusCode(response).ok) {
       const userAccount = await response.json();
       thunkAPI.dispatch(fetchAccount());
+      thunkAPI.dispatch(setAlertMessage('Пользователь изменен'));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.success));
 
       return { userAccount, hasError: false };
     }
@@ -232,6 +236,8 @@ export const addUserAccountToRole = createAsyncThunk(
     if (statusCode(response).ok) {
       const userAccount = await response.json();
       thunkAPI.dispatch(fetchAccount());
+      thunkAPI.dispatch(setAlertMessage('Пользователь добавлен в роль'));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.success));
 
       return { userAccount, hasError: false };
     }
@@ -255,6 +261,8 @@ export const removeUserAccountFromRole = createAsyncThunk(
     if (statusCode(response).ok) {
       const userAccount = await response.json();
       thunkAPI.dispatch(fetchAccount());
+      thunkAPI.dispatch(setAlertMessage('Пользователь удален из роли'));
+      thunkAPI.dispatch(setAlertSeverity(alertTypes.success));
 
       return { userAccount, hasError: false };
     }
