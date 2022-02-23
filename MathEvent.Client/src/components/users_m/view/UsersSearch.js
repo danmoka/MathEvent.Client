@@ -30,15 +30,21 @@ const UsersSearch = () => {
     dispatch(setUserSearch(searchString));
   }, [dispatch, searchString]);
 
+  const onKeyPress = useCallback((event) => {
+    if (event.key === 'Enter') {
+      dispatch(setUserSearch(searchString));
+    }
+  }, [dispatch, searchString]);
+
   return (
     <Paper
       className="users-search"
-      component="form"
     >
       <InputBase
         className="users-search__input"
         placeholder="Введите фамилию"
         onChange={handleSearchStringChange}
+        onKeyPress={onKeyPress}
       />
       <IconButton
         type={iconTypes.search}

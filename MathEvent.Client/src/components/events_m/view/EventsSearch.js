@@ -30,16 +30,22 @@ const EventsSearch = () => {
     dispatch(setEventSearch(searchString));
   }, [dispatch, searchString]);
 
+  const onKeyPress = useCallback((event) => {
+    if (event.key === 'Enter') {
+      dispatch(setEventSearch(searchString));
+    }
+  }, [dispatch, searchString]);
+
   return (
     <Paper
       className="events-search"
-      component="form"
     >
       <InputBase
         className="events-search__input"
         placeholder="Поиск"
         value={searchString}
         onChange={handleSearchStringChange}
+        onKeyPress={onKeyPress}
       />
       <IconButton
         type={iconTypes.search}
